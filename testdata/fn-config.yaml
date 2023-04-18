@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: set-replicas
+data:
+  replicas: "5"
+  source: |
+    [item | {if item.kind == "Deployment": spec.replicas = option("resource_list").functionConfig.data.replicas} for item in option("resource_list").items]
