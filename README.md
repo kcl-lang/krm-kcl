@@ -45,7 +45,7 @@ data:
   source: |
     resources = option("resource_list")
     setReplicas = lambda items, replicas {
-       [item | {if item.kind == "Deployment": spec.replicas = replicas} for item in items]
+       [item | {if item.kind == "Deployment": spec.replicas = int(replicas)} for item in items]
     }
     setReplicas(resources.items or [], resources.functionConfig.data.replicas)
 ```
@@ -68,7 +68,7 @@ spec:
   source: |
     resource = option("resource_list")
     items = resource.items
-    params = resource.functionConfig.params
+    params = resource.functionConfig.spec.params
     toMatch = params.toMatch
     toAdd = params.toAdd
     [item | {
@@ -80,7 +80,7 @@ spec:
     } for item in items]
 ```
 
-In the example above, the script accesses the `toMatch` parameters using `option("resource_list").functionConfig.params.toMatch`.
+In the example above, the script accesses the `toMatch` parameters using `option("resource_list").functionConfig.spec.params.toMatch`.
 
 ## Guides for Developing KCL
 
