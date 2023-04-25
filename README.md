@@ -76,7 +76,7 @@ spec:
        if all key, value in toMatch {
           item.metadata.annotations[key] == value
        }:
-           metadata.annotations: {**params.toAdd}
+           metadata.annotations: toAdd
     } for item in items]
 ```
 
