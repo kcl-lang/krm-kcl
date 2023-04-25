@@ -13,7 +13,7 @@ import (
 
 const (
 	// KCLRunGroup represents the API group for the KCLRun resource.
-	KCLRunGroup = "fn.kpt.dev"
+	KCLRunGroup = "krm.kcl.dev"
 
 	// KCLRunVersion represents the API version for the KCLRun resource.
 	KCLRunVersion = "v1alpha1"
@@ -40,10 +40,13 @@ const (
 // KCLRun is a custom resource to provider KPT `functionConfig`, KCL source and params.
 type KCLRun struct {
 	yaml.ResourceMeta `json:",inline" yaml:",inline"`
-	// Source is a required field for providing a KCL script inline.
-	Source string `json:"source" yaml:"source"`
-	// Params are the parameters in key-value pairs format.
-	Params map[string]interface{} `json:"params,omitempty" yaml:"params,omitempty"`
+	// Spec is the KCLRun spec.
+	Spec struct {
+		// Source is a required field for providing a KCL script inline.
+		Source string `json:"source" yaml:"source"`
+		// Params are the parameters in key-value pairs format.
+		Params map[string]interface{} `json:"params,omitempty" yaml:"params,omitempty"`
+	} `json:"spec" yaml:"spec"`
 }
 
 func (r *KCLRun) Config(fnCfg *fn.KubeObject) error {
@@ -60,12 +63,12 @@ func (r *KCLRun) Config(fnCfg *fn.KubeObject) error {
 		// Convert ConfigMap to KCLRun
 		r.Name = cm.Name
 		r.Namespace = cm.Namespace
-		r.Params = map[string]interface{}{}
+		r.Spec.Params = map[string]interface{}{}
 		for k, v := range cm.Data {
 			if k == SourceKey {
-				r.Source = v
+				r.Spec.Source = v
 			}
-			r.Params[k] = v
+			r.Spec.Params[k] = v
 		}
 	case fnCfgAPIVersion == KCLRunAPIVersion && fnCfgKind == KCLRunKind:
 		if err := fnCfg.As(r); err != nil {
@@ -83,7 +86,7 @@ func (r *KCLRun) Config(fnCfg *fn.KubeObject) error {
 		r.Name = defaultProgramName
 	}
 	// Validation
-	if r.Source == "" {
+	if r.Spec.Source == "" {
 		return fmt.Errorf("`source` must not be empty")
 	}
 	return nil
@@ -107,7 +110,7 @@ func (r *KCLRun) Transform(rl *fn.ResourceList) error {
 
 	st := &edit.SimpleTransformer{
 		Name:           r.Name,
-		Source:         r.Source,
+		Source:         r.Spec.Source,
 		FunctionConfig: fcRN,
 	}
 	transformedNodes, err := st.Transform(nodes)

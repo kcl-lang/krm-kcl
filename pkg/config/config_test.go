@@ -15,18 +15,19 @@ func TestKCLConfig(t *testing.T) {
 	}{
 		{
 			name: "valid KCLRun",
-			config: `apiVersion: fn.kpt.dev/v1alpha1
+			config: `apiVersion: krm.kcl.dev/v1alpha1
 kind: KCLRun
 metadata:
   name: my-kcl-fn
   namespace: foo
-source: |
-  [item | {metadata.namespace = "baz"} for item in option("resource_list")]
+spec:
+  source: |
+    [item | {metadata.namespace = "baz"} for item in option("resource_list")]
 `,
 		},
 		{
 			name: "KCLRun missing Source",
-			config: `apiVersion: fn.kpt.dev/v1alpha1
+			config: `apiVersion: krm.kcl.dev/v1alpha1
 kind: KCLRun
 metadata:
   name: my-kcl-fn

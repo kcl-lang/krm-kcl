@@ -1,7 +1,7 @@
 package kio
 
 import (
-	"github.com/KusionStack/krm-kcl/pkg/api"
+	"github.com/KusionStack/krm-kcl/pkg/config"
 	"github.com/KusionStack/krm-kcl/pkg/edit"
 
 	"sigs.k8s.io/kustomize/kyaml/kio"
@@ -16,24 +16,24 @@ type Filter struct {
 // Filter checks each input and ensures that all containers have cpu and memory
 // reservations set, otherwise it returns an error.
 func (f Filter) Filter(in []*yaml.RNode) ([]*yaml.RNode, error) {
-	api, err := f.parseAPI()
+	config, err := f.parseConfig()
 	if err != nil {
 		return nil, err
 	}
 	st := &edit.SimpleTransformer{
 		Name:           "kcl-function-run",
-		Source:         api.Spec.Source,
+		Source:         config.Spec.Source,
 		FunctionConfig: f.rw.FunctionConfig,
 	}
 	return st.Transform(in)
 }
 
-// parseAPI parses the functionConfig into an API struct.
-func (f *Filter) parseAPI() (*api.API, error) {
+// parseConfig parses the functionConfig into an API struct.
+func (f *Filter) parseConfig() (*config.KCLRun, error) {
 	// Parse the input function config.
-	var api api.API
-	if err := yaml.Unmarshal([]byte(f.rw.FunctionConfig.MustString()), &api); err != nil {
+	var config config.KCLRun
+	if err := yaml.Unmarshal([]byte(f.rw.FunctionConfig.MustString()), &config); err != nil {
 		return nil, err
 	}
-	return &api, nil
+	return &config, nil
 }
