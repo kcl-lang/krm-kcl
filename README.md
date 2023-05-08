@@ -55,7 +55,7 @@ In the example above, the script accesses the replicas parameters using `option(
 To use a KCLRun as the functionConfig, the KCL source must be specified in the source field. Additional parameters can be specified in the params field. The params field supports any complex data structure as long as it can be represented in YAML.
 
 ```yaml
-apiVersion: krm.kcl.dev
+apiVersion: krm.kcl.dev/v1alpha1
 kind: KCLRun
 metadata:
   name: conditionally-add-annotations
