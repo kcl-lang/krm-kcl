@@ -4,9 +4,7 @@
 [![GoDoc](https://godoc.org/github.com/KusionStack/kpt-kcl-sdk?status.svg)](https://godoc.org/github.com/KusionStack/kpt-kcl-sdk)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/KusionStack/kpt-kcl-sdk/blob/main/LICENSE)
 
-[KCL](https://github.com/KusionStack/KCLVM) is a constraint-based record & functional domain language. Full documents of KCL can be found [here](https://kcl-lang.io/).
-
-The KRM KCL function SDK contains a KCL interpreter to run a KCL script to mutate or validate resources.
+The KRM KCL function SDK contains a KRM KCL spec and a interpreter to run KCL codes to generate, mutate or validate Kubernetes resources.
 
 The KCL programming language can be used to:
 
