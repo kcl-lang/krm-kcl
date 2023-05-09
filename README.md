@@ -43,7 +43,10 @@ data:
   source: |
     resources = option("resource_list")
     setReplicas = lambda items, replicas {
-       [item | {if item.kind == "Deployment": spec.replicas = int(replicas)} for item in items]
+        [item | {
+            if item.kind == "Deployment": 
+                spec.replicas = int(replicas)
+        } for item in items]
     }
     setReplicas(resources.items or [], resources.functionConfig.data.replicas)
 ```
@@ -85,7 +88,7 @@ In the example above, the script accesses the `toMatch` parameters using `option
 Here's what you can do in the KCL script:
 
 + Read resources from `option("resource_list")`. The `option("resource_list")` complies with the [KRM Functions Specification](https://github.com/kubernetes-sigs/kustomize/blob/master/cmd/config/docs/api-conventions/functions-spec.md#krm-functions-specification). You can read the input resources from `option("resource_list")["items"]` and the `functionConfig` from `option("resource_list")["functionConfig"]`.
-+ Return a KPM list for output resources.
++ Return a KRM list for output resources.
 + Return an error using `assert {condition}, {error_message}`.
 + Read the environment variables. e.g. `option("PATH")` (Not yet implemented).
 + Read the OpenAPI schema. e.g. `option("open_api")["definitions"]["io.k8s.api.apps.v1.Deployment"]` (Not yet implemented).
