@@ -1,0 +1,36 @@
+apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+metadata:
+  name: required-annotations
+  metadata:
+    annotations: 
+      krm.kcl.dev/version: 0.0.1
+      krm.kcl.dev/type: validation
+      documentation: >-
+        Requires resources to contain specified annotations, with values matching provided regular expressions.
+spec:
+  params:
+    requires:
+      - key: config.kubernetes.io/local-config
+        # Optional: If specified, a regular expression the annotation's value must match.
+        allowedRegex: "true"
+  source: |
+    # Construct resource and params
+    resource = option("resource_list")
+    items = resource.items
+    params = resource.functionConfig.spec.params
+    requires = params.requires or []
+    # Define the validation function
+    validate_required_annotations = lambda item, requires {
+        if requires:
+            requires_map = {r.key: r.allowedRegex or "" for r in requires}
+            assert all k, v in item.metadata.annotations {
+                k in requires_map
+            }, "must provide annotations with the regex ${requires_map}"
+            assert all k, v in item.metadata.annotations {
+                regex.match(v, requires_map[k]) if requires_map[k]
+            }, "must provide annotations with the regex ${requires_map}"
+        item
+    }
+    # Validate All resource
+    [validate_required_annotations(i, min_replicas, requires) for i in items]

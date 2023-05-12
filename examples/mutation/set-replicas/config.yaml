@@ -1,0 +1,18 @@
+apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+metadata:
+  name: set-replicas
+spec:
+  params:
+    replicas: 5
+  source: |
+    resource = option("resource_list")
+    items = resource.items
+    replicas = resource.functionConfig.spec.params.replicas
+    setReplicas = lambda items, replicas: int {
+        [item | {
+            if item.kind == "Deployment": 
+                spec.replicas = replicas
+        } for item in items]
+    }
+    setReplicas(resources.items or [], replicas)

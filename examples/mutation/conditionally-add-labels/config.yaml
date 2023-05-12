@@ -1,0 +1,29 @@
+apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+metadata:
+  name: conditionally-add-labels
+  metadata:
+    annotations: 
+      krm.kcl.dev/version: 0.0.1
+      krm.kcl.dev/type: mutation
+      documentation: >-
+        Conditionally add labels
+spec:
+  params:
+    toMatch:
+      config.kubernetes.io/local-config: "true"
+    toAdd:
+      configmanagement.gke.io/managed: disabled
+  source: |
+    resource = option("resource_list")
+    items = resource.items
+    params = resource.functionConfig.spec.params
+    toMatch = params.toMatch
+    toAdd = params.toAdd
+    [item | {
+       # If all labels are matched, patch more labels
+       if all key, value in toMatch {
+          item.metadata.labels[key] == value
+       }:
+           metadata.labels: toAdd
+    } for item in items]
