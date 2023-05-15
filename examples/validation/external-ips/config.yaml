@@ -1,0 +1,29 @@
+apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+metadata:
+  name: external-ips
+  metadata:
+    annotations: 
+      krm.kcl.dev/version: 0.0.1
+      krm.kcl.dev/type: validation
+      documentation: >-
+        Restricts Service externalIPs to an allowed list of IP addresses.
+        More info: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+spec:
+  params:
+    allowedIps: ["127.0.0.1"]
+  source: |
+    # Construct resource and params
+    resource = option("resource_list")
+    items = resource.items
+    params = resource.functionConfig.spec.params
+    # Define the validation function
+    validate_external_ips = lambda item, allowedIps: [str] {
+        if allowedIps and item.kind == "Service" and item.spec.externalIPs:
+            assert all ip in item.spec.externalIPs {
+                ip in allowedIps
+            }, "Service external IPs must be in ${allowedIps}"
+        item
+    }
+    # Validate All resource
+    [validate_external_ips(i, params.allowedIps or []) for i in items]

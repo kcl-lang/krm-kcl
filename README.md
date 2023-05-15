@@ -14,12 +14,20 @@ The KCL programming language can be used to:
 
 ## Test the KRM function
 
+### Unit Tests
+
 You need to put your KCL script source in the functionConfig of kind KCLRun and then the function will run the KCL script that you provide.
 
 This function can be used both declaratively and imperatively.
 
 ```bash
 make test
+```
+
+### Integration Tests
+
+```bash
+make test-replica-limits
 ```
 
 ## FunctionConfig

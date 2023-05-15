@@ -1,0 +1,17 @@
+apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+metadata:
+  name: set-labels
+spec:
+  params:
+    labels:
+      config.kubernetes.io/local-config: "true"
+  source: |
+    resource = option("resource_list")
+    items = resource.items
+    params = resource.functionConfig.spec.params
+    # Use `k = v` to override existing labels
+    labels = {k = v for k, v in params.labels}
+    [item | {
+        metadata.labels: labels
+    } for item in items]
