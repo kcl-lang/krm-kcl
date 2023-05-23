@@ -4,7 +4,7 @@
 [![GoDoc](https://godoc.org/github.com/KusionStack/kpt-kcl-sdk?status.svg)](https://godoc.org/github.com/KusionStack/kpt-kcl-sdk)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/KusionStack/kpt-kcl-sdk/blob/main/LICENSE)
 
-The KRM KCL function SDK contains a KRM KCL spec and a interpreter to run KCL codes to generate, mutate or validate Kubernetes resources.
+The KRM KCL function SDK contains a KRM KCL spec and an interpreter to run KCL codes to generate, mutate or validate Kubernetes resources.
 
 The KCL programming language can be used to:
 
