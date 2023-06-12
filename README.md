@@ -8,9 +8,10 @@ The KRM KCL function SDK contains a KRM KCL spec and an interpreter to run KCL c
 
 The KCL programming language can be used to:
 
-+ Add annotations based on a condition.
++ Add labels or annotations based on a condition.
 + Inject a sidecar container in all KRM resources that contain a PodTemplate.
 + Validate all KRM resources using KCL schema.
++ Use a abstact model to generate KRM resources.
 
 ## Test the KRM function
 
