@@ -346,10 +346,10 @@ k8s.io/utils v0.0.0-20211116205334-6203023598ed/go.mod h1:jPW/WVKK9YHAvNhRxK0md/
 k8s.io/utils v0.0.0-20220210201930-3a6ce19ff2f9/go.mod h1:jPW/WVKK9YHAvNhRxK0md/EJ228hCsBRufyofKtW8HA=
 k8s.io/utils v0.0.0-20221107191617-1a15be271d1d h1:0Smp/HP1OH4Rvhe+4B8nWGERtlqAGSftbSbbmm45oFs=
 k8s.io/utils v0.0.0-20221107191617-1a15be271d1d/go.mod h1:OLgZIPagt7ERELqWJFomSt595RzquPNLL48iOWgYOg0=
-kusionstack.io/kclvm-artifact-go v0.5.0-alpha.2 h1:D+R75S7pQlsIg8UTfDi1u+NHdpbd1ot9tLYIfNpN/qQ=
-kusionstack.io/kclvm-artifact-go v0.5.0-alpha.2/go.mod h1:WI+NvDeMqu1AduJT119X7q8KQdYmKfv4Nq4OvZ1tAsI=
-kusionstack.io/kclvm-go v0.5.0-alpha.2 h1:bniZHN6xugNuNTekvcHkHsuAtN3tGaftIauXXDZ1QKs=
-kusionstack.io/kclvm-go v0.5.0-alpha.2/go.mod h1:LhlEeKktLr4gJla1ci9cOkwkKK0vBAQLAfQ3B1rsP6o=
+kusionstack.io/kclvm-artifact-go v0.5.0-alpha.3 h1:sirVOSHHmkgWdBY74luH9jNucL6ebF9L0KUTJ/r3b5Q=
+kusionstack.io/kclvm-artifact-go v0.5.0-alpha.3/go.mod h1:WI+NvDeMqu1AduJT119X7q8KQdYmKfv4Nq4OvZ1tAsI=
+kusionstack.io/kclvm-go v0.5.0-alpha.3 h1:aNsrTUYR4VC3gToR5WFzdCfTEGTi36/+uMitqNhx0Uw=
+kusionstack.io/kclvm-go v0.5.0-alpha.3/go.mod h1:bnY9JNrCG2Cdc/CYLxxDSfB9dYmVcpXZ9SfyQxSf8/w=
 sigs.k8s.io/json v0.0.0-20211020170558-c049b76a60c6/go.mod h1:p4QtZmO4uMYipTQNzagwnNoseA6OxSUutVw05NhYDRs=
 sigs.k8s.io/json v0.0.0-20211208200746-9f7c6b3444d2/go.mod h1:B+TnT182UBxE84DiCz4CVE26eOSDAeYCpfDnC2kdKMY=
 sigs.k8s.io/json v0.0.0-20220713155537-f223a00ba0e2 h1:iXTIw73aPyC+oRdyqqvVJuloN1p0AC/kzH07hu3NE+k=
