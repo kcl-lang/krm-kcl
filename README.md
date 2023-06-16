@@ -9,7 +9,7 @@ The KRM KCL function SDK contains a KRM KCL spec and an interpreter to run KCL c
 The KCL programming language can be used to:
 
 + Add labels or annotations based on a condition.
-+ Inject a sidecar container in all KRM resources that contain a PodTemplate.
++ Inject a sidecar container in all KRM resources that contain a `PodTemplate`.
 + Validate all KRM resources using KCL schema.
 + Use an abstract model to generate KRM resources.
 
@@ -99,9 +99,17 @@ Here's what you can do in the KCL script:
 + Read resources from `option("resource_list")`. The `option("resource_list")` complies with the [KRM Functions Specification](https://github.com/kubernetes-sigs/kustomize/blob/master/cmd/config/docs/api-conventions/functions-spec.md#krm-functions-specification). You can read the input resources from `option("resource_list")["items"]` and the `functionConfig` from `option("resource_list")["functionConfig"]`.
 + Return a KRM list for output resources.
 + Return an error using `assert {condition}, {error_message}`.
-+ Read the environment variables. e.g. `option("PATH")` (Not yet implemented).
-+ Read the OpenAPI schema. e.g. `option("open_api")["definitions"]["io.k8s.api.apps.v1.Deployment"]` (Not yet implemented).
++ Read the environment variables. e.g. `option("PATH")` (**Not yet implemented**).
++ Read the OpenAPI schema. e.g. `option("open_api")["definitions"]["io.k8s.api.apps.v1.Deployment"]` (**Not yet implemented**).
 
 ## Library
 
 You can directly use [KCL standard libraries](https://kcl-lang.io/docs/reference/model/overview) without importing them, such as `regex.match`, `math.log`.
+
+## Tutorial
+
++ See [here](https://kcl-lang.io/docs/reference/lang/tour) to study more features of KCL.
+
+## Examples
+
++ See [here](./examples/README.md) for more examples.
