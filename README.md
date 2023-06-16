@@ -11,7 +11,7 @@ The KCL programming language can be used to:
 + Add labels or annotations based on a condition.
 + Inject a sidecar container in all KRM resources that contain a PodTemplate.
 + Validate all KRM resources using KCL schema.
-+ Use a abstact model to generate KRM resources.
++ Use an abstract model to generate KRM resources.
 
 ## Test the KRM function
 
