@@ -1,6 +1,6 @@
 kcl_cli_configs:
   files:
-    - ./test.k
+    - ./main.k
 kcl_options:
   - key: resource_list
     value:

@@ -25,10 +25,10 @@ This function can be used both declaratively and imperatively.
 make test
 ```
 
-### Integration Tests
+### Integration E2E Tests
 
 ```bash
-make test-replica-limits
+make test-e2e
 ```
 
 ## FunctionConfig
