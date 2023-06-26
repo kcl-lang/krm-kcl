@@ -49,6 +49,9 @@ type KCLRun struct {
 	} `json:"spec" yaml:"spec"`
 }
 
+// Config is used to configure the KCLRun instance based on the given FunctionConfig.
+// It converts ConfigMap to KCLRun or assigns values directly from KCLRun.
+// If an error occurs during the configuration process, an error message will be returned.
 func (r *KCLRun) Config(fnCfg *fn.KubeObject) error {
 	fnCfgKind := fnCfg.GetKind()
 	fnCfgAPIVersion := fnCfg.GetAPIVersion()
@@ -92,6 +95,10 @@ func (r *KCLRun) Config(fnCfg *fn.KubeObject) error {
 	return nil
 }
 
+// Transform is used to transform the ResourceList with the KCLRun instance.
+// It parses the FunctionConfig and each object in the ResourceList, transforms them according to the KCLRun configuration,
+// and updates the ResourceList with the transformed objects.
+// If an error occurs during the transformation process, an error message will be returned.
 func (r *KCLRun) Transform(rl *fn.ResourceList) error {
 	var transformedObjects []*fn.KubeObject
 	var nodes []*yaml.RNode

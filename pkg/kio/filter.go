@@ -8,7 +8,7 @@ import (
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
-// filter implements kio.Filter
+// Filter implements kio.Filter
 type Filter struct {
 	rw *kio.ByteReadWriter
 }

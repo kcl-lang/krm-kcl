@@ -25,10 +25,17 @@ This function can be used both declaratively and imperatively.
 make test
 ```
 
-### Integration E2E Tests
+### Integration Tests
+
+You need to put your KCL source code or url in the functionConfig of kind KCLRun and then the function will run the KCL code that you provide.
 
 ```bash
-make test-e2e
+# Verify that the annotation is added to the `Deployment` resource and the other resource `Service` 
+# does not have this annotation.
+export TEST_FILE=./pkg/options/testdata/kcl-run.yaml
+diff \
+  <(cat ${TEST_FILE}) \
+  <(cat ${TEST_FILE} | go run main.go)
 ```
 
 ## FunctionConfig
