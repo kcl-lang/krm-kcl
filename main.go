@@ -22,16 +22,12 @@ func main() {
 	//     replicas: 2
 	// - kind: Service
 	// functionConfig:
-	//   # kcl-fn-config.yaml
 	//   apiVersion: krm.kcl.dev/v1alpha1
 	//   kind: KCLRun
 	//   metadata:
-	//   # EDIT THE SOURCE!
-	//   # This should be your KCL code which preloads the `ResourceList` to `option("resource_list")
 	//   spec:
 	//     source: |
 	//       [resource | {if resource.kind == "Deployment": metadata.annotations: {"managed-by" = "krm-kcl"}} for resource in option("resource_list").items]
-	//
 	// ```
 	if err := options.NewRunOptions().Run(); err != nil {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
