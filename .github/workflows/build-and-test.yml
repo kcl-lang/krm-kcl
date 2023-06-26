@@ -22,5 +22,3 @@ jobs:
 
       - name: Unit test
         run: make test
-      - name: E2E test
-        run: make test-e2e

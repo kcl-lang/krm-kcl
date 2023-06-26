@@ -36,17 +36,20 @@ func (st *SimpleTransformer) String() string {
 
 // Transform YAML nodes and return error if any error occurs.
 func (st *SimpleTransformer) Transform(nodes []*yaml.RNode) ([]*yaml.RNode, error) {
+	// 1. Wrap KCLRun resource to KRM the function spec.
 	in, err := WrapResources(nodes, st.FunctionConfig)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
 
+	// 2. Run code
 	out, err := RunKCL(st.Name, st.Source, in)
 
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
 
+	// 3. Unwrap KRM function spec to KCLRun resource.
 	updatedNodes, _, err := UnwrapResources(out)
 	return updatedNodes, err
 }

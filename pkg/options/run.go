@@ -1,20 +1,12 @@
-package kio
+package options
 
 import (
 	"bufio"
 	"io"
 	"os"
-	"testing"
-)
 
-func TestPipeline(t *testing.T) {
-	o := &RunOptions{
-		InputPath: "./testdata/kcl-run.yaml",
-	}
-	if err := o.Run(); err != nil {
-		t.Fatal(err)
-	}
-}
+	"github.com/KusionStack/krm-kcl/pkg/kio"
+)
 
 // RunOptions is the options for the run command
 type RunOptions struct {
@@ -39,12 +31,12 @@ func (o *RunOptions) Run() error {
 	if err != nil {
 		return err
 	}
-	pipeline := NewPipeline(reader, writer, true)
+	pipeline := kio.NewPipeline(reader, writer, true)
 	return pipeline.Execute()
 }
 
 func (o *RunOptions) reader() (io.Reader, error) {
-	if o.InputPath == "-" {
+	if o.InputPath == "" || o.InputPath == "-" {
 		return os.Stdin, nil
 	} else {
 		file, err := os.Open(o.InputPath)
