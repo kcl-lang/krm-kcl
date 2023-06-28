@@ -4,16 +4,16 @@ import (
 	"testing"
 )
 
-func TestPipeline(t *testing.T) {
+func TestRunCode(t *testing.T) {
 	o := &RunOptions{
-		InputPath: "./testdata/kcl-run.yaml",
+		InputPath: "./testdata/kcl-run-code.yaml",
 	}
 	if err := o.Run(); err != nil {
 		t.Fatal(err)
 	}
 }
 
-func TestPipelineLocalPath(t *testing.T) {
+func TestRunLocalPath(t *testing.T) {
 	o := &RunOptions{
 		InputPath: "./testdata/kcl-run-local.yaml",
 	}
@@ -22,7 +22,7 @@ func TestPipelineLocalPath(t *testing.T) {
 	}
 }
 
-func TestPipelineOCI(t *testing.T) {
+func TestRunOCI(t *testing.T) {
 	o := &RunOptions{
 		InputPath: "./testdata/kcl-run-oci.yaml",
 	}
@@ -31,7 +31,7 @@ func TestPipelineOCI(t *testing.T) {
 	}
 }
 
-func TestPipelineGit(t *testing.T) {
+func TestRunGit(t *testing.T) {
 	o := &RunOptions{
 		InputPath: "./testdata/kcl-run-git.yaml",
 	}
@@ -40,7 +40,7 @@ func TestPipelineGit(t *testing.T) {
 	}
 }
 
-func TestPipelineHttps(t *testing.T) {
+func TestRunHttps(t *testing.T) {
 	o := &RunOptions{
 		InputPath: "./testdata/kcl-run-https.yaml",
 	}
