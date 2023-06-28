@@ -16,13 +16,13 @@ type Filter struct {
 // Filter checks each input and ensures that all containers have cpu and memory
 // reservations set, otherwise it returns an error.
 func (f Filter) Filter(in []*yaml.RNode) ([]*yaml.RNode, error) {
-	config, err := f.parseConfig()
+	c, err := f.parseConfig()
 	if err != nil {
 		return nil, err
 	}
 	st := &edit.SimpleTransformer{
-		Name:           "kcl-function-run",
-		Source:         config.Spec.Source,
+		Name:           config.DefaultProgramName,
+		Source:         c.Spec.Source,
 		FunctionConfig: f.rw.FunctionConfig,
 	}
 	return st.Transform(in)

@@ -1,6 +1,6 @@
 module github.com/KusionStack/krm-kcl
 
-go 1.18
+go 1.19
 
 require (
 	github.com/GoogleContainerTools/kpt-functions-sdk/go/fn v0.0.0-20230427202446-3255accc518d
@@ -11,7 +11,7 @@ require (
 	k8s.io/api v0.26.2
 	k8s.io/apimachinery v0.26.2
 	kusionstack.io/kclvm-go v0.5.0-alpha.4
-	kusionstack.io/kpm v0.2.5-0.20230625091945-c4893e671e51
+	kusionstack.io/kpm v0.2.5-0.20230628131330-328109752457
 	sigs.k8s.io/kustomize/kyaml v0.14.3
 )
 

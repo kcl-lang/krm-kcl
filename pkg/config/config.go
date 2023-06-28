@@ -33,8 +33,8 @@ const (
 	// SourceKey is the key for the source field in a ConfigMap.
 	SourceKey = "source"
 
-	// defaultProgramName is the default name for the KCL function program.
-	defaultProgramName = "kcl-function-run"
+	// DefaultProgramName is the default name for the KCL function program.
+	DefaultProgramName = "kcl-function-run"
 )
 
 // KCLRun is a custom resource to provider KPT `functionConfig`, KCL source and params.
@@ -86,7 +86,7 @@ func (r *KCLRun) Config(fnCfg *fn.KubeObject) error {
 
 	// Defaulting
 	if r.Name == "" {
-		r.Name = defaultProgramName
+		r.Name = DefaultProgramName
 	}
 	// Validation
 	if r.Spec.Source == "" {

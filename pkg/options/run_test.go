@@ -22,15 +22,14 @@ func TestPipelineLocalPath(t *testing.T) {
 	}
 }
 
-// TODO: OCI source
-// func TestPipelineOCI(t *testing.T) {
-// 	o := &RunOptions{
-// 		InputPath: "./testdata/kcl-run-oci.yaml",
-// 	}
-// 	if err := o.Run(); err != nil {
-// 		t.Fatal(err)
-// 	}
-// }
+func TestPipelineOCI(t *testing.T) {
+	o := &RunOptions{
+		InputPath: "./testdata/kcl-run-oci.yaml",
+	}
+	if err := o.Run(); err != nil {
+		t.Fatal(err)
+	}
+}
 
 func TestPipelineGit(t *testing.T) {
 	o := &RunOptions{
