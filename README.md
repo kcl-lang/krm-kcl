@@ -120,8 +120,3 @@ You can directly use [KCL standard libraries](https://kcl-lang.io/docs/reference
 ## Examples
 
 + See [here](./examples/README.md) for more examples.
-
-git tag $1
-git push origin $1
-gh release create $1 --draft --generate-notes --title "$1 Release" release/*.tgz
-
