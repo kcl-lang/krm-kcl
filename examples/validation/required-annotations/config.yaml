@@ -33,4 +33,4 @@ spec:
         item
     }
     # Validate All resource
-    [validate_required_annotations(i, min_replicas, requires) for i in items]
+    [validate_required_annotations(i, requires) for i in items]

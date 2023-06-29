@@ -33,4 +33,4 @@ spec:
         item
     }
     # Validate All resource
-    [validate_required_labels(i, min_replicas, requires) for i in items]
+    [validate_required_labels(i, requires) for i in items]
