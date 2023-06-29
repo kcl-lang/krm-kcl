@@ -1,8 +1,8 @@
 # KRM KCL
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/KusionStack/kpt-kcl-sdk)](https://goreportcard.com/report/github.com/KusionStack/kpt-kcl-sdk)
-[![GoDoc](https://godoc.org/github.com/KusionStack/kpt-kcl-sdk?status.svg)](https://godoc.org/github.com/KusionStack/kpt-kcl-sdk)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/KusionStack/kpt-kcl-sdk/blob/main/LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/KusionStack/krm-kcl)](https://goreportcard.com/report/github.com/KusionStack/krm-kcl)
+[![GoDoc](https://godoc.org/github.com/KusionStack/krm-kcl?status.svg)](https://godoc.org/github.com/KusionStack/krm-kcl)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/KusionStack/krm-kcl/blob/main/LICENSE)
 
 The KRM KCL function SDK contains a KRM KCL spec and an interpreter to run KCL codes to generate, mutate or validate Kubernetes resources.
 
@@ -120,3 +120,8 @@ You can directly use [KCL standard libraries](https://kcl-lang.io/docs/reference
 ## Examples
 
 + See [here](./examples/README.md) for more examples.
+
+git tag $1
+git push origin $1
+gh release create $1 --draft --generate-notes --title "$1 Release" release/*.tgz
+
