@@ -13,7 +13,7 @@ The KCL programming language can be used to:
 + Validate all KRM resources using KCL schema.
 + Use an abstract model to generate KRM resources.
 
-## Test the KRM function
+## Test the KRM Function
 
 ### Unit Tests
 
