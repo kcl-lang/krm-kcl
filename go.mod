@@ -8,8 +8,8 @@ require (
 	github.com/acarl005/stripansi v0.0.0-20180116102854-5a71ef0e047d
 	github.com/hashicorp/go-getter v1.7.1
 	github.com/stretchr/testify v1.8.4
-	k8s.io/api v0.26.2
-	k8s.io/apimachinery v0.26.2
+	k8s.io/api v0.27.3
+	k8s.io/apimachinery v0.27.3
 	kusionstack.io/kclvm-go v0.5.0-alpha.4
 	kusionstack.io/kpm v0.2.5-0.20230628131330-328109752457
 	sigs.k8s.io/kustomize/kyaml v0.14.3
