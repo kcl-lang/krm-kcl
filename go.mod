@@ -1,4 +1,4 @@
-module github.com/KusionStack/krm-kcl
+module kcl-lang.io/krm-kcl
 
 go 1.19
 

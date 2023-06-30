@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/KusionStack/krm-kcl/pkg/options"
+	"kcl-lang.io/krm-kcl/pkg/options"
 )
 
 func main() {

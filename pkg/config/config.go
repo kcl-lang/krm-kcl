@@ -8,7 +8,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 
-	"github.com/KusionStack/krm-kcl/pkg/edit"
+	"kcl-lang.io/krm-kcl/pkg/edit"
 )
 
 const (

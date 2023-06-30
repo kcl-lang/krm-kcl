@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/KusionStack/krm-kcl/pkg/kio"
+	"kcl-lang.io/krm-kcl/pkg/kio"
 )
 
 // RunOptions is the options for the run command

@@ -1,8 +1,8 @@
 # KRM KCL Examples
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/KusionStack/krm-kcl)](https://goreportcard.com/report/github.com/KusionStack/krm-kcl)
-[![GoDoc](https://godoc.org/github.com/KusionStack/krm-kcl?status.svg)](https://godoc.org/github.com/KusionStack/krm-kcl)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/KusionStack/krm-kcl/blob/main/LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/kcl-lang.io/krm-kcl)](https://goreportcard.com/report/kcl-lang.io/krm-kcl)
+[![GoDoc](https://godoc.org/kcl-lang.io/krm-kcl?status.svg)](https://godoc.org/kcl-lang.io/krm-kcl)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://kcl-lang.io/krm-kcl/blob/main/LICENSE)
 
 The KCL programming language can be used to:
 

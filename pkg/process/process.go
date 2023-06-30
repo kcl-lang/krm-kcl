@@ -2,7 +2,7 @@ package process
 
 import (
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
-	"github.com/KusionStack/krm-kcl/pkg/config"
+	"kcl-lang.io/krm-kcl/pkg/config"
 )
 
 // Process is a function that takes a pointer to a ResourceList and processes

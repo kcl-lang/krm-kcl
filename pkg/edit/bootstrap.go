@@ -9,7 +9,7 @@ import (
 	"strings"
 	"text/template"
 
-	src "github.com/KusionStack/krm-kcl/pkg/source"
+	src "kcl-lang.io/krm-kcl/pkg/source"
 
 	"github.com/Masterminds/sprig/v3"
 	"github.com/acarl005/stripansi"

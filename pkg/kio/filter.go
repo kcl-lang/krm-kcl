@@ -1,8 +1,8 @@
 package kio
 
 import (
-	"github.com/KusionStack/krm-kcl/pkg/config"
-	"github.com/KusionStack/krm-kcl/pkg/edit"
+	"kcl-lang.io/krm-kcl/pkg/config"
+	"kcl-lang.io/krm-kcl/pkg/edit"
 
 	"sigs.k8s.io/kustomize/kyaml/kio"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
