@@ -1179,8 +1179,8 @@ k8s.io/utils v0.0.0-20230505201702-9f6742963106 h1:EObNQ3TW2D+WptiYXlApGNLVy0zm/
 k8s.io/utils v0.0.0-20230505201702-9f6742963106/go.mod h1:OLgZIPagt7ERELqWJFomSt595RzquPNLL48iOWgYOg0=
 kcl-lang.io/kcl-artifact-go v0.5.0-beta.1 h1:HGjgH3/+2okgzIxsUC8+yq0LhrUj2h7nk/nz6QKp6N4=
 kcl-lang.io/kcl-artifact-go v0.5.0-beta.1/go.mod h1:c07mqi9Hu2UjPW7lYfHhAAWOlZiB7lo7Vkr4jL5ov/M=
-kusionstack.io/kclvm-go v0.5.0-beta.1 h1:cSmRsC3aHYSJIAADLFI54Yj81c5kr+dMgMYDNxOYOc0=
-kusionstack.io/kclvm-go v0.5.0-beta.1/go.mod h1:EvElbVpQ4q1/nVeJst9WOet/zRcMI1uZF+Gzf4Xdin0=
+kcl-lang.io/kcl-go v0.5.0-beta.2 h1:603hUZhXHvBkWWVnwyYYfjiKGndXNNudv8PquMRVFmA=
+kcl-lang.io/kcl-go v0.5.0-beta.2/go.mod h1:PPTopxnrHjNCTSJZoH2R1NoO7E2wc2kzv7zeU6wnKNE=
 kusionstack.io/kpm v0.2.5-0.20230628131330-328109752457 h1:FNnzcS3RNXwgb8IBJzHCA1du6Js2KYDkVQmI2ei51WE=
 kusionstack.io/kpm v0.2.5-0.20230628131330-328109752457/go.mod h1:RLY4GuATwhNMeDM+8XAV6VmzZj2+pKBI+RQMGUX7IrU=
 oras.land/oras-go v1.2.3 h1:v8PJl+gEAntI1pJ/LCrDgsuk+1PKVavVEPsYIHFE5uY=

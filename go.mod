@@ -10,7 +10,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	k8s.io/api v0.27.3
 	k8s.io/apimachinery v0.27.3
-	kusionstack.io/kclvm-go v0.5.0-beta.1
+	kcl-lang.io/kcl-go v0.5.0-beta.2
 	kusionstack.io/kpm v0.2.5-0.20230628131330-328109752457
 	sigs.k8s.io/kustomize/kyaml v0.14.3
 )

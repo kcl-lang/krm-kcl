@@ -10,10 +10,10 @@ import (
 	"text/template"
 
 	src "kcl-lang.io/krm-kcl/pkg/source"
+	"kcl-lang.io/kcl-go"
 
 	"github.com/Masterminds/sprig/v3"
 	"github.com/acarl005/stripansi"
-	"kusionstack.io/kclvm-go"
 	"sigs.k8s.io/kustomize/kyaml/errors"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
