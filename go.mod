@@ -10,7 +10,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	k8s.io/api v0.27.3
 	k8s.io/apimachinery v0.27.3
-	kusionstack.io/kclvm-go v0.5.0-alpha.4
+	kusionstack.io/kclvm-go v0.5.0-beta.1
 	kusionstack.io/kpm v0.2.5-0.20230628131330-328109752457
 	sigs.k8s.io/kustomize/kyaml v0.14.3
 )
@@ -118,7 +118,7 @@ require (
 	k8s.io/klog/v2 v2.90.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20230601164746-7562a1006961 // indirect
 	k8s.io/utils v0.0.0-20230505201702-9f6742963106 // indirect
-	kusionstack.io/kclvm-artifact-go v0.5.0-alpha.4 // indirect
+	kcl-lang.io/kcl-artifact-go v0.5.0-beta.1 // indirect
 	oras.land/oras-go v1.2.3 // indirect
 	oras.land/oras-go/v2 v2.0.2 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
