@@ -1,3 +1,5 @@
+VERSION := $(shell cat VERSIOM)
+
 default: test
 
 test:
@@ -5,3 +7,7 @@ test:
 
 fmt:
 	go fmt ./...
+
+.PHONY: release
+release:
+	scripts/release.sh v$(VERSION)
