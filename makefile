@@ -1,4 +1,4 @@
-VERSION := $(shell cat VERSIOM)
+VERSION := $(shell cat VERSION)
 
 default: test
 
