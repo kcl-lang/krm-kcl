@@ -21,4 +21,4 @@ functionConfig:
         - key: config.kubernetes.io/local-config
           # Optional: If specified, a regular expression the annotation's value must match.
           allowedRegex: "true"
-    source: oci://docker.io/peefyxpf/required-labels
+    source: oci://docker.io/kcllang/required-labels

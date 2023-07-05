@@ -17,4 +17,4 @@ functionConfig:
         - port: 80
       labels:
         name: app
-    source: oci://docker.io/peefyxpf/web-service
+    source: oci://docker.io/kcllang/web-service

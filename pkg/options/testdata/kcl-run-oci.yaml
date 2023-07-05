@@ -13,4 +13,4 @@ functionConfig:
     params:
       annotations:
         config.kubernetes.io/local-config: "true"
-    source: oci://docker.io/peefyxpf/set-annotation
+    source: oci://docker.io/kcllang/set-annotation
