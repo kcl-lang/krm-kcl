@@ -10,7 +10,7 @@ import (
 	"text/template"
 
 	src "kcl-lang.io/krm-kcl/pkg/source"
-	"kcl-lang.io/kcl-go"
+	kcl "kcl-lang.io/kcl-go"
 
 	"github.com/Masterminds/sprig/v3"
 	"github.com/acarl005/stripansi"
@@ -50,7 +50,7 @@ func RunKCL(name, source string, resourceList *yaml.RNode) (*yaml.RNode, error) 
 	}
 
 	// 3. Run the KCL code.
-	r, err := kclvm.Run(file, kclvm.WithOptions(fmt.Sprintf("%s=%s", resourceListOptionName, resourceListOptionKCLValue)))
+	r, err := kcl.Run(file, kcl.WithOptions(fmt.Sprintf("%s=%s", resourceListOptionName, resourceListOptionKCLValue)))
 	if err != nil {
 		return nil, errors.Wrap(stripansi.Strip(err.Error()))
 	}
