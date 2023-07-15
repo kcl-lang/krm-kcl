@@ -17,4 +17,4 @@ functionConfig:
         - port: 80
       labels:
         name: app
-    source: oci://docker.io/kcllang/web-service
+    source: oci://ghcr.io/kcl-lang/web-service
