@@ -4,47 +4,163 @@ import (
 	"testing"
 )
 
+type fields struct {
+	InputPath  string
+	OutputPath string
+}
+
+type suite struct {
+	name    string
+	fields  fields
+	wantErr bool
+}
+
 func TestRunCode(t *testing.T) {
-	o := &RunOptions{
-		InputPath: "./testdata/kcl-run-code.yaml",
+	tests := []suite{
+		{
+			"resource_list",
+			fields{
+				InputPath: "./testdata/resource_list/kcl-run-code.yaml",
+			},
+			false,
+		},
+		{
+			"yaml_steam",
+			fields{
+				InputPath: "./testdata/yaml_steam/kcl-run-code.yaml",
+			},
+			false,
+		},
 	}
-	if err := o.Run(); err != nil {
-		t.Fatal(err)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			o := &RunOptions{
+				InputPath:  tt.fields.InputPath,
+				OutputPath: tt.fields.OutputPath,
+			}
+			if err := o.Run(); (err != nil) != tt.wantErr {
+				t.Errorf("TestRunCode() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
 	}
 }
 
 func TestRunLocalPath(t *testing.T) {
-	o := &RunOptions{
-		InputPath: "./testdata/kcl-run-local.yaml",
+	tests := []suite{
+		{
+			"resource_list",
+			fields{
+				InputPath: "./testdata/resource_list/kcl-run-local.yaml",
+			},
+			false,
+		},
+		{
+			"yaml_stream",
+			fields{
+				InputPath: "./testdata/yaml_steam/kcl-run-local.yaml",
+			},
+			false,
+		},
 	}
-	if err := o.Run(); err != nil {
-		t.Fatal(err)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			o := &RunOptions{
+				InputPath:  tt.fields.InputPath,
+				OutputPath: tt.fields.OutputPath,
+			}
+			if err := o.Run(); (err != nil) != tt.wantErr {
+				t.Errorf("TestRunLocalPath() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
 	}
 }
 
 func TestRunOCI(t *testing.T) {
-	o := &RunOptions{
-		InputPath: "./testdata/kcl-run-oci.yaml",
+	tests := []suite{
+		{
+			"resource_list",
+			fields{
+				InputPath: "./testdata/resource_list/kcl-run-oci.yaml",
+			},
+			false,
+		},
+		{
+			"yaml_steam",
+			fields{
+				InputPath: "./testdata/yaml_steam/kcl-run-oci.yaml",
+			},
+			false,
+		},
 	}
-	if err := o.Run(); err != nil {
-		t.Fatal(err)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			o := &RunOptions{
+				InputPath:  tt.fields.InputPath,
+				OutputPath: tt.fields.OutputPath,
+			}
+			if err := o.Run(); (err != nil) != tt.wantErr {
+				t.Errorf("TestRunOCI() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
 	}
 }
 
 func TestRunGit(t *testing.T) {
-	o := &RunOptions{
-		InputPath: "./testdata/kcl-run-git.yaml",
+	tests := []suite{
+		{
+			"resource_list",
+			fields{
+				InputPath: "./testdata/resource_list/kcl-run-git.yaml",
+			},
+			false,
+		},
+		{
+			"yaml_steam",
+			fields{
+				InputPath: "./testdata/yaml_steam/kcl-run-git.yaml",
+			},
+			false,
+		},
 	}
-	if err := o.Run(); err != nil {
-		t.Fatal(err)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			o := &RunOptions{
+				InputPath:  tt.fields.InputPath,
+				OutputPath: tt.fields.OutputPath,
+			}
+			if err := o.Run(); (err != nil) != tt.wantErr {
+				t.Errorf("TestRunGit() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
 	}
 }
 
 func TestRunHttps(t *testing.T) {
-	o := &RunOptions{
-		InputPath: "./testdata/kcl-run-https.yaml",
+	tests := []suite{
+		{
+			"resource_list",
+			fields{
+				InputPath: "./testdata/resource_list/kcl-run-https.yaml",
+			},
+			false,
+		},
+		{
+			"yaml_steam",
+			fields{
+				InputPath: "./testdata/yaml_steam/kcl-run-https.yaml",
+			},
+			false,
+		},
 	}
-	if err := o.Run(); err != nil {
-		t.Fatal(err)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			o := &RunOptions{
+				InputPath:  tt.fields.InputPath,
+				OutputPath: tt.fields.OutputPath,
+			}
+			if err := o.Run(); (err != nil) != tt.wantErr {
+				t.Errorf("TestRunHttps() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
 	}
 }

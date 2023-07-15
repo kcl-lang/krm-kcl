@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+spec:
+  replicas: 2
+---
+kind: Service
+---
+apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+spec:
+  source: |
+    [resource | {if resource.kind == "Deployment": metadata.annotations: {"managed-by" = "krm-kcl"}} for resource in option("resource_list").items]
