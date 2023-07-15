@@ -99,6 +99,8 @@ spec:
 
 In the example above, the script accesses the `toMatch` parameters using `option("resource_list").functionConfig.spec.params.toMatch`.
 
+Besides, the `source` ield supports different KCL sources, which can come from a local file, VCS such as github, OCI registry, http, etc. You can see the specific usage [here](./pkg/options/testdata/).
+
 ## Guides for Developing KCL
 
 Here's what you can do in the KCL script:
