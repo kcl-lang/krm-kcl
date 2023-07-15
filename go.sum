@@ -1181,8 +1181,8 @@ kcl-lang.io/kcl-artifact-go v0.5.0 h1:zaIUamQjdrW+imLZCnrl7g2QuhCNuYCCvoPFFkikgL
 kcl-lang.io/kcl-artifact-go v0.5.0/go.mod h1:c07mqi9Hu2UjPW7lYfHhAAWOlZiB7lo7Vkr4jL5ov/M=
 kcl-lang.io/kcl-go v0.5.0 h1:t9gBcUDQoEa894l0xZ7wKFoC4Nj3EOLvEb4mSiPN0EM=
 kcl-lang.io/kcl-go v0.5.0/go.mod h1:gdDthKp2sx6LWfTuIcw50K1RTOQhzBtFGz6dMO7R25Q=
-kcl-lang.io/kpm v0.2.6 h1:bTcOasx125ynBM3qHQx4bQKDaYvCYTBkbONEeeuhPqY=
-kcl-lang.io/kpm v0.2.6/go.mod h1:BMyLN22bjtfjGgtiZeGFEdXEw8NI/89RKo6fAakBL8g=
+kcl-lang.io/kpm v0.3.0 h1:RE9jJsPYmCot6MzjdHXcB7dJQHXAHSEzxnBoGnXRhyM=
+kcl-lang.io/kpm v0.3.0/go.mod h1:ObyRKH4lnRjWDZN/lkgvT6Zqu3GVvjNMY+78u2kkFtA=
 oras.land/oras-go v1.2.3 h1:v8PJl+gEAntI1pJ/LCrDgsuk+1PKVavVEPsYIHFE5uY=
 oras.land/oras-go v1.2.3/go.mod h1:M/uaPdYklze0Vf3AakfarnpoEckvw0ESbRdN8Z1vdJg=
 oras.land/oras-go/v2 v2.0.2 h1:3aSQdJ7EUC0ft2e9PjJB9Jzastz5ojPA4LzZ3Q4YbUc=
