@@ -25,9 +25,9 @@ func TestRunCode(t *testing.T) {
 			false,
 		},
 		{
-			"yaml_steam",
+			"yaml_stream",
 			fields{
-				InputPath: "./testdata/yaml_steam/kcl-run-code.yaml",
+				InputPath: "./testdata/yaml_stream/kcl-run-code.yaml",
 			},
 			false,
 		},
@@ -57,7 +57,7 @@ func TestRunLocalPath(t *testing.T) {
 		{
 			"yaml_stream",
 			fields{
-				InputPath: "./testdata/yaml_steam/kcl-run-local.yaml",
+				InputPath: "./testdata/yaml_stream/kcl-run-local.yaml",
 			},
 			false,
 		},
@@ -85,9 +85,9 @@ func TestRunOCI(t *testing.T) {
 			false,
 		},
 		{
-			"yaml_steam",
+			"yaml_stream",
 			fields{
-				InputPath: "./testdata/yaml_steam/kcl-run-oci.yaml",
+				InputPath: "./testdata/yaml_stream/kcl-run-oci.yaml",
 			},
 			false,
 		},
@@ -115,9 +115,9 @@ func TestRunGit(t *testing.T) {
 			false,
 		},
 		{
-			"yaml_steam",
+			"yaml_stream",
 			fields{
-				InputPath: "./testdata/yaml_steam/kcl-run-git.yaml",
+				InputPath: "./testdata/yaml_stream/kcl-run-git.yaml",
 			},
 			false,
 		},
@@ -145,9 +145,9 @@ func TestRunHttps(t *testing.T) {
 			false,
 		},
 		{
-			"yaml_steam",
+			"yaml_stream",
 			fields{
-				InputPath: "./testdata/yaml_steam/kcl-run-https.yaml",
+				InputPath: "./testdata/yaml_stream/kcl-run-https.yaml",
 			},
 			false,
 		},
