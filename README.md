@@ -1,4 +1,4 @@
-# KRM KCL
+# Kubernetes Resource Model (KRM) KCL Specification
 
 [![Go Report Card](https://goreportcard.com/badge/kcl-lang.io/krm-kcl)](https://goreportcard.com/report/kcl-lang.io/krm-kcl)
 [![GoDoc](https://godoc.org/kcl-lang.io/krm-kcl?status.svg)](https://godoc.org/kcl-lang.io/krm-kcl)
