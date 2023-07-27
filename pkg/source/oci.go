@@ -1,15 +1,14 @@
 package source
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"kcl-lang.io/kpm/pkg/errors"
 	"kcl-lang.io/kpm/pkg/oci"
 	"kcl-lang.io/kpm/pkg/opt"
-	"kcl-lang.io/kpm/pkg/settings"
 	"kcl-lang.io/kpm/pkg/utils"
 )
 
@@ -34,25 +33,14 @@ func IsOCI(src string) bool {
 // A string containing the source code, and an error if any.
 func ReadFromOCISource(src string) (string, error) {
 	// 1. Parse the OCI url.
-	ociOpts, err := opt.ParseOciUrl(src)
-
-	if err == errors.IsOciRef {
-		settings, err := settings.GetSettings()
-		if err != nil {
-			return src, err
-		}
-
-		ociOpts, err = opt.ParseOciRef(filepath.Join(settings.DefaultOciRepo(), src))
-		if err != nil {
-			return src, err
-		}
-	} else if err != nil {
-		return src, err
+	ociOpts, e := opt.ParseOciOptionFromOciUrl(src, "")
+	if e != nil {
+		return src, errors.New(e.Error())
 	}
 
 	tmpDir, err := os.MkdirTemp("", "")
 	if err != nil {
-		return src, errors.InternalBug
+		return src, err
 	}
 	// clean the temp dir.
 	defer os.RemoveAll(tmpDir)
@@ -69,7 +57,7 @@ func ReadFromOCISource(src string) (string, error) {
 	// 3. Get the (*.tar) file path.
 	matches, err := filepath.Glob(filepath.Join(localPath, TarPattern))
 	if err != nil || len(matches) != 1 {
-		return src, errors.FailedPullFromOci
+		return src, err
 	}
 	tarPath := matches[0]
 
