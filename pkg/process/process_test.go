@@ -14,7 +14,7 @@ items:
 - apiVersion: apps/v1
   kind: Deployment
   spec:
-    replicas: "2"
+    replicas: '2'
 - kind: Service
 functionConfig:
   apiVersion: v1
@@ -22,7 +22,7 @@ functionConfig:
   metadata:
     name: set-replicas
   data:
-    replicas: "5"
+    replicas: '5'
     source: |
       resources = option("resource_list")
       setReplicas = lambda items, replicas {
@@ -37,14 +37,14 @@ items:
 - apiVersion: apps/v1
   kind: Deployment
   spec:
-    replicas: "5"
+    replicas: '5'
 functionConfig:
   apiVersion: v1
   kind: ConfigMap
   metadata:
     name: set-replicas
   data:
-    replicas: "5"
+    replicas: '5'
     source: |
       resources = option("resource_list")
       setReplicas = lambda items, replicas {
