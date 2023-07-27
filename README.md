@@ -32,7 +32,7 @@ You need to put your KCL source code or url in the functionConfig of kind KCLRun
 ```bash
 # Verify that the annotation is added to the `Deployment` resource and the other resource `Service` 
 # does not have this annotation.
-export TEST_FILE=./pkg/options/testdata/kcl-run.yaml
+export TEST_FILE=./pkg/options/testdata/yaml_stream/kcl-run-code.yaml
 diff \
   <(cat ${TEST_FILE}) \
   <(cat ${TEST_FILE} | go run main.go)
