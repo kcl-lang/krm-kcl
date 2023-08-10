@@ -28,7 +28,7 @@ functionConfig:
       setReplicas = lambda items, replicas {
          [item | {if item.kind == "Deployment": spec.replicas = replicas} for item in items]
       }
-      setReplicas(resources.items or [], resources.functionConfig.data.replicas)
+      items = setReplicas(resources.items or [], resources.functionConfig.data.replicas)
 `
 	expected := `apiVersion: config.kubernetes.io/v1
 kind: ResourceList
@@ -50,7 +50,7 @@ functionConfig:
       setReplicas = lambda items, replicas {
          [item | {if item.kind == "Deployment": spec.replicas = replicas} for item in items]
       }
-      setReplicas(resources.items or [], resources.functionConfig.data.replicas)
+      items = setReplicas(resources.items or [], resources.functionConfig.data.replicas)
 `
 	output, err := fn.Run(p, []byte(input))
 	if err != nil {
