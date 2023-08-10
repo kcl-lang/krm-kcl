@@ -39,18 +39,37 @@ func WrapResources(nodes []*yaml.RNode, fc *yaml.RNode) (*yaml.RNode, error) {
 }
 
 // UnwrapResources unwraps the resources and the functionConfig from a resourceList
-func UnwrapResources(in *yaml.RNode) ([]*yaml.RNode, *yaml.RNode, error) {
+func UnwrapResources(nodes []*yaml.RNode) ([]*yaml.RNode, *yaml.RNode, error) {
+	var in *yaml.RNode
+	if len(nodes) == 0 {
+		return []*yaml.RNode{}, nil, nil
+	} else if len(nodes) == 1 {
+		in = nodes[0]
+	} else {
+		out, err := WrapResources(nodes, nil)
+		if err != nil {
+			return nil, nil, errors.Wrap(err)
+		}
+		in = out
+	}
+	// Find items
 	items, err := in.Pipe(yaml.Lookup("items"))
 	if err != nil {
 		return nil, nil, errors.Wrap(err)
 	}
-	nodes, err := items.Elements()
-	if err != nil {
-		return nil, nil, errors.Wrap(err)
+	var outs []*yaml.RNode
+	// If the items field does not exist, regard the input resource as the output resource.
+	if items.IsNil() && !in.IsNil() {
+		outs = []*yaml.RNode{in}
+	} else {
+		outs, err = items.Elements()
+		if err != nil {
+			return nil, nil, errors.Wrap(err)
+		}
 	}
 	fc, err := in.Pipe(yaml.Lookup("functionConfig"))
 	if err != nil {
 		return nil, nil, errors.Wrap(err)
 	}
-	return nodes, fc, nil
+	return outs, fc, nil
 }

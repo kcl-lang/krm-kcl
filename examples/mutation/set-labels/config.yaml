@@ -8,10 +8,9 @@ spec:
       config.kubernetes.io/local-config: "true"
   source: |
     resource = option("resource_list")
-    items = resource.items
     params = resource.functionConfig.spec.params
     # Use `k = v` to override existing labels
     labels = {k = v for k, v in params.labels}
-    [item | {
+    items = [item | {
         metadata.labels: labels
-    } for item in items]
+    } for item in resource.items]

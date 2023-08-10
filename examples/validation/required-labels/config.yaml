@@ -17,7 +17,6 @@ spec:
   source: |
     # Construct resource and params
     resource = option("resource_list")
-    items = resource.items
     params = resource.functionConfig.spec.params
     requires = params.requires or []
     # Define the validation function
@@ -33,4 +32,4 @@ spec:
         item
     }
     # Validate All resource
-    [validate_required_labels(i, requires) for i in items]
+    items = [validate_required_labels(i, requires) for i in resource.items]

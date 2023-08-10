@@ -1,29 +1,28 @@
 package edit
 
 import (
-	"bytes"
 	_ "embed"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
-	"text/template"
 
 	kcl "kcl-lang.io/kcl-go"
 	src "kcl-lang.io/krm-kcl/pkg/source"
 
-	"github.com/Masterminds/sprig/v3"
 	"github.com/acarl005/stripansi"
 	"sigs.k8s.io/kustomize/kyaml/errors"
+	"sigs.k8s.io/kustomize/kyaml/kio"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
-//go:embed _code.tmpl
-var codeTemplateString string
-
-var codeTemplate = template.Must(template.New("code.tmpl").Funcs(sprig.TxtFuncMap()).Parse(codeTemplateString))
-
-const resourceListOptionName = "resource_list"
+const (
+	resourceListOptionName = "resource_list"
+	itemsOptionName        = "items"
+	paramsOptionName       = "params"
+	emptyConfig            = "{}"
+	emptyList              = "[]"
+)
 
 // RunKCL runs a KCL program specified by the given source code or url,
 // with the given resource list as input, and returns the resulting KRM resource list.
@@ -34,8 +33,8 @@ const resourceListOptionName = "resource_list"
 // - resourceList: a pointer to a yaml.RNode object that represents the input KRM resource list.
 //
 // Return:
-// A pointer to a yaml.RNode object that represents the output YAML objects of the KCL program, and an error if any.
-func RunKCL(name, source string, resourceList *yaml.RNode) (*yaml.RNode, error) {
+// A pointer to []*yaml.RNode objects that represent the output YAML objects of the KCL program.
+func RunKCL(name, source string, resourceList *yaml.RNode) ([]*yaml.RNode, error) {
 	// 1. Construct KCL code from source.
 	file, err := SourceToTempFile(source)
 	if err != nil {
@@ -44,19 +43,23 @@ func RunKCL(name, source string, resourceList *yaml.RNode) (*yaml.RNode, error) 
 	defer os.RemoveAll(file)
 
 	// 2. Construct option list.
-	resourceListOptionKCLValue, err := ToKCLValueString(resourceList)
+	opts, err := constructOptions(resourceList)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
 
 	// 3. Run the KCL code.
-	r, err := kcl.Run(file, kcl.WithOptions(fmt.Sprintf("%s=%s", resourceListOptionName, resourceListOptionKCLValue)))
+	r, err := kcl.Run(file, opts...)
 	if err != nil {
 		return nil, errors.Wrap(stripansi.Strip(err.Error()))
 	}
 
 	// 4. Parse YAML objects.
-	rn, err := yaml.Parse(r.GetRawYamlResult())
+	reader := kio.ByteReader{
+		Reader:                strings.NewReader(r.GetRawYamlResult()),
+		OmitReaderAnnotations: true,
+	}
+	rn, err := reader.Read()
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
@@ -64,7 +67,10 @@ func RunKCL(name, source string, resourceList *yaml.RNode) (*yaml.RNode, error) 
 }
 
 // ToKCLValueString converts YAML value to KCL top level argument json value.
-func ToKCLValueString(value *yaml.RNode) (string, error) {
+func ToKCLValueString(value *yaml.RNode, defaultValue string) (string, error) {
+	if value.IsNil() {
+		return defaultValue, nil
+	}
 	jsonString, err := value.MarshalJSON()
 	if err != nil {
 		return "", errors.Wrap(err)
@@ -83,8 +89,6 @@ func SourceToTempFile(source string) (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err)
 	}
-	buffer := new(bytes.Buffer)
-	codeTemplate.Execute(buffer, &struct{ Source string }{localeSource})
 	// Create temp files.
 	tmpDir, err := os.MkdirTemp("", "sandbox")
 	if err != nil {
@@ -92,9 +96,40 @@ func SourceToTempFile(source string) (string, error) {
 	}
 	// Write kcl code in the temp file.
 	file := filepath.Join(tmpDir, "prog.k")
-	err = os.WriteFile(file, buffer.Bytes(), 0666)
+	err = os.WriteFile(file, []byte(localeSource), 0666)
 	if err != nil {
 		return "", errors.Wrap(err)
 	}
 	return file, nil
+}
+
+func constructOptions(resourceList *yaml.RNode) ([]kcl.Option, error) {
+	resourceListOptionKCLValue, err := ToKCLValueString(resourceList, emptyConfig)
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+	v, err := resourceList.Pipe(yaml.Lookup("items"))
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+	itemsOptionKCLValue, err := ToKCLValueString(v, emptyList)
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+	v, err = resourceList.Pipe(yaml.Lookup("functionConfig", "spec", "params"))
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+	paramsptionKCLValue, err := ToKCLValueString(v, emptyConfig)
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+	opts := []kcl.Option{
+		kcl.WithOptions(fmt.Sprintf("%s=%s", resourceListOptionName, resourceListOptionKCLValue)),
+		// resource.items
+		kcl.WithOptions(fmt.Sprintf("%s=%s", itemsOptionName, itemsOptionKCLValue)),
+		// resource.functionConfig.spec.params
+		kcl.WithOptions(fmt.Sprintf("%s=%s", paramsOptionName, paramsptionKCLValue)),
+	}
+	return opts, nil
 }

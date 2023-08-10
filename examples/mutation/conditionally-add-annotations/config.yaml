@@ -16,14 +16,13 @@ spec:
       configmanagement.gke.io/managed: disabled
   source: |
     resource = option("resource_list")
-    items = resource.items
     params = resource.functionConfig.spec.params
     toMatch = params.toMatch
     toAdd = params.toAdd
-    [item | {
+    items = [item | {
        # If all annotations are matched, patch more annotations
        if all key, value in toMatch {
           item.metadata.annotations[key] == value
        }:
            metadata.annotations: toAdd
-    } for item in items]
+    } for item in resource.items]

@@ -40,36 +40,7 @@ diff \
 
 ## FunctionConfig
 
-There are 2 kinds of `functionConfig` supported by this function:
-
-+ ConfigMap
-+ A custom resource of kind `KCLRun`
-
-To use a ConfigMap as the functionConfig, the KCL script source must be specified in the data.source field. Additional parameters can be specified in the data field.
-
-Here's an example:
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: set-replicas
-data:
-  replicas: "5"
-  source: |
-    resources = option("resource_list")
-    setReplicas = lambda items, replicas {
-        [item | {
-            if item.kind == "Deployment": 
-                spec.replicas = int(replicas)
-        } for item in items]
-    }
-    setReplicas(resources.items or [], resources.functionConfig.data.replicas)
-```
-
-In the example above, the script accesses the replicas parameters using `option("resource_list").functionConfig.data.replicas`.
-
-To use a KCLRun as the functionConfig, the KCL source must be specified in the source field. Additional parameters can be specified in the params field. The params field supports any complex data structure as long as it can be represented in YAML.
+To use a `KCLRun` as the functionConfig, the KCL source must be specified in the source field. Additional parameters can be specified in the params field. The params field supports any complex data structure as long as it can be represented in YAML.
 
 ```yaml
 apiVersion: krm.kcl.dev/v1alpha1
@@ -83,21 +54,19 @@ spec:
     toAdd:
       configmanagement.gke.io/managed: disabled
   source: |
-    resource = option("resource_list")
-    items = resource.items
-    params = resource.functionConfig.spec.params
+    params = option("params")
     toMatch = params.toMatch
     toAdd = params.toAdd
-    [item | {
+    items = [item | {
        # If all annotations are matched, patch more annotations
        if all key, value in toMatch {
           item.metadata.annotations[key] == value
        }:
            metadata.annotations: toAdd
-    } for item in items]
+    } for item in option("items")]
 ```
 
-In the example above, the script accesses the `toMatch` parameters using `option("resource_list").functionConfig.spec.params.toMatch`.
+In the example above, the script accesses the `toMatch` parameters using `option("params").toMatch`.
 
 Besides, the `source` ield supports different KCL sources, which can come from a local file, VCS such as github, OCI registry, http, etc. You can see the specific usage [here](./pkg/options/testdata/). Take an OCI source as the example.
 

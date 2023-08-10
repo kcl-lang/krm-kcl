@@ -67,4 +67,4 @@ spec:
         [deployment, if a.service: service]
     }
 
-    kubernetesRender(params)
+    items = kubernetesRender(params)
