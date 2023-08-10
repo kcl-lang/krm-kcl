@@ -9,9 +9,12 @@ import (
 
 	"kcl-lang.io/kcl-go/pkg/service"
 	"kcl-lang.io/kcl-go/pkg/spec/gpyrpc"
+	pkg "kcl-lang.io/kpm/pkg/package"
 )
 
 const (
+	// ModFile is the package configuration
+	ModFile = "kcl.mod"
 	// DefaultEntryFile is the default entry file for the package folder.
 	DefaultEntryFile = "main.k"
 	// DefaultEntryFile is the default entry config for the package folder.
@@ -27,9 +30,20 @@ var (
 
 // GetSourceFromDir returns the kcl source code located at a filepath,
 func GetSourceFromDir(dir string) (string, error) {
-	// 0. TODO: kcl.mod entries
-	// 1. kcl.yaml
-	path := filepath.Join(dir, DefaultEntryConfig)
+	// 0. kcl.mod entries
+	path := filepath.Join(dir, ModFile)
+	if FileExists(path) {
+		kPkg, err := pkg.LoadKclPkg(dir)
+		if err != nil {
+			return "", err
+		}
+		files := kPkg.GetEntryKclFilesFromModFile()
+		if len(files) != 0 {
+			return GetSourceFromEntryFiles(files)
+		}
+	}
+	// 1. kcl.yaml entries
+	path = filepath.Join(dir, DefaultEntryConfig)
 	if FileExists(path) {
 		client := service.NewKclvmServiceClient()
 		resp, err := client.LoadSettingsFiles(&gpyrpc.LoadSettingsFiles_Args{
@@ -39,7 +53,10 @@ func GetSourceFromDir(dir string) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		return GetSourceFromEntryFiles(resp.GetKclCliConfigs().Files)
+		files := resp.GetKclCliConfigs().Files
+		if len(files) != 0 {
+			return GetSourceFromEntryFiles(files)
+		}
 	}
 	// 2. main.k
 	path = filepath.Join(dir, DefaultEntryFile)

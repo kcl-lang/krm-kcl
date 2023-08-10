@@ -16,7 +16,6 @@ spec:
   source: |
     # Construct resource and params
     resource = option("resource_list")
-    items = resource.items
     params = resource.functionConfig.spec.params
     # Define the validation function
     validate_https_only = lambda item {
@@ -25,4 +24,4 @@ spec:
         item
     }
     # Validate All resource
-    [validate_https_only(i) for i in items]
+    items = [validate_https_only(i) for i in resource.items]

@@ -15,7 +15,6 @@ spec:
   source: |
     # Construct resource and params
     resource = option("resource_list")
-    items = resource.items
     params = resource.functionConfig.spec.params
     # Define the validation function
     validate_external_ips = lambda item, allowedIps: [str] {
@@ -26,4 +25,4 @@ spec:
         item
     }
     # Validate All resource
-    [validate_external_ips(i, params.allowedIps or []) for i in items]
+    items = [validate_external_ips(i, params.allowedIps or []) for i in resource.items]
