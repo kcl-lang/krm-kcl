@@ -9,8 +9,8 @@ require (
 	github.com/stretchr/testify v1.8.4
 	k8s.io/api v0.27.3
 	k8s.io/apimachinery v0.27.3
-	kcl-lang.io/kcl-go v0.5.2
-	kcl-lang.io/kpm v0.3.3-0.20230807021350-5a53906c5c3e
+	kcl-lang.io/kcl-go v0.5.4
+	kcl-lang.io/kpm v0.3.4-0.20230824121556-85a014e222fc
 	sigs.k8s.io/kustomize/kyaml v0.14.3
 )
 
@@ -27,8 +27,6 @@ require (
 	github.com/Microsoft/go-winio v0.6.0 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20230217124315-7d5c6f04bbb8 // indirect
 	github.com/acomagu/bufpipe v1.0.4 // indirect
-	github.com/alexflint/go-arg v1.4.3 // indirect
-	github.com/alexflint/go-scalar v1.1.0 // indirect
 	github.com/aws/aws-sdk-go v1.44.122 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
@@ -104,6 +102,7 @@ require (
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/skeema/knownhosts v1.1.0 // indirect
+	github.com/thoas/go-funk v0.9.3 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	github.com/xlab/treeprint v1.2.0 // indirect
@@ -131,7 +130,7 @@ require (
 	k8s.io/klog/v2 v2.90.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20230601164746-7562a1006961 // indirect
 	k8s.io/utils v0.0.0-20230505201702-9f6742963106 // indirect
-	kcl-lang.io/kcl-artifact-go v0.5.1 // indirect
+	kcl-lang.io/kcl-artifact-go v0.5.6 // indirect
 	oras.land/oras-go v1.2.3 // indirect
 	oras.land/oras-go/v2 v2.0.2 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
