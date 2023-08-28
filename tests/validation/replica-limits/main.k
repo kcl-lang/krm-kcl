@@ -2,7 +2,7 @@ items = lambda {
     # Construct resource and params
     resource = option("resource_list")
     items = resource.items
-    params = resource.functionConfig.spec.params
+    params = option("params")
     min_replicas: int = params.min_replicas or 0
     max_replicas: int = params.max_replicas or 99999
     # Define the validation function

@@ -1,6 +1,7 @@
 package kio
 
 import (
+	"kcl-lang.io/krm-kcl/pkg/api/v1alpha1"
 	"kcl-lang.io/krm-kcl/pkg/config"
 	"kcl-lang.io/krm-kcl/pkg/edit"
 
@@ -16,7 +17,7 @@ type Filter struct {
 // Filter checks each input and ensures that all containers have cpu and memory
 // reservations set, otherwise it returns an error.
 func (f Filter) Filter(in []*yaml.RNode) ([]*yaml.RNode, error) {
-	// Whether has fnCfg in the
+	// Whether has fnCfg in the `functionConfig` field input resource list
 	hasFnCfg := f.rw.FunctionConfig != nil
 	configs, idxs, err := f.parseConfigs(in)
 	if err != nil {
@@ -49,7 +50,7 @@ func (f *Filter) parseConfigs(in []*yaml.RNode) ([]*config.KCLRun, []int, error)
 	// If KCLRun is not found in the function config, find it in the input manifests
 	if f.rw.FunctionConfig == nil {
 		for idx, i := range in {
-			if i.GetApiVersion() == config.KCLRunAPIVersion && i.GetKind() == config.KCLRunKind {
+			if i.GetApiVersion() == v1alpha1.KCLRunAPIVersion && i.GetKind() == v1alpha1.KCLRunKind {
 				// Parse the input function config.
 				config, err := f.parseConfig(i)
 				f.rw.FunctionConfig = i

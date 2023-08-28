@@ -2,12 +2,11 @@ apiVersion: krm.kcl.dev/v1alpha1
 kind: KCLRun
 metadata:
   name: web-service
-  metadata:
-    annotations: 
-      krm.kcl.dev/version: 0.0.1
-      krm.kcl.dev/type: abstraction
-      documentation: >-
-        Web service application abstraction
+  annotations: 
+    krm.kcl.dev/version: 0.0.1
+    krm.kcl.dev/type: abstraction
+    documentation: >-
+      Web service application abstraction
 spec:
   params:
     name: app
@@ -23,7 +22,7 @@ spec:
       name: app
   source: |
     resource = option("resource_list")
-    params = resource.functionConfig.spec.params
+    params = option("params")
 
     # Convert the `App` model into Kubernetes Deployment and Service Manifests
     kubernetesRender = lambda a {

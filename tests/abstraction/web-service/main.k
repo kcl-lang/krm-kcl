@@ -1,6 +1,6 @@
 items = lambda {
     resource = option("resource_list")
-    params = resource.functionConfig.spec.params
+    params = option("params")
 
     # Convert the `App` model into Kubernetes Deployment and Service Manifests
     kubernetesRender = lambda a {
