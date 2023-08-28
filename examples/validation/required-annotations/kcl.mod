@@ -1,4 +1,4 @@
 [package]
-name = "restrict-ingress-paths"
+name = "required-annotations"
 edition = "*"
 version = "0.0.1"

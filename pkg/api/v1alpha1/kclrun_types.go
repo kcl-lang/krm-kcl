@@ -13,6 +13,9 @@ const (
 	// KCLRunKind represents the kind of resource for the KCLRun resource.
 	KCLRunKind = "KCLRun"
 
-	// SourceKey is the key for the source field in a ConfigMap.
+	// SourceKey is the key for the source field in the KCLRun resource.
 	SourceKey = "source"
+
+	// ParamsKey is the key for the params field in the KCLRun resource.
+	ParamsKey = "params"
 )

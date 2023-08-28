@@ -12,9 +12,6 @@ metadata:
       This policy mutates Pods to add the capabilities SETFCAP and SETUID so long as they are not listed
       as dropped capabilities first.
 spec:
-  params:
-    capabilities:
-    - SETUID
   source: ./examples/mutation/add-capabilities/main.k
 ---
 apiVersion: v1

@@ -1,4 +1,4 @@
 [package]
-name = "required-labels"
+name = "set-labels"
 edition = "*"
 version = "0.0.1"
