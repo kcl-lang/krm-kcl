@@ -31,7 +31,7 @@ func (o *RunOptions) Run() error {
 	if err != nil {
 		return err
 	}
-	pipeline := kio.NewPipeline(reader, writer, true)
+	pipeline := kio.NewPipeline(reader, writer, false)
 	return pipeline.Execute()
 }
 

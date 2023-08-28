@@ -26,7 +26,7 @@ type suite struct {
 
 func TestRunExamples(t *testing.T) {
 	var tests []suite
-	filepath.Walk("./examples", func(path string, info fs.FileInfo, err error) error {
+	err := filepath.Walk("./examples", func(path string, info fs.FileInfo, err error) error {
 		if !strings.HasSuffix(path, "kcl.mod") {
 			return nil
 		}
@@ -39,7 +39,10 @@ func TestRunExamples(t *testing.T) {
 		suiteDir := filepath.Join(dir, "suite")
 		goodSuite := filepath.Join(suiteDir, "good.yaml")
 		badSuite := filepath.Join(suiteDir, "bad.yaml")
-
+		pkgName := kPkg.GetPkgName()
+		if filepath.Base(dir) != pkgName {
+			return fmt.Errorf("Mismatch package name %s and base dir %s", pkgName, dir)
+		}
 		tests = append(tests, suite{
 			kPkg.GetPkgName() + "-good-suite",
 			fields{
@@ -59,6 +62,9 @@ func TestRunExamples(t *testing.T) {
 		}
 		return nil
 	})
+	if err != nil {
+		t.Errorf("TestRunExamples() error = %v", err)
+	}
 	fmt.Printf("%d total suites checked\n", len(tests))
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -67,7 +73,7 @@ func TestRunExamples(t *testing.T) {
 				OutputPath: tt.fields.OutputPath,
 			}
 			if err := o.Run(); (err != nil) != tt.wantErr {
-				t.Errorf("TestRunHttps() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("TestRunExamples() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
