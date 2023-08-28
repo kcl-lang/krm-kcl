@@ -125,6 +125,7 @@ func constructOptions(resourceList *yaml.RNode) ([]kcl.Option, error) {
 		return nil, errors.Wrap(err)
 	}
 	opts := []kcl.Option{
+		// resource_list
 		kcl.WithOptions(fmt.Sprintf("%s=%s", resourceListOptionName, resourceListOptionKCLValue)),
 		// resource.items
 		kcl.WithOptions(fmt.Sprintf("%s=%s", itemsOptionName, itemsOptionKCLValue)),

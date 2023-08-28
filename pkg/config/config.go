@@ -8,30 +8,16 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 
+	"kcl-lang.io/krm-kcl/pkg/api/v1alpha1"
 	"kcl-lang.io/krm-kcl/pkg/edit"
 )
 
 const (
-	// KCLRunGroup represents the API group for the KCLRun resource.
-	KCLRunGroup = "krm.kcl.dev"
-
-	// KCLRunVersion represents the API version for the KCLRun resource.
-	KCLRunVersion = "v1alpha1"
-
-	// KCLRunAPIVersion is a combination of the API group and version for the KCLRun resource.
-	KCLRunAPIVersion = KCLRunGroup + "/" + KCLRunVersion
-
-	// KCLRunKind represents the kind of resource for the KCLRun resource.
-	KCLRunKind = "KCLRun"
-
 	// ConfigMapAPIVersion represents the API version for the ConfigMap resource.
 	ConfigMapAPIVersion = "v1"
 
 	// ConfigMapKind represents the kind of resource for the ConfigMap resource.
 	ConfigMapKind = "ConfigMap"
-
-	// SourceKey is the key for the source field in a ConfigMap.
-	SourceKey = "source"
 
 	// DefaultProgramName is the default name for the KCL function program.
 	DefaultProgramName = "kcl-function-run"
@@ -68,19 +54,19 @@ func (r *KCLRun) Config(fnCfg *fn.KubeObject) error {
 		r.Namespace = cm.Namespace
 		r.Spec.Params = map[string]interface{}{}
 		for k, v := range cm.Data {
-			if k == SourceKey {
+			if k == v1alpha1.SourceKey {
 				r.Spec.Source = v
 			}
 			r.Spec.Params[k] = v
 		}
-	case fnCfgAPIVersion == KCLRunAPIVersion && fnCfgKind == KCLRunKind:
+	case fnCfgAPIVersion == v1alpha1.KCLRunAPIVersion && fnCfgKind == v1alpha1.KCLRunKind:
 		if err := fnCfg.As(r); err != nil {
 			return err
 		}
 	default:
 		return fmt.Errorf("`functionConfig` must be either %v or %v, but we got: %v",
 			schema.FromAPIVersionAndKind(ConfigMapAPIVersion, ConfigMapKind).String(),
-			schema.FromAPIVersionAndKind(KCLRunAPIVersion, KCLRunKind).String(),
+			schema.FromAPIVersionAndKind(v1alpha1.KCLRunAPIVersion, v1alpha1.KCLRunKind).String(),
 			schema.FromAPIVersionAndKind(fnCfg.GetAPIVersion(), fnCfg.GetKind()).String())
 	}
 

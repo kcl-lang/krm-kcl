@@ -7,7 +7,7 @@ spec:
     replicas: 5
   source: |
     resource = option("resource_list")
-    replicas = resource.functionConfig.spec.params.replicas
+    replicas = option("params").replicas
     setReplicas = lambda items: [], replicas: int {
         [item | {
             if item.kind == "Deployment": 

@@ -48,10 +48,9 @@ func ReadFromOCISource(src string) (string, error) {
 	localPath := ociOpts.AddStoragePathSuffix(tmpDir)
 
 	// 2. Pull the tarball from OCI.
-	err = oci.Pull(localPath, ociOpts.Reg, ociOpts.Repo, ociOpts.Tag)
-
-	if err != nil {
-		return src, err
+	e = oci.Pull(localPath, ociOpts.Reg, ociOpts.Repo, ociOpts.Tag)
+	if e != nil {
+		return src, errors.New(e.Error())
 	}
 
 	// 3. Get the (*.tar) file path.
