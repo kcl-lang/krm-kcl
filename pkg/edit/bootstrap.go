@@ -120,7 +120,7 @@ func constructOptions(resourceList *yaml.RNode) ([]kcl.Option, error) {
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
-	paramsptionKCLValue, err := ToKCLValueString(v, emptyConfig)
+	paramsOptionKCLValue, err := ToKCLValueString(v, emptyConfig)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
@@ -130,7 +130,7 @@ func constructOptions(resourceList *yaml.RNode) ([]kcl.Option, error) {
 		// resource.items
 		kcl.WithOptions(fmt.Sprintf("%s=%s", itemsOptionName, itemsOptionKCLValue)),
 		// resource.functionConfig.spec.params
-		kcl.WithOptions(fmt.Sprintf("%s=%s", paramsOptionName, paramsptionKCLValue)),
+		kcl.WithOptions(fmt.Sprintf("%s=%s", paramsOptionName, paramsOptionKCLValue)),
 	}
 	return opts, nil
 }
