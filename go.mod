@@ -10,7 +10,7 @@ require (
 	k8s.io/api v0.27.3
 	k8s.io/apimachinery v0.27.3
 	kcl-lang.io/kcl-go v0.6.0-alpha.1
-	kcl-lang.io/kpm v0.3.5
+	kcl-lang.io/kpm v0.3.6
 	sigs.k8s.io/kustomize/kyaml v0.14.3
 )
 
@@ -56,6 +56,7 @@ require (
 	github.com/go-openapi/swag v0.22.3 // indirect
 	github.com/gofrs/flock v0.8.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/golang-collections/collections v0.0.0-20130729185459-604e922904d3 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.3 // indirect
