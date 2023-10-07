@@ -31,7 +31,6 @@ validate = lambda item {
     if containers:
         cpu_list: [str] = [c.resources.limits.cpu for c in containers if c?.resources?.limits?.cpu]
         memory_list: [str] = [c.resources.limits.memory for c in containers if c?.resources?.limits?.memory]
-        # 转换为以核（Core）为单位的值
         if params.cpu:
             disallowed_cpu_list = [cpu for cpu in cpu_list if canonify_cpu(cpu) > canonify_cpu(params.cpu)]
             assert not disallowed_cpu_list, "container cpu limit list '${disallowed_cpu_list}' is higher than the maximum allowed of ${params.cpu}"
