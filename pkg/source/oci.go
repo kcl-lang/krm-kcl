@@ -9,6 +9,7 @@ import (
 
 	"kcl-lang.io/kpm/pkg/oci"
 	"kcl-lang.io/kpm/pkg/opt"
+	"kcl-lang.io/kpm/pkg/settings"
 	"kcl-lang.io/kpm/pkg/utils"
 )
 
@@ -48,9 +49,10 @@ func ReadFromOCISource(src string) (string, error) {
 	localPath := ociOpts.AddStoragePathSuffix(tmpDir)
 
 	// 2. Pull the tarball from OCI.
-	e = oci.Pull(localPath, ociOpts.Reg, ociOpts.Repo, ociOpts.Tag)
-	if e != nil {
-		return src, errors.New(e.Error())
+	s := settings.GetSettings()
+	err = oci.Pull(localPath, ociOpts.Reg, ociOpts.Repo, ociOpts.Tag, s)
+	if err != nil {
+		return src, err
 	}
 
 	// 3. Get the (*.tar) file path.
