@@ -68,7 +68,7 @@ spec:
 
 In the example above, the script accesses the `toMatch` parameters using `option("params").toMatch`.
 
-Besides, the `source` ield supports different KCL sources, which can come from a local file, VCS such as github, OCI registry, http, etc. You can see the specific usage [here](./pkg/options/testdata/). Take an OCI source as the example.
+Besides, the `source` field supports different KCL sources, which can come from a local file, VCS such as github, OCI registry, http, etc. You can see the specific usage [here](./pkg/options/testdata/). Take an OCI source as the example.
 
 ```yaml
 apiVersion: krm.kcl.dev/v1alpha1

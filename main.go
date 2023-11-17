@@ -9,8 +9,26 @@ import (
 
 func main() {
 	// Input KRM resource list and KCL function config from os.Stdin
+	// YAML Stream Example
 	//
-	// Example
+	// ```yaml
+	// apiVersion: apps/v1
+	// kind: Deployment
+	// metadata:
+	//   name: deployment
+	// spec:
+	//   replicas: 2
+	// ---
+	// apiVersion: krm.kcl.dev/v1alpha1
+	// kind: KCLRun
+	// metadata:
+	//   name: set-annotation
+	// spec:
+	//   source: |
+	//     [resource | {if resource.kind == "Deployment": metadata.annotations: {"managed-by" = "krm-kcl"}} for resource in option("resource_list").items]
+	// ```
+	//
+	// Resource List Example
 	//
 	// ```yaml
 	// apiVersion: config.kubernetes.io/v1
@@ -18,13 +36,15 @@ func main() {
 	// items:
 	// - apiVersion: apps/v1
 	//   kind: Deployment
+	//   metadata:
+	//     name: deployment
 	//   spec:
 	//     replicas: 2
-	// - kind: Service
 	// functionConfig:
 	//   apiVersion: krm.kcl.dev/v1alpha1
 	//   kind: KCLRun
 	//   metadata:
+	//     name: set-annotation
 	//   spec:
 	//     source: |
 	//       [resource | {if resource.kind == "Deployment": metadata.annotations: {"managed-by" = "krm-kcl"}} for resource in option("resource_list").items]
