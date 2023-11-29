@@ -1155,10 +1155,10 @@ k8s.io/kube-openapi v0.0.0-20230601164746-7562a1006961 h1:pqRVJGQJz6oeZby8qmPKXY
 k8s.io/kube-openapi v0.0.0-20230601164746-7562a1006961/go.mod h1:l8HTwL5fqnlns4jOveW1L75eo7R9KFHxiE0bsPGy428=
 k8s.io/utils v0.0.0-20230505201702-9f6742963106 h1:EObNQ3TW2D+WptiYXlApGNLVy0zm/JIBVY9i+M4wpAU=
 k8s.io/utils v0.0.0-20230505201702-9f6742963106/go.mod h1:OLgZIPagt7ERELqWJFomSt595RzquPNLL48iOWgYOg0=
-kcl-lang.io/kcl-artifact-go v0.7.0-beta.1 h1:u1l/OXWblOiDHabN+6ApSHTZwNyOskuOCf90fXreGu4=
-kcl-lang.io/kcl-artifact-go v0.7.0-beta.1/go.mod h1:c07mqi9Hu2UjPW7lYfHhAAWOlZiB7lo7Vkr4jL5ov/M=
-kcl-lang.io/kcl-go v0.7.0-alpha.2.0.20231124040835-17b297a9a177 h1:sCggavAK0yBFLQE2D+wsYZFbJfLmFhz5PDrakcc3H2U=
-kcl-lang.io/kcl-go v0.7.0-alpha.2.0.20231124040835-17b297a9a177/go.mod h1:yf8pMkic+1m4wedG9MLxrkeVoqFhIrMbY+x4nPPg2O8=
+kcl-lang.io/kcl-artifact-go v0.7.0-beta.2 h1:7L5qbEqD8y672XNTk2snv8/UXScABFdM3g9Bu2Ama1Q=
+kcl-lang.io/kcl-artifact-go v0.7.0-beta.2/go.mod h1:c07mqi9Hu2UjPW7lYfHhAAWOlZiB7lo7Vkr4jL5ov/M=
+kcl-lang.io/kcl-go v0.7.0-beta.1.0.20231129132340-83897a56d087 h1:shfYD/EiBuacHQJ63XuM7X1OgieiyfaqrpqhU0ECVCE=
+kcl-lang.io/kcl-go v0.7.0-beta.1.0.20231129132340-83897a56d087/go.mod h1:dxF3hghkxoJKOkBrXwrqc8nRT0HylrOvsI83FxdQT6M=
 kcl-lang.io/kpm v0.4.1 h1:72kNdmMF6UNMGwa0JOsTVWwFSHyb5TAVaj3PYMmkw4Y=
 kcl-lang.io/kpm v0.4.1/go.mod h1:GM6IrXwcTZHU+JLg6b0/JXoAcfwIzJkjIbGqV15jrtI=
 oras.land/oras-go v1.2.3 h1:v8PJl+gEAntI1pJ/LCrDgsuk+1PKVavVEPsYIHFE5uY=
