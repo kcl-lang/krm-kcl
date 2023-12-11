@@ -101,3 +101,12 @@ You can directly use [KCL standard libraries](https://kcl-lang.io/docs/reference
 ## Examples
 
 + See [here](./examples/README.md) for more examples.
+
+## Tools and Integrations
+
++ [Kubectl KCL Plugin](https://github.com/kcl-lang/kubectl-kcl)
++ [Helm KCL Plugin](https://github.com/kcl-lang/helm-kcl)
++ [Helmfile KCL Plugin](https://github.com/kcl-lang/helmfile-kcl)
++ [KPT KCL Plugin](https://github.com/kcl-lang/kpt-kcl)
++ [KCL Operator](https://github.com/kcl-lang/kcl-operator)
++ Crossplane KCL Function, see this [issue](https://github.com/kcl-lang/kcl/issues/885)
