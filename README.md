@@ -84,7 +84,7 @@ spec:
 
 Here's what you can do in the KCL script:
 
-+ Read resources from `option("resource_list")`. The `option("resource_list")` complies with the [KRM Functions Specification](https://github.com/kubernetes-sigs/kustomize/blob/master/cmd/config/docs/api-conventions/functions-spec.md#krm-functions-specification). You can read the input resources from `option("resource_list")["items"]` and the `functionConfig` from `option("resource_list")["functionConfig"]`.
++ Read resources from `option("resource_list")`. The `option("resource_list")` complies with the [KRM Functions Specification](https://github.com/kubernetes-sigs/kustomize/blob/master/cmd/config/docs/api-conventions/functions-spec.md#krm-functions-specification). You can read the input resources from `option("items")` and the `functionConfig` from `option("functionConfig")`.
 + Return a KRM list for output resources.
 + Return an error using `assert {condition}, {error_message}`.
 + Read the environment variables. e.g. `option("PATH")` (**Not yet implemented**).
@@ -109,4 +109,4 @@ You can directly use [KCL standard libraries](https://kcl-lang.io/docs/reference
 + [Helmfile KCL Plugin](https://github.com/kcl-lang/helmfile-kcl)
 + [KPT KCL Plugin](https://github.com/kcl-lang/kpt-kcl)
 + [KCL Operator](https://github.com/kcl-lang/kcl-operator)
-+ Crossplane KCL Function, see this [issue](https://github.com/kcl-lang/kcl/issues/885)
++ [Crossplane KCL Function](https://github.com/kcl-lang/crossplane-kcl)
