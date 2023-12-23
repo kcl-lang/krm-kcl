@@ -1,16 +1,16 @@
 package edit
 
 import (
+	"bytes"
 	_ "embed"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 
-	kcl "kcl-lang.io/kcl-go"
+	"kcl-lang.io/cli/pkg/options"
 	src "kcl-lang.io/krm-kcl/pkg/source"
 
-	"github.com/acarl005/stripansi"
 	"sigs.k8s.io/kustomize/kyaml/errors"
 	"sigs.k8s.io/kustomize/kyaml/kio"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
@@ -40,23 +40,22 @@ func RunKCL(name, source string, resourceList *yaml.RNode) ([]*yaml.RNode, error
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
-	defer os.RemoveAll(file)
-
 	// 2. Construct option list.
 	opts, err := constructOptions(resourceList)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
-
 	// 3. Run the KCL code.
-	r, err := kcl.Run(file, opts...)
+	result := bytes.NewBuffer([]byte{})
+	opts.Entries = []string{file}
+	opts.Writer = result
+	err = opts.Run()
 	if err != nil {
-		return nil, errors.Wrap(stripansi.Strip(err.Error()))
+		return nil, errors.Wrap(err)
 	}
-
 	// 4. Parse YAML objects.
 	reader := kio.ByteReader{
-		Reader:                strings.NewReader(r.GetRawYamlResult()),
+		Reader:                result,
 		OmitReaderAnnotations: true,
 	}
 	rn, err := reader.Read()
@@ -89,6 +88,9 @@ func SourceToTempFile(source string) (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err)
 	}
+	if src.IsOCI(source) {
+		return source, nil
+	}
 	// Create temp files.
 	tmpDir, err := os.MkdirTemp("", "sandbox")
 	if err != nil {
@@ -103,7 +105,7 @@ func SourceToTempFile(source string) (string, error) {
 	return file, nil
 }
 
-func constructOptions(resourceList *yaml.RNode) ([]kcl.Option, error) {
+func constructOptions(resourceList *yaml.RNode) (*options.RunOptions, error) {
 	resourceListOptionKCLValue, err := ToKCLValueString(resourceList, emptyConfig)
 	if err != nil {
 		return nil, errors.Wrap(err)
@@ -124,13 +126,15 @@ func constructOptions(resourceList *yaml.RNode) ([]kcl.Option, error) {
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
-	opts := []kcl.Option{
+	opts := options.NewRunOptions()
+	opts.NoStyle = true
+	opts.Arguments = []string{
 		// resource_list
-		kcl.WithOptions(fmt.Sprintf("%s=%s", resourceListOptionName, resourceListOptionKCLValue)),
+		fmt.Sprintf("%s=%s", resourceListOptionName, resourceListOptionKCLValue),
 		// resource.items
-		kcl.WithOptions(fmt.Sprintf("%s=%s", itemsOptionName, itemsOptionKCLValue)),
+		fmt.Sprintf("%s=%s", itemsOptionName, itemsOptionKCLValue),
 		// resource.functionConfig.spec.params
-		kcl.WithOptions(fmt.Sprintf("%s=%s", paramsOptionName, paramsOptionKCLValue)),
+		fmt.Sprintf("%s=%s", paramsOptionName, paramsOptionKCLValue),
 	}
 	return opts, nil
 }
