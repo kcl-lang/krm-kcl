@@ -11,7 +11,7 @@ const (
 	// GitHubDomain is the domain used for GitHub-based requests.
 	GitHubDomain = "github.com"
 	// GitLabDomain is the domain used for GitLab-based requests.
-	GitLabDomain = "gitlab.com/inkscape/inkscape"
+	GitLabDomain = "gitlab.com/"
 	// BitBucketDomain is the domain used for BitBucket-based requests.
 	BitBucketDomain = "bitbucket.org/"
 )
