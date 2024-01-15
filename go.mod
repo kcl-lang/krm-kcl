@@ -2,8 +2,6 @@ module kcl-lang.io/krm-kcl
 
 go 1.21
 
-toolchain go1.21.5
-
 require (
 	github.com/GoogleContainerTools/kpt-functions-sdk/go/fn v0.0.0-20230427202446-3255accc518d
 	github.com/hashicorp/go-getter v1.7.1
