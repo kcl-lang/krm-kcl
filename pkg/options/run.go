@@ -14,11 +14,15 @@ type RunOptions struct {
 	InputPath string
 	// OutputPath is the -o flag
 	OutputPath string
+	// Environment variable example (PATH)
+	PathEnvVar string
 }
 
 // RunOptions creates a new options for the run command.
 func NewRunOptions() *RunOptions {
-	return &RunOptions{}
+	return &RunOptions{
+		PathEnvVar: os.Getenv("PATH"),
+	}
 }
 
 // Run the with the run command options.
