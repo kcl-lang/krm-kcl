@@ -126,6 +126,8 @@ func constructOptions(resourceList *yaml.RNode) (*options.RunOptions, error) {
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
+	// 4. Read environment variables.
+	pathOptionKCLValue := os.Getenv("PATH")
 	opts := options.NewRunOptions()
 	opts.NoStyle = true
 	opts.Arguments = []string{
@@ -135,6 +137,8 @@ func constructOptions(resourceList *yaml.RNode) (*options.RunOptions, error) {
 		fmt.Sprintf("%s=%s", itemsOptionName, itemsOptionKCLValue),
 		// resource.functionConfig.spec.params
 		fmt.Sprintf("%s=%s", paramsOptionName, paramsOptionKCLValue),
+		// environment variable example (PATH)
+		fmt.Sprintf("PATH=%s", pathOptionKCLValue),
 	}
 	return opts, nil
 }
