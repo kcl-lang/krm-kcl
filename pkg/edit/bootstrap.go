@@ -128,6 +128,13 @@ func constructOptions(resourceList *yaml.RNode) (*options.RunOptions, error) {
 	}
 	// 4. Read environment variables.
 	pathOptionKCLValue := os.Getenv("PATH")
+
+	// read map on env
+	envMapOptionKCLValue, err := getEnvMapOptionKCLValue(resourceList)
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+
 	opts := options.NewRunOptions()
 	opts.NoStyle = true
 	opts.Arguments = []string{
@@ -139,6 +146,23 @@ func constructOptions(resourceList *yaml.RNode) (*options.RunOptions, error) {
 		fmt.Sprintf("%s=%s", paramsOptionName, paramsOptionKCLValue),
 		// environment variable example (PATH)
 		fmt.Sprintf("PATH=%s", pathOptionKCLValue),
+		// environment map example (option("env"))
+		fmt.Sprintf("env=%s", envMapOptionKCLValue),
 	}
 	return opts, nil
+}
+
+// getEnvMapOptionKCLValue retrieves the environment map from the KCL 'option("env")' function.
+func getEnvMapOptionKCLValue(resourceList *yaml.RNode) (string, error) {
+	v, err := resourceList.Pipe(yaml.Lookup("option", "env"))
+	if err != nil {
+		return "", errors.Wrap(err)
+	}
+
+	envMapOptionKCLValue, err := ToKCLValueString(v, "{}")
+	if err != nil {
+		return "", errors.Wrap(err)
+	}
+
+	return envMapOptionKCLValue, nil
 }
