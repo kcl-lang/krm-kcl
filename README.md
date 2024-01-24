@@ -109,4 +109,4 @@ You can directly use [KCL standard libraries](https://kcl-lang.io/docs/reference
 + [Helmfile KCL Plugin](https://github.com/kcl-lang/helmfile-kcl)
 + [KPT KCL Plugin](https://github.com/kcl-lang/kpt-kcl)
 + [KCL Operator](https://github.com/kcl-lang/kcl-operator)
-+ [Crossplane KCL Function](https://github.com/kcl-lang/crossplane-kcl)
++ [Crossplane KCL Function](https://github.com/crossplane-contrib/function-kcl)
