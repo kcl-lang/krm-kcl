@@ -154,12 +154,26 @@ func constructOptions(resourceList *yaml.RNode) (*options.RunOptions, error) {
 
 // getEnvMapOptionKCLValue retrieves the environment map from the KCL 'option("env")' function.
 func getEnvMapOptionKCLValue(resourceList *yaml.RNode) (string, error) {
-	v, err := resourceList.Pipe(yaml.Lookup("option", "env"))
+
+	envMap := make(map[string]string)
+	env := os.Environ()
+	for _, e := range env {
+		pair := strings.SplitN(e, "=", 2)
+		envMap[pair[0]] = pair[1]
+	}
+
+	envMapInterface := make(map[string]interface{})
+	for k, v := range envMap {
+		envMapInterface[k] = v
+	}
+
+	v, err := yaml.FromMap(envMapInterface)
 	if err != nil {
 		return "", errors.Wrap(err)
 	}
 
-	envMapOptionKCLValue, err := ToKCLValueString(v, "{}")
+	// 4. Convert the YAML RNode to its KCL value string representation.
+	envMapOptionKCLValue, err := ToKCLValueString(v, emptyConfig)
 	if err != nil {
 		return "", errors.Wrap(err)
 	}
