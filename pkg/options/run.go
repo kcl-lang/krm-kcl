@@ -16,12 +16,15 @@ type RunOptions struct {
 	OutputPath string
 	// Environment variable example (PATH)
 	PathEnvVar string
+	// Environment map from KCL option("env")
+	EnvMap map[string]string
 }
 
 // RunOptions creates a new options for the run command.
 func NewRunOptions() *RunOptions {
 	return &RunOptions{
 		PathEnvVar: os.Getenv("PATH"),
+		EnvMap:     make(map[string]string),
 	}
 }
 
