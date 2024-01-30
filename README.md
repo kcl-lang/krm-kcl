@@ -87,7 +87,7 @@ Here's what you can do in the KCL script:
 + Read resources from `option("resource_list")`. The `option("resource_list")` complies with the [KRM Functions Specification](https://github.com/kubernetes-sigs/kustomize/blob/master/cmd/config/docs/api-conventions/functions-spec.md#krm-functions-specification). You can read the input resources from `option("items")` and the `functionConfig` from `option("functionConfig")`.
 + Return a KRM list for output resources.
 + Return an error using `assert {condition}, {error_message}`.
-+ Read the environment variables. e.g. `option("PATH")` (**Not yet implemented**).
++ Read the environment variables. e.g. `option("PATH")`.
 + Read the OpenAPI schema. e.g. `option("open_api")["definitions"]["io.k8s.api.apps.v1.Deployment"]` (**Not yet implemented**).
 
 ## Library
