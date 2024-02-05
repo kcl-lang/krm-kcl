@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/GoogleContainerTools/kpt-functions-sdk/go/fn v0.0.0-20230427202446-3255accc518d
-	github.com/hashicorp/go-getter v1.7.1
+	github.com/hashicorp/go-getter v1.7.3
 	github.com/stretchr/testify v1.8.4
 	k8s.io/api v0.28.3
 	k8s.io/apimachinery v0.28.3
