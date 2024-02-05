@@ -11,7 +11,7 @@ require (
 	kcl-lang.io/cli v0.7.5
 	kcl-lang.io/kcl-go v0.7.5
 	kcl-lang.io/kpm v0.6.0
-	sigs.k8s.io/kustomize/kyaml v0.14.3
+	sigs.k8s.io/kustomize/kyaml v0.16.0
 )
 
 require (
@@ -167,5 +167,5 @@ require (
 	oras.land/oras-go/v2 v2.3.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.2.3 // indirect
-	sigs.k8s.io/yaml v1.3.0 // indirect
+	sigs.k8s.io/yaml v1.4.0 // indirect
 )
