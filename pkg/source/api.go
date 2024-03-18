@@ -10,7 +10,9 @@ func LocaleSource(src string) (string, error) {
 	if IsOCI(src) {
 		// Read code from a OCI source.
 		return ReadFromOCISource(src)
-	} else if IsLocal(src) || IsRemoteUrl(src) || IsGit(src) || IsVCSDomain(src) {
+	} else if IsLocal(src) {
+		return ReadFromLocalSource(src)
+	} else if IsRemoteUrl(src) || IsGit(src) || IsVCSDomain(src) {
 		// Read code from local path or a remote url.
 		return ReadThroughGetter(src)
 	} else {
