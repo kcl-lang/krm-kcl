@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	kpmreporter "kcl-lang.io/kpm/pkg/reporter"
-	kpmrunner "kcl-lang.io/kpm/pkg/runner"
+	"kcl-lang.io/kpm/pkg/reporter"
+	"kcl-lang.io/kpm/pkg/runner"
 )
 
 // IsLocal determines whether or not a source is to be treated as a local path.
@@ -16,19 +16,19 @@ func IsLocal(src string) bool {
 	return false
 }
 
-// ReadFromOCISource reads source code from an OCI (Open Container Initiative) source.
+// ReadFromLocalSource reads source code from a local file system path source.
 //
 // Parameters:
-// - src: a string containing the OCI source URL.
+// - src: a local file system path.
 //
 // Return:
 // A string containing the source code, and an error if any.
 func ReadFromLocalSource(src string) (string, error) {
 	// Find the mod root
 
-	modpath, kpmerr := kpmrunner.FindModRootFrom(src)
+	modpath, kpmerr := runner.FindModRootFrom(src)
 	if kpmerr != nil {
-		if kpmerr.Type() != kpmreporter.KclModNotFound {
+		if kpmerr.Type() != reporter.KclModNotFound {
 			return "", kpmerr
 		} else {
 			modpath = filepath.Dir(src)
