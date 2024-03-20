@@ -2,12 +2,15 @@ package config
 
 import (
 	"fmt"
+	"os"
+	"strings"
 
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 
+	"kcl-lang.io/kpm/pkg/settings"
 	"kcl-lang.io/krm-kcl/pkg/api/v1alpha1"
 	"kcl-lang.io/krm-kcl/pkg/edit"
 )
@@ -21,6 +24,9 @@ const (
 
 	// DefaultProgramName is the default name for the KCL function program.
 	DefaultProgramName = "kcl-function-run"
+
+	// AnnotationAllowInSecureSource represents the annotation key for allowing insecure sources in KCLRun.
+	AnnotationAllowInSecureSource = "krm.kcl.dev/allow-insecure-source"
 )
 
 // KCLRun is a custom resource to provider KPT `functionConfig`, KCL source and params.
@@ -89,6 +95,8 @@ func (r *KCLRun) Transform(rl *fn.ResourceList) error {
 	var transformedObjects []*fn.KubeObject
 	var nodes []*yaml.RNode
 
+	r.DealAnnotations()
+
 	fcRN, err := yaml.Parse(rl.FunctionConfig.String())
 	if err != nil {
 		return err
@@ -119,4 +127,21 @@ func (r *KCLRun) Transform(rl *fn.ResourceList) error {
 	}
 	rl.Items = transformedObjects
 	return nil
+}
+
+func (r *KCLRun) DealAnnotations() {
+	// Deal the allow-insecure-source annotation
+	if v, ok := r.ObjectMeta.Annotations[AnnotationAllowInSecureSource]; ok && isOk(v) {
+		os.Setenv(settings.DEFAULT_OCI_PLAIN_HTTP_ENV, settings.ON)
+	}
+}
+
+func isOk(value string) bool {
+	okValues := []string{"ok", "yes", "true", "1", "on"}
+	for _, v := range okValues {
+		if strings.EqualFold(strings.ToLower(value), strings.ToLower(v)) {
+			return true
+		}
+	}
+	return false
 }

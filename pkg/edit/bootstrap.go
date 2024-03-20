@@ -129,8 +129,8 @@ func constructOptions(resourceList *yaml.RNode) (*options.RunOptions, error) {
 	// 4. Read environment variables.
 	pathOptionKCLValue := os.Getenv("PATH")
 
-	// read map on env
-	envMapOptionKCLValue, err := getEnvMapOptionKCLValue(resourceList)
+	// 5. Read Env map
+	envMapOptionKCLValue, err := getEnvMapOptionKCLValue()
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
@@ -153,8 +153,7 @@ func constructOptions(resourceList *yaml.RNode) (*options.RunOptions, error) {
 }
 
 // getEnvMapOptionKCLValue retrieves the environment map from the KCL 'option("env")' function.
-func getEnvMapOptionKCLValue(resourceList *yaml.RNode) (string, error) {
-
+func getEnvMapOptionKCLValue() (string, error) {
 	envMap := make(map[string]string)
 	env := os.Environ()
 	for _, e := range env {

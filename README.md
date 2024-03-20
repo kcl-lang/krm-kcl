@@ -68,16 +68,34 @@ spec:
 
 In the example above, the script accesses the `toMatch` parameters using `option("params").toMatch`.
 
-Besides, the `source` field supports different KCL sources, which can come from a local file, VCS such as github, OCI registry, http, etc. You can see the specific usage [here](./pkg/options/testdata/). Take an OCI source as the example.
+Besides, the `source` field supports different KCL sources, which can come from a local file, VCS such as GitHub, OCI registry, HTTP, etc. You can see the specific usage [here](./pkg/options/testdata/). Take an OCI source as an example.
 
 ```yaml
 apiVersion: krm.kcl.dev/v1alpha1
 kind: KCLRun
+metadata:
+  name: set-annotation
 spec:
   params:
     annotations:
       config.kubernetes.io/local-config: "true"
   source: oci://ghcr.io/kcl-lang/set-annotation
+```
+
+### Annotations
+
+```yaml
+apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+metadata:
+  name: set-annotation
+  annotations:
+    krm.kcl.dev/allow-insecure-source: true  # Set plain http for the source managed by KCLRun such as a local registry localhost:7900
+spec:
+  params:
+    annotations:
+      config.kubernetes.io/local-config: "true"
+  source: oci://localhost:7900/my-repo/set-annotation
 ```
 
 ## Guides for Developing KCL
@@ -87,8 +105,8 @@ Here's what you can do in the KCL script:
 + Read resources from `option("resource_list")`. The `option("resource_list")` complies with the [KRM Functions Specification](https://github.com/kubernetes-sigs/kustomize/blob/master/cmd/config/docs/api-conventions/functions-spec.md#krm-functions-specification). You can read the input resources from `option("items")` and the `functionConfig` from `option("functionConfig")`.
 + Return a KRM list for output resources.
 + Return an error using `assert {condition}, {error_message}`.
-+ Read the environment variables. e.g. `option("PATH")`.
-+ Read the OpenAPI schema. e.g. `option("open_api")["definitions"]["io.k8s.api.apps.v1.Deployment"]` (**Not yet implemented**).
++ Read the PATH variables. e.g. `option("PATH")`.
++ Read the environment variables. e.g. `option("env")`.
 
 ## Library
 
