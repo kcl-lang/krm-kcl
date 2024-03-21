@@ -30,6 +30,7 @@ func (f Filter) Filter(in []*yaml.RNode) ([]*yaml.RNode, error) {
 		} else {
 			fnCfg = in[idxs[idx]]
 		}
+		c.DealAnnotations()
 		st := &edit.SimpleTransformer{
 			Name:           config.DefaultProgramName,
 			Source:         c.Spec.Source,
