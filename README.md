@@ -90,7 +90,7 @@ kind: KCLRun
 metadata:
   name: set-annotation
   annotations:
-    krm.kcl.dev/allow-insecure-source: true  # Set plain http for the source managed by KCLRun such as a local registry localhost:7900
+    krm.kcl.dev/allow-insecure-source: "true"  # Set plain http for the source managed by KCLRun such as a local registry localhost:7900
 spec:
   params:
     annotations:
