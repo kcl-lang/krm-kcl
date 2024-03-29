@@ -74,11 +74,7 @@ func ToKCLValueString(value *yaml.RNode, defaultValue string) (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err)
 	}
-	// In KCL, `true`, `false` and `null` are denoted by `True`, `False` and `None`.
-	result := strings.Replace(string(jsonString), ": true", ": True", -1)
-	result = strings.Replace(result, ": false", ": False", -1)
-	result = strings.Replace(result, ": null", ": None", -1)
-	return result, nil
+	return string(jsonString), nil
 }
 
 // SourceToTempFile convert source to a temp KCL file.
