@@ -8,9 +8,9 @@ require (
 	github.com/stretchr/testify v1.9.0
 	k8s.io/api v0.28.3
 	k8s.io/apimachinery v0.28.3
-	kcl-lang.io/cli v0.8.4
+	kcl-lang.io/cli v0.8.5
 	kcl-lang.io/kcl-go v0.8.3
-	kcl-lang.io/kpm v0.8.4
+	kcl-lang.io/kpm v0.8.5-0.20240401071819-7a69be511c95
 	sigs.k8s.io/kustomize/kyaml v0.16.0
 )
 
