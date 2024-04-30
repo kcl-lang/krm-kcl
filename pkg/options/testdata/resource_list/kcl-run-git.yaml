@@ -14,3 +14,8 @@ functionConfig:
       annotations:
         config.kubernetes.io/local-config: "true"
     source: github.com/kcl-lang/krm-kcl/tests/mutation/set-annotations/
+    matchConstraints:
+      resourceRules:
+      - apiGroups:   ["apps"]
+        apiVersions: ["v1"]
+        resources:   ["deployments"]
