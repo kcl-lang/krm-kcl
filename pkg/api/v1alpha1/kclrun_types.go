@@ -18,4 +18,7 @@ const (
 
 	// ParamsKey is the key for the params field in the KCLRun resource.
 	ParamsKey = "params"
+
+	// MatchConstraintsKey is the key for the match constraints field in the KCLRun resource.
+	MatchConstraintsKey = "matchConstraints"
 )

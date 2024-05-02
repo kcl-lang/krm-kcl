@@ -23,6 +23,8 @@ metadata:
 spec:
   source: |
     [item | {metadata.namespace = "baz"} for item in option("resource_list")]
+  matchConstraints:
+    resourceRules:
 `,
 		},
 		{
@@ -33,6 +35,19 @@ metadata:
   name: my-kcl-fn
 `,
 			expectErrMsg: "`source` must not be empty",
+		},
+		{
+			name: "KCLRun missing matchConstraints",
+			config: `apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+metadata:
+  name: my-kcl-fn
+  namespace: foo
+spec:
+  source: |
+    [item | {metadata.namespace = "baz"} for item in option("resource_list")]
+`,
+			expectErrMsg: "",
 		},
 		{
 			name: "valid ConfigMap",

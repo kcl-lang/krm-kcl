@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"reflect"
 	"strings"
 
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
@@ -38,7 +39,21 @@ type KCLRun struct {
 		Source string `json:"source" yaml:"source"`
 		// Params are the parameters in key-value pairs format.
 		Params map[string]interface{} `json:"params,omitempty" yaml:"params,omitempty"`
+		// MatchConstraints defines the resource matching rules.
+		MatchConstraints MatchConstraints `json:"matchConstraints,omitempty" yaml:"matchConstraints,omitempty"`
 	} `json:"spec" yaml:"spec"`
+}
+
+// MatchConstraints defines the resource matching rules.
+type MatchConstraints struct {
+	ResourceRules []ResourceRule `json:"resourceRules,omitempty" yaml:"resourceRules,omitempty"`
+}
+
+// ResourceRule defines a rule for matching resources.
+type ResourceRule struct {
+	APIGroups   []string `json:"apiGroups,omitempty" yaml:"apiGroups,omitempty"`
+	APIVersions []string `json:"apiVersions,omitempty" yaml:"apiVersions,omitempty"`
+	Resources   []string `json:"resources,omitempty" yaml:"resources,omitempty"`
 }
 
 // Config is used to configure the KCLRun instance based on the given FunctionConfig.
@@ -123,12 +138,36 @@ func (r *KCLRun) Transform(rl *fn.ResourceList) error {
 		if err != nil {
 			return err
 		}
-		transformedObjects = append(transformedObjects, obj)
+
+		// Check if the transformed object matches the resource rules
+		if r.MatchResourceRules(obj) {
+			transformedObjects = append(transformedObjects, obj)
+		}
 	}
 	rl.Items = transformedObjects
 	return nil
 }
 
+// MatchResourceRules checks if the given Kubernetes object matches the resource rules specified in KCLRun.
+func (r *KCLRun) MatchResourceRules(obj *fn.KubeObject) bool {
+
+	// if MatchConstraints.ResourceRules is not set (nil or empty), return true by default
+	if r == nil || isEmpty(r.Spec) || isEmpty(r.Spec.MatchConstraints) || isEmpty(r.Spec.MatchConstraints.ResourceRules) {
+		return true
+	}
+	// iterate through each resource rule
+	for _, rule := range r.Spec.MatchConstraints.ResourceRules {
+		if containsString(rule.APIGroups, obj.GroupKind().Group) &&
+			containsString(rule.APIVersions, obj.GetAPIVersion()) &&
+			containsString(rule.Resources, obj.GetKind()) {
+			return true
+		}
+	}
+	// if no match is found, return false
+	return false
+}
+
+// DealAnnotations handles annotations, e.g., allow-insecure-source.
 func (r *KCLRun) DealAnnotations() {
 	// Deal the allow-insecure-source annotation
 	if v, ok := r.ObjectMeta.Annotations[AnnotationAllowInSecureSource]; ok && isOk(v) {
@@ -136,6 +175,7 @@ func (r *KCLRun) DealAnnotations() {
 	}
 }
 
+// isOk checks if a given string is in the list of "OK" values.
 func isOk(value string) bool {
 	okValues := []string{"ok", "yes", "true", "1", "on"}
 	for _, v := range okValues {
@@ -144,4 +184,26 @@ func isOk(value string) bool {
 		}
 	}
 	return false
+}
+
+// containsString checks if a slice contains a string.
+func containsString(slice []string, str string) bool {
+	for _, s := range slice {
+		if s == str {
+			return true
+		}
+	}
+	return false
+}
+
+// isEmpty checks if a struct is empty
+func isEmpty(s interface{}) bool {
+	t := reflect.TypeOf(s)
+
+	if t.Kind() != reflect.Struct {
+		panic("Input is not a struct")
+	}
+	zeroValue := reflect.New(t).Elem()
+
+	return reflect.DeepEqual(s, zeroValue.Interface())
 }
