@@ -150,12 +150,9 @@ func (r *KCLRun) Transform(rl *fn.ResourceList) error {
 
 // MatchResourceRules checks if the given Kubernetes object matches the resource rules specified in KCLRun.
 func (r *KCLRun) MatchResourceRules(obj *fn.KubeObject) bool {
-	// check if MatchConstraints is set
-	if isEmptyStruct(r.Spec.MatchConstraints) {
-		return true
-	}
+
 	// if MatchConstraints.ResourceRules is not set (nil or empty), return true by default
-	if r.Spec.MatchConstraints.ResourceRules == nil || len(r.Spec.MatchConstraints.ResourceRules) == 0 {
+	if r == nil || isEmpty(r.Spec) || isEmpty(r.Spec.MatchConstraints) || isEmpty(r.Spec.MatchConstraints.ResourceRules) {
 		return true
 	}
 	// iterate through each resource rule
@@ -199,18 +196,14 @@ func containsString(slice []string, str string) bool {
 	return false
 }
 
-// isEmptyStruct checks if a struct is empty (i.e., all fields are zero or nil).
-func isEmptyStruct(mc MatchConstraints) bool {
-	v := reflect.ValueOf(mc)
-	switch v.Kind() {
-	case reflect.Struct:
-		for i := 0; i < v.NumField(); i++ {
-			if !reflect.DeepEqual(v.Field(i).Interface(), reflect.Zero(v.Field(i).Type()).Interface()) {
-				return false
-			}
-		}
-		return true
-	default:
-		return false
+// isEmpty checks if a struct is empty
+func isEmpty(s interface{}) bool {
+	t := reflect.TypeOf(s)
+
+	if t.Kind() != reflect.Struct {
+		panic("Input is not a struct")
 	}
+	zeroValue := reflect.New(t).Elem()
+
+	return reflect.DeepEqual(s, zeroValue.Interface())
 }
