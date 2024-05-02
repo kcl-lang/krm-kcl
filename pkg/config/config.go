@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"reflect"
 	"strings"
 
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
@@ -149,11 +150,15 @@ func (r *KCLRun) Transform(rl *fn.ResourceList) error {
 
 // MatchResourceRules checks if the given Kubernetes object matches the resource rules specified in KCLRun.
 func (r *KCLRun) MatchResourceRules(obj *fn.KubeObject) bool {
+	// check if MatchConstraints is set
+	if isEmptyStruct(r.Spec.MatchConstraints) {
+		return true
+	}
 	// if MatchConstraints.ResourceRules is not set (nil or empty), return true by default
 	if r.Spec.MatchConstraints.ResourceRules == nil || len(r.Spec.MatchConstraints.ResourceRules) == 0 {
 		return true
 	}
-    // iterate through each resource rule
+	// iterate through each resource rule
 	for _, rule := range r.Spec.MatchConstraints.ResourceRules {
 		if containsString(rule.APIGroups, obj.GroupKind().Group) &&
 			containsString(rule.APIVersions, obj.GetAPIVersion()) &&
@@ -192,4 +197,20 @@ func containsString(slice []string, str string) bool {
 		}
 	}
 	return false
+}
+
+// isEmptyStruct checks if a struct is empty (i.e., all fields are zero or nil).
+func isEmptyStruct(mc MatchConstraints) bool {
+	v := reflect.ValueOf(mc)
+	switch v.Kind() {
+	case reflect.Struct:
+		for i := 0; i < v.NumField(); i++ {
+			if !reflect.DeepEqual(v.Field(i).Interface(), reflect.Zero(v.Field(i).Type()).Interface()) {
+				return false
+			}
+		}
+		return true
+	default:
+		return false
+	}
 }
