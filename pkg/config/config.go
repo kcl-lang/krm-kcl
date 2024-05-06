@@ -10,9 +10,11 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 
+	"kcl-lang.io/kpm/pkg/client"
 	"kcl-lang.io/kpm/pkg/settings"
 	"kcl-lang.io/krm-kcl/pkg/api/v1alpha1"
 	"kcl-lang.io/krm-kcl/pkg/edit"
+	src "kcl-lang.io/krm-kcl/pkg/source"
 )
 
 const (
@@ -36,11 +38,20 @@ type KCLRun struct {
 	Spec struct {
 		// Source is a required field for providing a KCL script inline.
 		Source string `json:"source" yaml:"source"`
+		// Credentials for remote locations
+		Credentials CredSpec `json:"credentials" yaml:"credentials"`
 		// Params are the parameters in key-value pairs format.
 		Params map[string]interface{} `json:"params,omitempty" yaml:"params,omitempty"`
 		// MatchConstraints defines the resource matching rules.
 		MatchConstraints MatchConstraints `json:"matchConstraints,omitempty" yaml:"matchConstraints,omitempty"`
 	} `json:"spec" yaml:"spec"`
+}
+
+// CredSpec defines authentication credentials for remote locations
+type CredSpec struct {
+	Url      string `json:"url" yaml:"url"`
+	Username string `json:"username" yaml:"username"`
+	Password string `json:"password" yaml:"password"`
 }
 
 // MatchConstraints defines the resource matching rules.
@@ -149,6 +160,27 @@ func (c *KCLRun) Transform(in []*yaml.RNode, fnCfg *yaml.RNode) ([]*yaml.RNode, 
 		}
 	}
 	c.DealAnnotations()
+
+	// Authenticate with credentials to remote source
+	if os.Getenv("KCL_SRC_URL") != "" {
+		c.Spec.Credentials.Url = os.Getenv("KCL_SRC_URL")
+	}
+	if os.Getenv("KCL_SRC_USERNAME") != "" {
+		c.Spec.Credentials.Username = os.Getenv("KCL_SRC_USERNAME")
+	}
+	if os.Getenv("KCL_SRC_PASSWORD") != "" {
+		c.Spec.Credentials.Password = os.Getenv("KCL_SRC_PASSWORD")
+	}
+	if src.IsOCI(c.Spec.Source) && c.Spec.Credentials.Url != "" {
+		cli, err := client.NewKpmClient()
+		if err != nil {
+			return nil, err
+		}
+		if err := cli.LoginOci(c.Spec.Credentials.Url, c.Spec.Credentials.Username, c.Spec.Credentials.Password); err != nil {
+			return nil, err
+		}
+	}
+
 	st := &edit.SimpleTransformer{
 		Name:           DefaultProgramName,
 		Source:         c.Spec.Source,
