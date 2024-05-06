@@ -98,6 +98,23 @@ spec:
   source: oci://localhost:7900/my-repo/set-annotation
 ```
 
+## Resource Match Constraints
+
+```yaml
+apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+spec:
+  params:
+    annotations:
+      config.kubernetes.io/local-config: "true"
+  source: oci://ghcr.io/kcl-lang/set-annotation
+  matchConstraints:  # Set resource filter match constraints for the matched types.
+    resourceRules:
+    - apiGroups: ["apps"]
+      apiVersions: ["apps/v1"]
+      kinds: ["Deployment"]
+```
+
 ## Guides for Developing KCL
 
 Here's what you can do in the KCL script:

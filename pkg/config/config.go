@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"os"
-	"reflect"
 	"strings"
 
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
@@ -53,7 +52,7 @@ type MatchConstraints struct {
 type ResourceRule struct {
 	APIGroups   []string `json:"apiGroups,omitempty" yaml:"apiGroups,omitempty"`
 	APIVersions []string `json:"apiVersions,omitempty" yaml:"apiVersions,omitempty"`
-	Resources   []string `json:"resources,omitempty" yaml:"resources,omitempty"`
+	Kinds       []string `json:"kinds,omitempty" yaml:"kinds,omitempty"`
 }
 
 // Config is used to configure the KCLRun instance based on the given FunctionConfig.
@@ -102,15 +101,13 @@ func (r *KCLRun) Config(fnCfg *fn.KubeObject) error {
 	return nil
 }
 
-// Transform is used to transform the ResourceList with the KCLRun instance.
+// TransformResourceList is used to transform the ResourceList with the KCLRun instance.
 // It parses the FunctionConfig and each object in the ResourceList, transforms them according to the KCLRun configuration,
 // and updates the ResourceList with the transformed objects.
 // If an error occurs during the transformation process, an error message will be returned.
-func (r *KCLRun) Transform(rl *fn.ResourceList) error {
+func (r *KCLRun) TransformResourceList(rl *fn.ResourceList) error {
 	var transformedObjects []*fn.KubeObject
 	var nodes []*yaml.RNode
-
-	r.DealAnnotations()
 
 	fcRN, err := yaml.Parse(rl.FunctionConfig.String())
 	if err != nil {
@@ -123,13 +120,7 @@ func (r *KCLRun) Transform(rl *fn.ResourceList) error {
 		}
 		nodes = append(nodes, objRN)
 	}
-
-	st := &edit.SimpleTransformer{
-		Name:           r.Name,
-		Source:         r.Spec.Source,
-		FunctionConfig: fcRN,
-	}
-	transformedNodes, err := st.Transform(nodes)
+	transformedNodes, err := r.Transform(nodes, fcRN)
 	if err != nil {
 		return err
 	}
@@ -138,28 +129,45 @@ func (r *KCLRun) Transform(rl *fn.ResourceList) error {
 		if err != nil {
 			return err
 		}
-
-		// Check if the transformed object matches the resource rules
-		if r.MatchResourceRules(obj) {
-			transformedObjects = append(transformedObjects, obj)
-		}
+		transformedObjects = append(transformedObjects, obj)
 	}
 	rl.Items = transformedObjects
 	return nil
 }
 
-// MatchResourceRules checks if the given Kubernetes object matches the resource rules specified in KCLRun.
-func (r *KCLRun) MatchResourceRules(obj *fn.KubeObject) bool {
+// Transform is used to transform the input nodes with the KCLRun instance and function config.
+func (c *KCLRun) Transform(in []*yaml.RNode, fnCfg *yaml.RNode) ([]*yaml.RNode, error) {
+	var filterNodes []*yaml.RNode
+	for _, n := range in {
+		obj, err := fn.ParseKubeObject([]byte(n.MustString()))
+		if err != nil {
+			return nil, err
+		}
+		// Check if the transformed object matches the resource rules
+		if MatchResourceRules(obj, &c.Spec.MatchConstraints) {
+			filterNodes = append(filterNodes, n)
+		}
+	}
+	c.DealAnnotations()
+	st := &edit.SimpleTransformer{
+		Name:           DefaultProgramName,
+		Source:         c.Spec.Source,
+		FunctionConfig: fnCfg,
+	}
+	return st.Transform(filterNodes)
+}
 
+// MatchResourceRules checks if the given Kubernetes object matches the resource rules specified in KCLRun.
+func MatchResourceRules(obj *fn.KubeObject, MatchConstraints *MatchConstraints) bool {
 	// if MatchConstraints.ResourceRules is not set (nil or empty), return true by default
-	if r == nil || isEmpty(r.Spec) || isEmpty(r.Spec.MatchConstraints) || isEmpty(r.Spec.MatchConstraints.ResourceRules) {
+	if len(MatchConstraints.ResourceRules) == 0 {
 		return true
 	}
 	// iterate through each resource rule
-	for _, rule := range r.Spec.MatchConstraints.ResourceRules {
+	for _, rule := range MatchConstraints.ResourceRules {
 		if containsString(rule.APIGroups, obj.GroupKind().Group) &&
 			containsString(rule.APIVersions, obj.GetAPIVersion()) &&
-			containsString(rule.Resources, obj.GetKind()) {
+			containsString(rule.Kinds, obj.GetKind()) {
 			return true
 		}
 	}
@@ -186,24 +194,15 @@ func isOk(value string) bool {
 	return false
 }
 
-// containsString checks if a slice contains a string.
+// containsString checks if a slice contains a string or "*"
 func containsString(slice []string, str string) bool {
+	if len(slice) == 0 {
+		return true
+	}
 	for _, s := range slice {
-		if s == str {
+		if s == "*" || s == str {
 			return true
 		}
 	}
 	return false
-}
-
-// isEmpty checks if a struct is empty
-func isEmpty(s interface{}) bool {
-	t := reflect.TypeOf(s)
-
-	if t.Kind() != reflect.Struct {
-		panic("Input is not a struct")
-	}
-	zeroValue := reflect.New(t).Elem()
-
-	return reflect.DeepEqual(s, zeroValue.Interface())
 }
