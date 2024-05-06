@@ -14,8 +14,3 @@ functionConfig:
       annotations:
         config.kubernetes.io/local-config: "true"
     source: oci://ghcr.io/kcl-lang/set-annotation
-    matchConstraints:
-      resourceRules:
-      - apiGroups:   ["apps"]
-        apiVersions: ["v1"]
-        resources:   ["deployments"]

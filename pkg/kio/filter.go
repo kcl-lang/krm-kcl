@@ -3,7 +3,6 @@ package kio
 import (
 	"kcl-lang.io/krm-kcl/pkg/api/v1alpha1"
 	"kcl-lang.io/krm-kcl/pkg/config"
-	"kcl-lang.io/krm-kcl/pkg/edit"
 
 	"sigs.k8s.io/kustomize/kyaml/kio"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
@@ -30,13 +29,7 @@ func (f Filter) Filter(in []*yaml.RNode) ([]*yaml.RNode, error) {
 		} else {
 			fnCfg = in[idxs[idx]]
 		}
-		c.DealAnnotations()
-		st := &edit.SimpleTransformer{
-			Name:           config.DefaultProgramName,
-			Source:         c.Spec.Source,
-			FunctionConfig: fnCfg,
-		}
-		in, err = st.Transform(in)
+		in, err = c.Transform(in, fnCfg)
 		if err != nil {
 			return nil, err
 		}

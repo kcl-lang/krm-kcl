@@ -14,7 +14,7 @@ func Process(resourceList *fn.ResourceList) (bool, error) {
 		if err := r.Config(resourceList.FunctionConfig); err != nil {
 			return err
 		}
-		return r.Transform(resourceList)
+		return r.TransformResourceList(resourceList)
 	}()
 	if err != nil {
 		resourceList.Results = []*fn.Result{
