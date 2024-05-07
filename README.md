@@ -119,6 +119,23 @@ spec:
       kinds: ["Deployment"]
 ```
 
+## Run Config
+
+```yaml
+apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+spec:
+  params:
+    annotations:
+      config.kubernetes.io/local-config: "true"
+  source: oci://ghcr.io/kcl-lang/set-annotation
+  config: # See [pkg/api/ConfigSpec]
+    vendor: true
+    sortKeys: true
+    disableNone: true
+    # omit other fields
+```
+
 ## Guides for Developing KCL
 
 Here's what you can do in the KCL script:
