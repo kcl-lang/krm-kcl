@@ -17,7 +17,7 @@ schema KCLRunSpec:
 
 resource: ResourceList = option("resource_list")
 # Use `k = v` to override existing annotations
-annotations = {"${k}" = v for k, v in option("params").annotations or {}}
+annotations = {"${k}" = v for k, v in option("params")?.annotations or {}}
 items = [item | {
     metadata.annotations: annotations
-} for item in option("items")]
+} for item in option("items") or []]
