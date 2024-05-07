@@ -5,6 +5,7 @@ import (
 
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	"github.com/stretchr/testify/assert"
+	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
 func TestKCLConfig(t *testing.T) {
@@ -91,6 +92,104 @@ data:
 			err = r.Config(ko)
 			if tc.expectErrMsg == "" {
 				assert.NoError(t, err)
+			} else {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectErrMsg)
+			}
+		})
+	}
+}
+
+func TestKCLRun(t *testing.T) {
+	testcases := []struct {
+		name         string
+		config       string
+		expectResult string
+		expectErrMsg string
+	}{
+		{
+			name: "KCLRun0",
+			config: `apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+metadata:
+  name: my-kcl-fn
+  namespace: foo
+spec:
+  source: |
+    {
+        apiVersion = "v1"
+    }
+`,
+			expectResult: `apiVersion: v1`,
+		},
+		{
+			name: "KCLRun1",
+			config: `apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+metadata:
+  name: my-kcl-fn
+  namespace: foo
+spec:
+  params:
+    version: v1
+  source: |
+    {
+        apiVersion = option("params")?.version
+    }
+`,
+			expectResult: `apiVersion: v1`,
+		},
+		{
+			name: "KCLRun2",
+			config: `apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+metadata:
+  name: my-kcl-fn
+  namespace: foo
+spec:
+  config:
+    arguments:
+    - version=v1
+  source: |
+    {
+        apiVersion = option("version")
+    }
+`,
+			expectResult: `apiVersion: v1`,
+		},
+		{
+			name: "KCLRun3",
+			config: `apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+metadata:
+  name: my-kcl-fn
+  namespace: foo
+spec:
+  config:
+    disableNone: true
+  source: |
+    {
+        a = None
+        b = 1
+    }
+`,
+			expectResult: `b: 1`,
+		},
+	}
+	for _, tc := range testcases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			r := &KCLRun{}
+			ko, err := fn.ParseKubeObject([]byte(tc.config))
+			assert.NoError(t, err)
+			err = r.Config(ko)
+			assert.NoError(t, err)
+			result, err := r.Run()
+			if tc.expectErrMsg == "" {
+				assert.NoError(t, err)
+				resultYaml, err := yaml.Parse(tc.expectResult)
+				assert.NoError(t, err)
+				assert.Equal(t, result[0], resultYaml)
 			} else {
 				assert.Error(t, err)
 				assert.Contains(t, err.Error(), tc.expectErrMsg)

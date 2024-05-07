@@ -9,7 +9,6 @@ require (
 	k8s.io/api v0.28.3
 	k8s.io/apimachinery v0.28.3
 	kcl-lang.io/cli v0.8.7
-	kcl-lang.io/kcl-go v0.8.6
 	kcl-lang.io/kpm v0.8.6
 	sigs.k8s.io/kustomize/kyaml v0.16.0
 )
@@ -172,6 +171,7 @@ require (
 	k8s.io/klog/v2 v2.100.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20230717233707-2695361300d9 // indirect
 	k8s.io/utils v0.0.0-20230505201702-9f6742963106 // indirect
+	kcl-lang.io/kcl-go v0.8.6 // indirect
 	kcl-lang.io/kcl-openapi v0.6.1 // indirect
 	kcl-lang.io/lib v0.8.6 // indirect
 	oras.land/oras-go v1.2.3 // indirect
