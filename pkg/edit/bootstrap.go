@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"kcl-lang.io/cli/pkg/options"
-	src "kcl-lang.io/krm-kcl/pkg/source"
+	"kcl-lang.io/krm-kcl/pkg/source"
 
 	"sigs.k8s.io/kustomize/kyaml/errors"
 	"sigs.k8s.io/kustomize/kyaml/kio"
@@ -36,7 +36,7 @@ const (
 // A pointer to []*yaml.RNode objects that represent the output YAML objects of the KCL program.
 func RunKCL(name, source string, resourceList *yaml.RNode) ([]*yaml.RNode, error) {
 	// 1. Construct KCL code from source.
-	file, err := SourceToTempFile(source)
+	entry, err := SourceToTempEntry(source)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
@@ -47,7 +47,7 @@ func RunKCL(name, source string, resourceList *yaml.RNode) ([]*yaml.RNode, error
 	}
 	// 3. Run the KCL code.
 	result := bytes.NewBuffer([]byte{})
-	opts.Entries = []string{file}
+	opts.Entries = []string{entry}
 	opts.Writer = result
 	err = opts.Run()
 	if err != nil {
@@ -77,28 +77,30 @@ func ToKCLValueString(value *yaml.RNode, defaultValue string) (string, error) {
 	return string(jsonString), nil
 }
 
-// SourceToTempFile convert source to a temp KCL file.
-func SourceToTempFile(source string) (string, error) {
-	// 1. Construct KCL code from source.
-	localeSource, err := src.LocaleSource(source)
-	if err != nil {
-		return "", errors.Wrap(err)
+// SourceToTempEntry convert source to a temp KCL file.
+func SourceToTempEntry(src string) (string, error) {
+	if source.IsOCI(src) {
+		// Read code from a OCI source.
+		return src, nil
+	} else if source.IsLocal(src) {
+		return src, nil
+	} else if source.IsRemoteUrl(src) || source.IsGit(src) || source.IsVCSDomain(src) {
+		// Read code from local path or a remote url.
+		return source.ReadThroughGetter(src)
+	} else {
+		// May be a inline code source.
+		tmpDir, err := os.MkdirTemp("", "sandbox")
+		if err != nil {
+			return "", fmt.Errorf("error creating temp directory: %v", err)
+		}
+		// Write kcl code in the temp file.
+		file := filepath.Join(tmpDir, "prog.k")
+		err = os.WriteFile(file, []byte(src), 0666)
+		if err != nil {
+			return "", errors.Wrap(err)
+		}
+		return file, nil
 	}
-	if src.IsOCI(source) {
-		return source, nil
-	}
-	// Create temp files.
-	tmpDir, err := os.MkdirTemp("", "sandbox")
-	if err != nil {
-		return "", fmt.Errorf("error creating temp directory: %v", err)
-	}
-	// Write kcl code in the temp file.
-	file := filepath.Join(tmpDir, "prog.k")
-	err = os.WriteFile(file, []byte(localeSource), 0666)
-	if err != nil {
-		return "", errors.Wrap(err)
-	}
-	return file, nil
 }
 
 func constructOptions(resourceList *yaml.RNode) (*options.RunOptions, error) {

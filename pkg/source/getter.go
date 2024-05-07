@@ -26,7 +26,6 @@ func ReadThroughGetter(src string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("error creating temp file: %v", err)
 	}
-	defer os.RemoveAll(tmpDir)
 
 	// Build the client
 	client := &getter.Client{
@@ -64,5 +63,5 @@ func ReadThroughGetter(src string) (string, error) {
 	}
 
 	// 5. Read source from the temp directory
-	return GetSourceFromDir(tmpDir)
+	return tmpDir, nil
 }
