@@ -18,7 +18,7 @@ const (
 
 // IsGit determines whether or not a source is to be treated as a git source.
 func IsGit(src string) bool {
-	return strings.HasPrefix(src, fmt.Sprintf("%s://", GitScheme))
+	return strings.HasPrefix(src, fmt.Sprintf("%s::", GitScheme))
 }
 
 // IsVCSDomain determines whether or not a source is to be treated as a VCS source.
