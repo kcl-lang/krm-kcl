@@ -80,6 +80,10 @@ spec:
     annotations:
       config.kubernetes.io/local-config: "true"
   source: oci://ghcr.io/kcl-lang/set-annotation
+  credentials: # If private OCI registry
+    url: https://<oci-host-url> # or KCL_SRC_URL environment variable
+    username: <username> # or KCL_SRC_USERNAME environment variable
+    password: <password> # or KCL_SRC_PASSWORD environment variable
 ```
 
 ### Annotations
