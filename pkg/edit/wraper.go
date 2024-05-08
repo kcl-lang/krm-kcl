@@ -1,6 +1,7 @@
 package edit
 
 import (
+	"kcl-lang.io/krm-kcl/pkg/api"
 	"kcl-lang.io/krm-kcl/pkg/api/v1alpha1"
 	"sigs.k8s.io/kustomize/kyaml/errors"
 	"sigs.k8s.io/kustomize/kyaml/kio"
@@ -12,7 +13,7 @@ func WrapResources(nodes []*yaml.RNode, fc *yaml.RNode) (*yaml.RNode, error) {
 	var ynodes []*yaml.Node
 	for _, rnode := range nodes {
 		// Filter KCLRun resources
-		if rnode.GetApiVersion() == v1alpha1.KCLRunAPIVersion && rnode.GetKind() == v1alpha1.KCLRunKind {
+		if rnode.GetApiVersion() == v1alpha1.KCLRunAPIVersion && rnode.GetKind() == api.KCLRunKind {
 			continue
 		}
 		ynodes = append(ynodes, rnode.YNode())

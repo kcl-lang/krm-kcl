@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	corev1 "k8s.io/api/core/v1"
@@ -12,6 +11,7 @@ import (
 
 	"kcl-lang.io/kpm/pkg/client"
 	"kcl-lang.io/kpm/pkg/settings"
+	"kcl-lang.io/krm-kcl/pkg/api"
 	"kcl-lang.io/krm-kcl/pkg/api/v1alpha1"
 	"kcl-lang.io/krm-kcl/pkg/edit"
 	src "kcl-lang.io/krm-kcl/pkg/source"
@@ -38,32 +38,15 @@ type KCLRun struct {
 	Spec struct {
 		// Source is a required field for providing a KCL script inline.
 		Source string `json:"source" yaml:"source"`
+		// Config is the compile config.
+		Config api.ConfigSpec `json:"config" yaml:"config"`
 		// Credentials for remote locations
-		Credentials CredSpec `json:"credentials" yaml:"credentials"`
+		Credentials api.CredSpec `json:"credentials" yaml:"credentials"`
 		// Params are the parameters in key-value pairs format.
 		Params map[string]interface{} `json:"params,omitempty" yaml:"params,omitempty"`
 		// MatchConstraints defines the resource matching rules.
-		MatchConstraints MatchConstraints `json:"matchConstraints,omitempty" yaml:"matchConstraints,omitempty"`
+		MatchConstraints api.MatchConstraintsSpec `json:"matchConstraints,omitempty" yaml:"matchConstraints,omitempty"`
 	} `json:"spec" yaml:"spec"`
-}
-
-// CredSpec defines authentication credentials for remote locations
-type CredSpec struct {
-	Url      string `json:"url" yaml:"url"`
-	Username string `json:"username" yaml:"username"`
-	Password string `json:"password" yaml:"password"`
-}
-
-// MatchConstraints defines the resource matching rules.
-type MatchConstraints struct {
-	ResourceRules []ResourceRule `json:"resourceRules,omitempty" yaml:"resourceRules,omitempty"`
-}
-
-// ResourceRule defines a rule for matching resources.
-type ResourceRule struct {
-	APIGroups   []string `json:"apiGroups,omitempty" yaml:"apiGroups,omitempty"`
-	APIVersions []string `json:"apiVersions,omitempty" yaml:"apiVersions,omitempty"`
-	Kinds       []string `json:"kinds,omitempty" yaml:"kinds,omitempty"`
 }
 
 // Config is used to configure the KCLRun instance based on the given FunctionConfig.
@@ -85,19 +68,19 @@ func (r *KCLRun) Config(fnCfg *fn.KubeObject) error {
 		r.Namespace = cm.Namespace
 		r.Spec.Params = map[string]interface{}{}
 		for k, v := range cm.Data {
-			if k == v1alpha1.SourceKey {
+			if k == api.SourceKey {
 				r.Spec.Source = v
 			}
 			r.Spec.Params[k] = v
 		}
-	case fnCfgAPIVersion == v1alpha1.KCLRunAPIVersion && fnCfgKind == v1alpha1.KCLRunKind:
+	case fnCfgAPIVersion == v1alpha1.KCLRunAPIVersion && fnCfgKind == api.KCLRunKind:
 		if err := fnCfg.As(r); err != nil {
 			return err
 		}
 	default:
 		return fmt.Errorf("`functionConfig` must be either %v or %v, but we got: %v",
 			schema.FromAPIVersionAndKind(ConfigMapAPIVersion, ConfigMapKind).String(),
-			schema.FromAPIVersionAndKind(v1alpha1.KCLRunAPIVersion, v1alpha1.KCLRunKind).String(),
+			schema.FromAPIVersionAndKind(v1alpha1.KCLRunAPIVersion, api.KCLRunKind).String(),
 			schema.FromAPIVersionAndKind(fnCfg.GetAPIVersion(), fnCfg.GetKind()).String())
 	}
 
@@ -110,6 +93,19 @@ func (r *KCLRun) Config(fnCfg *fn.KubeObject) error {
 		return fmt.Errorf("`source` must not be empty")
 	}
 	return nil
+}
+
+// Run is used to output the YAML list with the KCLRun instance.
+func (r *KCLRun) Run() ([]*yaml.RNode, error) {
+	c, err := yaml.Marshal(r)
+	if err != nil {
+		return nil, err
+	}
+	fnCfg, err := yaml.Parse(string(c))
+	if err != nil {
+		return nil, err
+	}
+	return r.Transform(nil, fnCfg)
 }
 
 // TransformResourceList is used to transform the ResourceList with the KCLRun instance.
@@ -162,14 +158,14 @@ func (c *KCLRun) Transform(in []*yaml.RNode, fnCfg *yaml.RNode) ([]*yaml.RNode, 
 	c.DealAnnotations()
 
 	// Authenticate with credentials to remote source
-	if os.Getenv("KCL_SRC_URL") != "" {
-		c.Spec.Credentials.Url = os.Getenv("KCL_SRC_URL")
+	if os.Getenv(SrcUrlEnvVar) != "" {
+		c.Spec.Credentials.Url = os.Getenv(SrcUrlEnvVar)
 	}
-	if os.Getenv("KCL_SRC_USERNAME") != "" {
-		c.Spec.Credentials.Username = os.Getenv("KCL_SRC_USERNAME")
+	if os.Getenv(SrcUrlUsernameEnvVar) != "" {
+		c.Spec.Credentials.Username = os.Getenv(SrcUrlUsernameEnvVar)
 	}
-	if os.Getenv("KCL_SRC_PASSWORD") != "" {
-		c.Spec.Credentials.Password = os.Getenv("KCL_SRC_PASSWORD")
+	if os.Getenv(SrcUrlPasswordEnvVar) != "" {
+		c.Spec.Credentials.Password = os.Getenv(SrcUrlPasswordEnvVar)
 	}
 	if src.IsOCI(c.Spec.Source) && c.Spec.Credentials.Url != "" {
 		cli, err := client.NewKpmClient()
@@ -185,26 +181,9 @@ func (c *KCLRun) Transform(in []*yaml.RNode, fnCfg *yaml.RNode) ([]*yaml.RNode, 
 		Name:           DefaultProgramName,
 		Source:         c.Spec.Source,
 		FunctionConfig: fnCfg,
+		Config:         &c.Spec.Config,
 	}
 	return st.Transform(filterNodes)
-}
-
-// MatchResourceRules checks if the given Kubernetes object matches the resource rules specified in KCLRun.
-func MatchResourceRules(obj *fn.KubeObject, MatchConstraints *MatchConstraints) bool {
-	// if MatchConstraints.ResourceRules is not set (nil or empty), return true by default
-	if len(MatchConstraints.ResourceRules) == 0 {
-		return true
-	}
-	// iterate through each resource rule
-	for _, rule := range MatchConstraints.ResourceRules {
-		if containsString(rule.APIGroups, obj.GroupKind().Group) &&
-			containsString(rule.APIVersions, obj.GetAPIVersion()) &&
-			containsString(rule.Kinds, obj.GetKind()) {
-			return true
-		}
-	}
-	// if no match is found, return false
-	return false
 }
 
 // DealAnnotations handles annotations, e.g., allow-insecure-source.
@@ -213,28 +192,4 @@ func (r *KCLRun) DealAnnotations() {
 	if v, ok := r.ObjectMeta.Annotations[AnnotationAllowInSecureSource]; ok && isOk(v) {
 		os.Setenv(settings.DEFAULT_OCI_PLAIN_HTTP_ENV, settings.ON)
 	}
-}
-
-// isOk checks if a given string is in the list of "OK" values.
-func isOk(value string) bool {
-	okValues := []string{"ok", "yes", "true", "1", "on"}
-	for _, v := range okValues {
-		if strings.EqualFold(strings.ToLower(value), strings.ToLower(v)) {
-			return true
-		}
-	}
-	return false
-}
-
-// containsString checks if a slice contains a string or "*"
-func containsString(slice []string, str string) bool {
-	if len(slice) == 0 {
-		return true
-	}
-	for _, s := range slice {
-		if s == "*" || s == str {
-			return true
-		}
-	}
-	return false
 }

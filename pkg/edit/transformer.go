@@ -3,6 +3,7 @@ package edit
 import (
 	"fmt"
 
+	"kcl-lang.io/krm-kcl/pkg/api"
 	"sigs.k8s.io/kustomize/kyaml/errors"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
@@ -26,6 +27,8 @@ type SimpleTransformer struct {
 	Source string
 	// FunctionConfig is the functionConfig for the function.
 	FunctionConfig *yaml.RNode
+	// Config is the compile config.
+	Config *api.ConfigSpec
 }
 
 // Format transformer using the name and source.
@@ -43,7 +46,7 @@ func (st *SimpleTransformer) Transform(nodes []*yaml.RNode) ([]*yaml.RNode, erro
 	}
 
 	// 2. Run code
-	out, err := RunKCL(st.Name, st.Source, in)
+	out, err := RunKCLWithConfig(st.Name, st.Source, in, st.Config)
 
 	if err != nil {
 		return nil, errors.Wrap(err)

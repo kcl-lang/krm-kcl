@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"kcl-lang.io/cli/pkg/options"
+	"kcl-lang.io/krm-kcl/pkg/api"
 	"kcl-lang.io/krm-kcl/pkg/source"
 
 	"sigs.k8s.io/kustomize/kyaml/errors"
@@ -35,13 +36,28 @@ const (
 // Return:
 // A pointer to []*yaml.RNode objects that represent the output YAML objects of the KCL program.
 func RunKCL(name, source string, resourceList *yaml.RNode) ([]*yaml.RNode, error) {
+	return RunKCLWithConfig(name, source, resourceList, nil)
+}
+
+// RunKCLWithConfig runs a KCL program specified by the given source code or url,
+// with the given resource list as input, and returns the resulting KRM resource list.
+//
+// Parameters:
+// - name: a string that represents the name of the KCL program. Not used in the function.
+// - source: a string that represents the source code of the KCL program.
+// - resourceList: a pointer to a yaml.RNode object that represents the input KRM resource list.
+// - config: a pointer to a ConfigSpec that represents the compile config.
+//
+// Return:
+// A pointer to []*yaml.RNode objects that represent the output YAML objects of the KCL program.
+func RunKCLWithConfig(name, source string, resourceList *yaml.RNode, config *api.ConfigSpec) ([]*yaml.RNode, error) {
 	// 1. Construct KCL code from source.
 	entry, err := SourceToTempEntry(source)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
 	// 2. Construct option list.
-	opts, err := constructOptions(resourceList)
+	opts, err := constructOptions(resourceList, config)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
@@ -103,7 +119,7 @@ func SourceToTempEntry(src string) (string, error) {
 	}
 }
 
-func constructOptions(resourceList *yaml.RNode) (*options.RunOptions, error) {
+func constructOptions(resourceList *yaml.RNode, config *api.ConfigSpec) (*options.RunOptions, error) {
 	resourceListOptionKCLValue, err := ToKCLValueString(resourceList, emptyConfig)
 	if err != nil {
 		return nil, errors.Wrap(err)
@@ -132,10 +148,21 @@ func constructOptions(resourceList *yaml.RNode) (*options.RunOptions, error) {
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
-
 	opts := options.NewRunOptions()
 	opts.NoStyle = true
-	opts.Arguments = []string{
+	if config != nil {
+		opts.Debug = config.Debug
+		opts.DisableNone = config.DisableNone
+		opts.Overrides = config.Overrides
+		opts.PathSelectors = config.PathSelectors
+		opts.Settings = config.Settings
+		opts.ShowHidden = config.ShowHidden
+		opts.SortKeys = config.SortKeys
+		opts.StrictRangeCheck = config.StrictRangeCheck
+		opts.Vendor = config.Vendor
+		opts.Arguments = config.Arguments
+	}
+	opts.Arguments = append(opts.Arguments,
 		// resource_list
 		fmt.Sprintf("%s=%s", resourceListOptionName, resourceListOptionKCLValue),
 		// resource.items
@@ -146,7 +173,7 @@ func constructOptions(resourceList *yaml.RNode) (*options.RunOptions, error) {
 		fmt.Sprintf("PATH=%s", pathOptionKCLValue),
 		// environment map example (option("env"))
 		fmt.Sprintf("env=%s", envMapOptionKCLValue),
-	}
+	)
 	return opts, nil
 }
 

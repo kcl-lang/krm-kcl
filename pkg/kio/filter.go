@@ -1,6 +1,7 @@
 package kio
 
 import (
+	"kcl-lang.io/krm-kcl/pkg/api"
 	"kcl-lang.io/krm-kcl/pkg/api/v1alpha1"
 	"kcl-lang.io/krm-kcl/pkg/config"
 
@@ -44,7 +45,7 @@ func (f *Filter) parseConfigs(in []*yaml.RNode) ([]*config.KCLRun, []int, error)
 	// If KCLRun is not found in the function config, find it in the input manifests
 	if f.rw.FunctionConfig == nil {
 		for idx, i := range in {
-			if i.GetApiVersion() == v1alpha1.KCLRunAPIVersion && i.GetKind() == v1alpha1.KCLRunKind {
+			if i.GetApiVersion() == v1alpha1.KCLRunAPIVersion && i.GetKind() == api.KCLRunKind {
 				// Parse the input function config.
 				config, err := f.parseConfig(i)
 				f.rw.FunctionConfig = i
