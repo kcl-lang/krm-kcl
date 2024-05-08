@@ -3,20 +3,19 @@ package config
 import (
 	"strings"
 
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	"kcl-lang.io/krm-kcl/pkg/api"
+	"kcl-lang.io/krm-kcl/pkg/kube"
 )
 
 // MatchResourceRules checks if the given Kubernetes object matches the resource rules specified in KCLRun.
-func MatchResourceRules(obj *fn.KubeObject, MatchConstraints *api.MatchConstraintsSpec) bool {
+func MatchResourceRules(obj *kube.KubeObject, MatchConstraints *api.MatchConstraintsSpec) bool {
 	// if MatchConstraints.ResourceRules is not set (nil or empty), return true by default
 	if len(MatchConstraints.ResourceRules) == 0 {
 		return true
 	}
 	// iterate through each resource rule
 	for _, rule := range MatchConstraints.ResourceRules {
-		if containsString(rule.APIGroups, obj.GroupKind().Group) &&
-			containsString(rule.APIVersions, obj.GetAPIVersion()) &&
+		if containsString(rule.APIVersions, obj.GetAPIVersion()) &&
 			containsString(rule.Kinds, obj.GetKind()) {
 			return true
 		}

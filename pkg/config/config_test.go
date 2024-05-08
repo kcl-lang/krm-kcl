@@ -3,8 +3,8 @@ package config
 import (
 	"testing"
 
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	"github.com/stretchr/testify/assert"
+	"kcl-lang.io/krm-kcl/pkg/kube"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
@@ -50,44 +50,12 @@ spec:
 `,
 			expectErrMsg: "",
 		},
-		{
-			name: "valid ConfigMap",
-			config: `apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: my-kcl-fn
-data:
-  source: |
-    # Set namespace to "baz"
-    [item | {metadata.namespace = "baz"} for item in option("resource_list")]
-`,
-		},
-		{
-			name: "ConfigMap missing source",
-			config: `apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: my-kcl-fn
-`,
-			expectErrMsg: "`source` must not be empty",
-		},
-		{
-			name: "ConfigMap with parameter but missing source",
-			config: `apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: my-kcl-fn
-data:
-  param1: foo
-`,
-			expectErrMsg: "`source` must not be empty",
-		},
 	}
 	for _, tc := range testcases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			r := &KCLRun{}
-			ko, err := fn.ParseKubeObject([]byte(tc.config))
+			ko, err := kube.ParseKubeObject([]byte(tc.config))
 			assert.NoError(t, err)
 			err = r.Config(ko)
 			if tc.expectErrMsg == "" {
@@ -180,7 +148,7 @@ spec:
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			r := &KCLRun{}
-			ko, err := fn.ParseKubeObject([]byte(tc.config))
+			ko, err := kube.ParseKubeObject([]byte(tc.config))
 			assert.NoError(t, err)
 			err = r.Config(ko)
 			assert.NoError(t, err)

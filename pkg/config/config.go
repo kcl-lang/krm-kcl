@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
-	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 
@@ -14,6 +12,7 @@ import (
 	"kcl-lang.io/krm-kcl/pkg/api"
 	"kcl-lang.io/krm-kcl/pkg/api/v1alpha1"
 	"kcl-lang.io/krm-kcl/pkg/edit"
+	"kcl-lang.io/krm-kcl/pkg/kube"
 	src "kcl-lang.io/krm-kcl/pkg/source"
 )
 
@@ -52,36 +51,23 @@ type KCLRun struct {
 // Config is used to configure the KCLRun instance based on the given FunctionConfig.
 // It converts ConfigMap to KCLRun or assigns values directly from KCLRun.
 // If an error occurs during the configuration process, an error message will be returned.
-func (r *KCLRun) Config(fnCfg *fn.KubeObject) error {
-	fnCfgKind := fnCfg.GetKind()
-	fnCfgAPIVersion := fnCfg.GetAPIVersion()
-	switch {
-	case fnCfg.IsEmpty():
+func (r *KCLRun) Config(o *kube.KubeObject) error {
+	if o == nil {
 		return fmt.Errorf("FunctionConfig is missing. Expect `ConfigMap` or `KCLRun`")
-	case fnCfgAPIVersion == ConfigMapAPIVersion && fnCfgKind == ConfigMapKind:
-		cm := &corev1.ConfigMap{}
-		if err := fnCfg.As(cm); err != nil {
-			return err
-		}
-		// Convert ConfigMap to KCLRun
-		r.Name = cm.Name
-		r.Namespace = cm.Namespace
-		r.Spec.Params = map[string]interface{}{}
-		for k, v := range cm.Data {
-			if k == api.SourceKey {
-				r.Spec.Source = v
-			}
-			r.Spec.Params[k] = v
-		}
-	case fnCfgAPIVersion == v1alpha1.KCLRunAPIVersion && fnCfgKind == api.KCLRunKind:
-		if err := fnCfg.As(r); err != nil {
+	}
+	kind := o.GetKind()
+	apiVersion := o.GetAPIVersion()
+	switch {
+	case o.IsNilOrEmpty():
+		return fmt.Errorf("FunctionConfig is missing. Expect `ConfigMap` or `KCLRun`")
+	case apiVersion == v1alpha1.KCLRunAPIVersion && kind == api.KCLRunKind:
+		if err := o.As(r); err != nil {
 			return err
 		}
 	default:
-		return fmt.Errorf("`functionConfig` must be either %v or %v, but we got: %v",
-			schema.FromAPIVersionAndKind(ConfigMapAPIVersion, ConfigMapKind).String(),
+		return fmt.Errorf("`functionConfig` must be either %v, but we got: %v",
 			schema.FromAPIVersionAndKind(v1alpha1.KCLRunAPIVersion, api.KCLRunKind).String(),
-			schema.FromAPIVersionAndKind(fnCfg.GetAPIVersion(), fnCfg.GetKind()).String())
+			schema.FromAPIVersionAndKind(apiVersion, kind).String())
 	}
 
 	// Defaulting
@@ -112,16 +98,16 @@ func (r *KCLRun) Run() ([]*yaml.RNode, error) {
 // It parses the FunctionConfig and each object in the ResourceList, transforms them according to the KCLRun configuration,
 // and updates the ResourceList with the transformed objects.
 // If an error occurs during the transformation process, an error message will be returned.
-func (r *KCLRun) TransformResourceList(rl *fn.ResourceList) error {
-	var transformedObjects []*fn.KubeObject
+func (r *KCLRun) TransformResourceList(rl *kube.ResourceList) error {
+	var transformedObjects []*kube.KubeObject
 	var nodes []*yaml.RNode
 
-	fcRN, err := yaml.Parse(rl.FunctionConfig.String())
+	fcRN, err := yaml.Parse(rl.FunctionConfig.MustString())
 	if err != nil {
 		return err
 	}
 	for _, obj := range rl.Items {
-		objRN, err := yaml.Parse(obj.String())
+		objRN, err := yaml.Parse(obj.MustString())
 		if err != nil {
 			return err
 		}
@@ -132,7 +118,7 @@ func (r *KCLRun) TransformResourceList(rl *fn.ResourceList) error {
 		return err
 	}
 	for _, n := range transformedNodes {
-		obj, err := fn.ParseKubeObject([]byte(n.MustString()))
+		obj, err := kube.ParseKubeObject([]byte(n.MustString()))
 		if err != nil {
 			return err
 		}
@@ -146,7 +132,7 @@ func (r *KCLRun) TransformResourceList(rl *fn.ResourceList) error {
 func (c *KCLRun) Transform(in []*yaml.RNode, fnCfg *yaml.RNode) ([]*yaml.RNode, error) {
 	var filterNodes []*yaml.RNode
 	for _, n := range in {
-		obj, err := fn.ParseKubeObject([]byte(n.MustString()))
+		obj, err := kube.ParseKubeObject([]byte(n.MustString()))
 		if err != nil {
 			return nil, err
 		}
