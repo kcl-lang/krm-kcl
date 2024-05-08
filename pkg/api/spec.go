@@ -56,7 +56,6 @@ type MatchConstraintsSpec struct {
 
 // ResourceRule defines a rule for matching resources.
 type ResourceRule struct {
-	APIGroups   []string `json:"apiGroups,omitempty" yaml:"apiGroups,omitempty"`
 	APIVersions []string `json:"apiVersions,omitempty" yaml:"apiVersions,omitempty"`
 	Kinds       []string `json:"kinds,omitempty" yaml:"kinds,omitempty"`
 }
