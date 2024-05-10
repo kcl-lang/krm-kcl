@@ -6,7 +6,7 @@ require (
 	github.com/hashicorp/go-getter v1.7.4
 	github.com/stretchr/testify v1.9.0
 	k8s.io/apimachinery v0.28.3
-	kcl-lang.io/cli v0.8.7
+	kcl-lang.io/cli v0.8.8
 	kcl-lang.io/kpm v0.8.6
 	sigs.k8s.io/kustomize/kyaml v0.16.0
 )
@@ -158,7 +158,7 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20240227224415-6ceb2ff114de // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240227224415-6ceb2ff114de // indirect
 	google.golang.org/grpc v1.63.2 // indirect
-	google.golang.org/protobuf v1.33.0 // indirect
+	google.golang.org/protobuf v1.34.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
@@ -169,9 +169,9 @@ require (
 	k8s.io/klog/v2 v2.100.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20230717233707-2695361300d9 // indirect
 	k8s.io/utils v0.0.0-20230505201702-9f6742963106 // indirect
-	kcl-lang.io/kcl-go v0.8.6 // indirect
+	kcl-lang.io/kcl-go v0.8.7 // indirect
 	kcl-lang.io/kcl-openapi v0.6.1 // indirect
-	kcl-lang.io/lib v0.8.6 // indirect
+	kcl-lang.io/lib v0.8.7 // indirect
 	oras.land/oras-go v1.2.3 // indirect
 	oras.land/oras-go/v2 v2.3.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
