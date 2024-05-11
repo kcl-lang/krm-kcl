@@ -48,24 +48,41 @@ type KCLRun struct {
 	} `json:"spec" yaml:"spec"`
 }
 
+// New returns a default a KCLRun resource
+func New() *KCLRun {
+	return NewV1Alpha1()
+}
+
+// NewV1Alpha1 returns a default a KCLRun resource with the v1alpha1 version.
+func NewV1Alpha1() *KCLRun {
+	return &KCLRun{
+		ResourceMeta: yaml.ResourceMeta{
+			TypeMeta: yaml.TypeMeta{
+				APIVersion: v1alpha1.KCLRunAPIVersion,
+				Kind:       api.KCLRunKind,
+			},
+		},
+	}
+}
+
 // Config is used to configure the KCLRun instance based on the given FunctionConfig.
 // It converts ConfigMap to KCLRun or assigns values directly from KCLRun.
 // If an error occurs during the configuration process, an error message will be returned.
 func (r *KCLRun) Config(o *kube.KubeObject) error {
 	if o == nil {
-		return fmt.Errorf("FunctionConfig is missing. Expect `ConfigMap` or `KCLRun`")
+		return fmt.Errorf("object is nil. Expect a `KCLRun` resource string")
 	}
 	kind := o.GetKind()
 	apiVersion := o.GetAPIVersion()
 	switch {
 	case o.IsNilOrEmpty():
-		return fmt.Errorf("FunctionConfig is missing. Expect `ConfigMap` or `KCLRun`")
+		return fmt.Errorf("object is nil. Expect a `KCLRun` resource string")
 	case apiVersion == v1alpha1.KCLRunAPIVersion && kind == api.KCLRunKind:
 		if err := o.As(r); err != nil {
 			return err
 		}
 	default:
-		return fmt.Errorf("`functionConfig` must be either %v, but we got: %v",
+		return fmt.Errorf("resource must be %v, but we got: %v",
 			schema.FromAPIVersionAndKind(v1alpha1.KCLRunAPIVersion, api.KCLRunKind).String(),
 			schema.FromAPIVersionAndKind(apiVersion, kind).String())
 	}
