@@ -6,7 +6,7 @@ require (
 	github.com/hashicorp/go-getter v1.7.4
 	github.com/stretchr/testify v1.9.0
 	k8s.io/apimachinery v0.28.3
-	kcl-lang.io/cli v0.8.8
+	kcl-lang.io/cli v0.8.9
 	kcl-lang.io/kpm v0.8.6
 	sigs.k8s.io/kustomize/kyaml v0.16.0
 )
