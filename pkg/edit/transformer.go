@@ -25,6 +25,8 @@ type SimpleTransformer struct {
 	Name string
 	// Source is a KCL script which will be run against the resources
 	Source string
+	// Dependencies are the external dependencies for the KCL code.
+	Dependencies []string
 	// FunctionConfig is the functionConfig for the function.
 	FunctionConfig *yaml.RNode
 	// Config is the compile config.
@@ -46,7 +48,7 @@ func (st *SimpleTransformer) Transform(nodes []*yaml.RNode) ([]*yaml.RNode, erro
 	}
 
 	// 2. Run code
-	out, err := RunKCLWithConfig(st.Name, st.Source, in, st.Config)
+	out, err := RunKCLWithConfig(st.Name, st.Source, st.Dependencies, in, st.Config)
 
 	if err != nil {
 		return nil, errors.Wrap(err)
