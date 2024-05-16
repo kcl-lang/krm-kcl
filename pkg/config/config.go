@@ -45,6 +45,9 @@ type KCLRun struct {
 		Params map[string]interface{} `json:"params,omitempty" yaml:"params,omitempty"`
 		// MatchConstraints defines the resource matching rules.
 		MatchConstraints api.MatchConstraintsSpec `json:"matchConstraints,omitempty" yaml:"matchConstraints,omitempty"`
+		// Dependencies are the external dependencies for the KCL code.
+		// The format of the `dependencies` field is same as the `[dependencies]` in the `kcl.mod` file
+		Dependencies string `json:"dependencies,omitempty" yaml:"dependencies,omitempty"`
 	} `json:"spec" yaml:"spec"`
 }
 
@@ -170,8 +173,8 @@ func (c *KCLRun) Transform(in []*yaml.RNode, fnCfg *yaml.RNode) ([]*yaml.RNode, 
 	if os.Getenv(SrcUrlPasswordEnvVar) != "" {
 		c.Spec.Credentials.Password = os.Getenv(SrcUrlPasswordEnvVar)
 	}
+	cli, err := client.NewKpmClient()
 	if src.IsOCI(c.Spec.Source) && c.Spec.Credentials.Url != "" {
-		cli, err := client.NewKpmClient()
 		if err != nil {
 			return nil, err
 		}
@@ -179,10 +182,18 @@ func (c *KCLRun) Transform(in []*yaml.RNode, fnCfg *yaml.RNode) ([]*yaml.RNode, 
 			return nil, err
 		}
 	}
+	var dependencies []string
+	if c.Spec.Dependencies != "" {
+		dependencies, err = edit.LoadDepListFromConfig(cli, c.Spec.Dependencies)
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	st := &edit.SimpleTransformer{
 		Name:           DefaultProgramName,
 		Source:         c.Spec.Source,
+		Dependencies:   dependencies,
 		FunctionConfig: fnCfg,
 		Config:         &c.Spec.Config,
 	}

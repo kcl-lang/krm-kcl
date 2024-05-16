@@ -6,9 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
-	"kcl-lang.io/cli/pkg/options"
 	"kcl-lang.io/krm-kcl/pkg/api"
 	"kcl-lang.io/krm-kcl/pkg/source"
 
@@ -36,7 +34,7 @@ const (
 // Return:
 // A pointer to []*yaml.RNode objects that represent the output YAML objects of the KCL program.
 func RunKCL(name, source string, resourceList *yaml.RNode) ([]*yaml.RNode, error) {
-	return RunKCLWithConfig(name, source, resourceList, nil)
+	return RunKCLWithConfig(name, source, []string{}, resourceList, nil)
 }
 
 // RunKCLWithConfig runs a KCL program specified by the given source code or url,
@@ -50,7 +48,7 @@ func RunKCL(name, source string, resourceList *yaml.RNode) ([]*yaml.RNode, error
 //
 // Return:
 // A pointer to []*yaml.RNode objects that represent the output YAML objects of the KCL program.
-func RunKCLWithConfig(name, source string, resourceList *yaml.RNode, config *api.ConfigSpec) ([]*yaml.RNode, error) {
+func RunKCLWithConfig(name, source string, dependencies []string, resourceList *yaml.RNode, config *api.ConfigSpec) ([]*yaml.RNode, error) {
 	// 1. Construct KCL code from source.
 	entry, err := SourceToTempEntry(source)
 	if err != nil {
@@ -65,6 +63,9 @@ func RunKCLWithConfig(name, source string, resourceList *yaml.RNode, config *api
 	result := bytes.NewBuffer([]byte{})
 	opts.Entries = []string{entry}
 	opts.Writer = result
+	if len(dependencies) > 0 {
+		opts.ExternalPackages = dependencies
+	}
 	err = opts.Run()
 	if err != nil {
 		return nil, errors.Wrap(err)
@@ -117,90 +118,4 @@ func SourceToTempEntry(src string) (string, error) {
 		}
 		return file, nil
 	}
-}
-
-func constructOptions(resourceList *yaml.RNode, config *api.ConfigSpec) (*options.RunOptions, error) {
-	resourceListOptionKCLValue, err := ToKCLValueString(resourceList, emptyConfig)
-	if err != nil {
-		return nil, errors.Wrap(err)
-	}
-	v, err := resourceList.Pipe(yaml.Lookup("items"))
-	if err != nil {
-		return nil, errors.Wrap(err)
-	}
-	itemsOptionKCLValue, err := ToKCLValueString(v, emptyList)
-	if err != nil {
-		return nil, errors.Wrap(err)
-	}
-	v, err = resourceList.Pipe(yaml.Lookup("functionConfig", "spec", "params"))
-	if err != nil {
-		return nil, errors.Wrap(err)
-	}
-	paramsOptionKCLValue, err := ToKCLValueString(v, emptyConfig)
-	if err != nil {
-		return nil, errors.Wrap(err)
-	}
-	// 4. Read environment variables.
-	pathOptionKCLValue := os.Getenv("PATH")
-
-	// 5. Read Env map
-	envMapOptionKCLValue, err := getEnvMapOptionKCLValue()
-	if err != nil {
-		return nil, errors.Wrap(err)
-	}
-	opts := options.NewRunOptions()
-	opts.NoStyle = true
-	if config != nil {
-		opts.Debug = config.Debug
-		opts.DisableNone = config.DisableNone
-		opts.Overrides = config.Overrides
-		opts.PathSelectors = config.PathSelectors
-		opts.Settings = config.Settings
-		opts.ShowHidden = config.ShowHidden
-		opts.SortKeys = config.SortKeys
-		opts.StrictRangeCheck = config.StrictRangeCheck
-		opts.Vendor = config.Vendor
-		opts.Arguments = config.Arguments
-	}
-	opts.Arguments = append(opts.Arguments,
-		// resource_list
-		fmt.Sprintf("%s=%s", resourceListOptionName, resourceListOptionKCLValue),
-		// resource.items
-		fmt.Sprintf("%s=%s", itemsOptionName, itemsOptionKCLValue),
-		// resource.functionConfig.spec.params
-		fmt.Sprintf("%s=%s", paramsOptionName, paramsOptionKCLValue),
-		// environment variable example (PATH)
-		fmt.Sprintf("PATH=%s", pathOptionKCLValue),
-		// environment map example (option("env"))
-		fmt.Sprintf("env=%s", envMapOptionKCLValue),
-	)
-	return opts, nil
-}
-
-// getEnvMapOptionKCLValue retrieves the environment map from the KCL 'option("env")' function.
-func getEnvMapOptionKCLValue() (string, error) {
-	envMap := make(map[string]string)
-	env := os.Environ()
-	for _, e := range env {
-		pair := strings.SplitN(e, "=", 2)
-		envMap[pair[0]] = pair[1]
-	}
-
-	envMapInterface := make(map[string]interface{})
-	for k, v := range envMap {
-		envMapInterface[k] = v
-	}
-
-	v, err := yaml.FromMap(envMapInterface)
-	if err != nil {
-		return "", errors.Wrap(err)
-	}
-
-	// 4. Convert the YAML RNode to its KCL value string representation.
-	envMapOptionKCLValue, err := ToKCLValueString(v, emptyConfig)
-	if err != nil {
-		return "", errors.Wrap(err)
-	}
-
-	return envMapOptionKCLValue, nil
 }

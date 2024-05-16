@@ -76,7 +76,7 @@ func TestKCLRun(t *testing.T) {
 		expectErrMsg string
 	}{
 		{
-			name: "KCLRun0",
+			name: "KCLRunInlineSource",
 			config: `apiVersion: krm.kcl.dev/v1alpha1
 kind: KCLRun
 metadata:
@@ -91,7 +91,7 @@ spec:
 			expectResult: `apiVersion: v1`,
 		},
 		{
-			name: "KCLRun1",
+			name: "KCLRunWithParams",
 			config: `apiVersion: krm.kcl.dev/v1alpha1
 kind: KCLRun
 metadata:
@@ -108,7 +108,7 @@ spec:
 			expectResult: `apiVersion: v1`,
 		},
 		{
-			name: "KCLRun2",
+			name: "KCLRunWithArgumentsConfig",
 			config: `apiVersion: krm.kcl.dev/v1alpha1
 kind: KCLRun
 metadata:
@@ -126,7 +126,7 @@ spec:
 			expectResult: `apiVersion: v1`,
 		},
 		{
-			name: "KCLRun3",
+			name: "KCLRunWithDisableNoneConfig",
 			config: `apiVersion: krm.kcl.dev/v1alpha1
 kind: KCLRun
 metadata:
@@ -142,6 +142,25 @@ spec:
     }
 `,
 			expectResult: `b: 1`,
+		},
+		{
+			name: "KCLRunWithDependencies",
+			config: `apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+metadata:
+  name: my-kcl-fn
+  namespace: foo
+spec:
+  dependencies:
+    helloworld = "0.1.0"
+  source: |
+    import helloworld
+
+    {
+        a = helloworld.The_first_kcl_program
+    }
+`,
+			expectResult: `a: Hello World!`,
 		},
 	}
 	for _, tc := range testcases {
