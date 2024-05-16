@@ -142,8 +142,8 @@ spec:
 apiVersion: krm.kcl.dev/v1alpha1
 kind: KCLRun
 spec:
-	# Set the dependencies are the external dependencies for the KCL code.
-	# The format of the `dependencies` field is same as the [dependencies]` in the `kcl.mod` file
+  # Set the dependencies are the external dependencies for the KCL code.
+  # The format of the `dependencies` field is same as the [dependencies]` in the `kcl.mod` file
   dependencies:
     helloworld = 0.1.0
   source: |
