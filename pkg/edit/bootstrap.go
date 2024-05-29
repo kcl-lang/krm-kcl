@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"kcl-lang.io/kcl-go/pkg/env"
 	"kcl-lang.io/krm-kcl/pkg/api"
 	"kcl-lang.io/krm-kcl/pkg/source"
 
@@ -22,6 +23,10 @@ const (
 	emptyConfig            = "{}"
 	emptyList              = "[]"
 )
+
+func init() {
+	env.EnableFastEvalMode()
+}
 
 // RunKCL runs a KCL program specified by the given source code or url,
 // with the given resource list as input, and returns the resulting KRM resource list.
