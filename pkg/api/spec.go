@@ -21,30 +21,30 @@ const (
 // ConfigSpec defines the compile config.
 type ConfigSpec struct {
 	// Arguments is the list of top level dynamic arguments for the kcl option function, e.g., env="prod"
-	Arguments []string `json:"arguments" yaml:"arguments"`
+	Arguments []string `json:"arguments,omitempty" yaml:"arguments,omitempty"`
 	// Settings is the list of kcl setting files including all of the CLI config.
-	Settings []string `json:"settings" yaml:"settings"`
+	Settings []string `json:"settings,omitempty" yaml:"settings,omitempty"`
 	// Overrides is the list of override paths and values, e.g., app.image="v2"
-	Overrides []string `json:"overrides" yaml:"overrides"`
+	Overrides []string `json:"overrides,omitempty" yaml:"overrides,omitempty"`
 	// PathSelectors is the list of path selectors to select output result, e.g., a.b.c
-	PathSelectors []string `json:"pathSelectors" yaml:"pathSelectors"`
+	PathSelectors []string `json:"pathSelectors,omitempty" yaml:"pathSelectors,omitempty"`
 	// Vendor denotes running kcl in the vendor mode.
-	Vendor bool `json:"vendor" yaml:"vendor"`
+	Vendor bool `json:"vendor,omitempty" yaml:"vendor,omitempty"`
 	// SortKeys denotes sorting the output result keys, e.g., `{b = 1, a = 2} => {a = 2, b = 1}`.
-	SortKeys bool `json:"sortKeys" yaml:"sortKeys"`
+	SortKeys bool `json:"sortKeys,omitempty" yaml:"sortKeys,omitempty"`
 	// ShowHidden denotes output the hidden attribute in the result.
-	ShowHidden bool `json:"showHidden" yaml:"showHidden"`
+	ShowHidden bool `json:"showHidden,omitempty" yaml:"showHidden,omitempty"`
 	// DisableNone denotes running kcl and disable dumping None values.
-	DisableNone bool `json:"disableNone" yaml:"disableNone"`
+	DisableNone bool `json:"disableNone,omitempty" yaml:"disableNone,omitempty"`
 	// Debug denotes running kcl in debug mode.
-	Debug bool `json:"debug" yaml:"debug"`
+	Debug bool `json:"debug,omitempty" yaml:"debug,omitempty"`
 	// StrictRangeCheck performs the 32-bit strict numeric range checks on numbers.
-	StrictRangeCheck bool `json:"strictRangeCheck" yaml:"strictRangeCheck"`
+	StrictRangeCheck bool `json:"strictRangeCheck,omitempty" yaml:"strictRangeCheck,omitempty"`
 }
 
 // CredSpec defines authentication credentials for remote locations
 type CredSpec struct {
-	Url      string `json:"url" yaml:"url"`
+	Url      string `json:"url,omitempty" yaml:"url,omitempty"`
 	Username string `json:"username" yaml:"username"`
 	Password string `json:"password" yaml:"password"`
 }

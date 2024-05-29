@@ -38,9 +38,9 @@ type KCLRun struct {
 		// Source is a required field for providing a KCL script inline.
 		Source string `json:"source" yaml:"source"`
 		// Config is the compile config.
-		Config api.ConfigSpec `json:"config" yaml:"config"`
+		Config api.ConfigSpec `json:"config,omitempty" yaml:"config,omitempty"`
 		// Credentials for remote locations
-		Credentials api.CredSpec `json:"credentials" yaml:"credentials"`
+		Credentials api.CredSpec `json:"credentials,omitempty" yaml:"credentials,omitempty"`
 		// Params are the parameters in key-value pairs format.
 		Params map[string]interface{} `json:"params,omitempty" yaml:"params,omitempty"`
 		// MatchConstraints defines the resource matching rules.
