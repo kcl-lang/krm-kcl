@@ -8,7 +8,7 @@ require (
 	k8s.io/apimachinery v0.28.3
 	kcl-lang.io/cli v0.9.0-beta.1
 	kcl-lang.io/kcl-go v0.9.0-beta.1
-	kcl-lang.io/kpm v0.9.0-beta.1
+	kcl-lang.io/kpm v0.9.0-rc.1
 	sigs.k8s.io/kustomize/kyaml v0.16.0
 )
 
