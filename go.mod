@@ -7,7 +7,7 @@ require (
 	github.com/stretchr/testify v1.9.0
 	k8s.io/apimachinery v0.28.3
 	kcl-lang.io/cli v0.9.0-beta.1
-	kcl-lang.io/kcl-go v0.9.0-beta.1
+	kcl-lang.io/kcl-go v0.9.0-rc.1
 	kcl-lang.io/kpm v0.9.0-rc.1
 	sigs.k8s.io/kustomize/kyaml v0.16.0
 )
@@ -109,6 +109,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
+	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/moby/locker v1.0.1 // indirect
 	github.com/moby/sys/mountinfo v0.7.1 // indirect
@@ -132,6 +133,7 @@ require (
 	github.com/prometheus/client_model v0.6.0 // indirect
 	github.com/prometheus/common v0.51.1 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
+	github.com/protocolbuffers/txtpbfmt v0.0.0-20240416193709-1e18ef0a7fdc // indirect
 	github.com/qri-io/jsonpointer v0.1.1 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/sergi/go-diff v1.3.2-0.20230802210424-5b0b94c5c0d3 // indirect
