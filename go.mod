@@ -3,7 +3,7 @@ module kcl-lang.io/krm-kcl
 go 1.21
 
 require (
-	github.com/hashicorp/go-getter v1.7.4
+	github.com/hashicorp/go-getter v1.7.5
 	github.com/stretchr/testify v1.9.0
 	k8s.io/apimachinery v0.28.3
 	kcl-lang.io/cli v0.9.0-rc.1
