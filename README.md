@@ -175,8 +175,9 @@ You can directly use [KCL standard libraries](https://kcl-lang.io/docs/reference
 ## Tools and Integrations
 
 + [Kubectl KCL Plugin](https://github.com/kcl-lang/kubectl-kcl)
++ [Kustomize KCL Plugin](https://github.com/kcl-lang/kustomize-kcl)
 + [Helm KCL Plugin](https://github.com/kcl-lang/helm-kcl)
 + [Helmfile KCL Plugin](https://github.com/kcl-lang/helmfile-kcl)
 + [KPT KCL Plugin](https://github.com/kcl-lang/kpt-kcl)
-+ [KCL Operator](https://github.com/kcl-lang/kcl-operator)
 + [Crossplane KCL Function](https://github.com/crossplane-contrib/function-kcl)
++ [KCL Operator](https://github.com/kcl-lang/kcl-operator)
