@@ -19,14 +19,13 @@ func ReadThroughGetter(src string) (string, error) {
 	if err != nil {
 		return src, err
 	}
-	ctx, cancel := context.WithCancel(context.Background())
-
 	// Create temp files.
 	tmpDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		return "", fmt.Errorf("error creating temp file: %v", err)
 	}
-
+	// Getter context
+	ctx, cancel := context.WithCancel(context.Background())
 	// Build the client
 	client := &getter.Client{
 		Ctx:  ctx,
@@ -46,10 +45,8 @@ func ReadThroughGetter(src string) (string, error) {
 			errChan <- err
 		}
 	}()
-
-	c := make(chan os.Signal)
+	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
-
 	select {
 	case <-c:
 		signal.Reset(os.Interrupt)
@@ -61,7 +58,6 @@ func ReadThroughGetter(src string) (string, error) {
 		wg.Wait()
 		return src, err
 	}
-
-	// 5. Read source from the temp directory
+	// Read source from the temp directory
 	return tmpDir, nil
 }

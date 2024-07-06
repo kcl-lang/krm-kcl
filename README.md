@@ -86,6 +86,8 @@ spec:
     password: <password> # or KCL_SRC_PASSWORD environment variable
 ```
 
+For Git Source, we can access specific branches or private repositories through [these parameters](https://github.com/hashicorp/go-getter?tab=readme-ov-file#git-git)
+
 ### Annotations
 
 ```yaml
