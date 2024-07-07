@@ -8,8 +8,8 @@ require (
 	github.com/hashicorp/go-getter v1.7.5
 	github.com/stretchr/testify v1.9.0
 	k8s.io/apimachinery v0.28.3
-	kcl-lang.io/cli v0.9.0
-	kcl-lang.io/kcl-go v0.9.0
+	kcl-lang.io/cli v0.9.1
+	kcl-lang.io/kcl-go v0.9.1
 	kcl-lang.io/kpm v0.9.0
 	sigs.k8s.io/kustomize/kyaml v0.16.0
 )
@@ -184,7 +184,7 @@ require (
 	k8s.io/kube-openapi v0.0.0-20230717233707-2695361300d9 // indirect
 	k8s.io/utils v0.0.0-20230505201702-9f6742963106 // indirect
 	kcl-lang.io/kcl-openapi v0.6.3 // indirect
-	kcl-lang.io/lib v0.9.0 // indirect
+	kcl-lang.io/lib v0.9.1 // indirect
 	oras.land/oras-go v1.2.5 // indirect
 	oras.land/oras-go/v2 v2.5.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect

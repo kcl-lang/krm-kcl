@@ -152,7 +152,7 @@ metadata:
   namespace: foo
 spec:
   dependencies:
-    helloworld = "0.1.0"
+    helloworld = {oci = "oci://ghcr.io/kcl-lang/helloworld", "tag" = "0.1.0"}
   source: |
     import helloworld
 

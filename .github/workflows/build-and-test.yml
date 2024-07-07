@@ -9,7 +9,7 @@ jobs:
   build-and-test:
     strategy:
       matrix:
-        os: [macos-13, ubuntu-latest, windows-latest]
+        os: [macos-12, macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Git checkout
@@ -18,7 +18,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: 1.21
+          go-version: 1.22
 
       - name: Unit test
         run: make test
