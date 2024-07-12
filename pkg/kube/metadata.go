@@ -27,8 +27,8 @@ func UnstructuredToObjMetadata(obj *unstructured.Unstructured) ObjMetadata {
 	}
 }
 
-// ObjMetadataID returns the object ID in the format <kind>/<namespace>/<name>.
-func ObjMetadataID(obj ObjMetadata) string {
+// ID returns the object ID in the format <kind>/<namespace>/<name>.
+func (obj *ObjMetadata) ID() string {
 	var builder strings.Builder
 	builder.WriteString(obj.GroupKind.Kind + "/")
 	if obj.Namespace != "" {

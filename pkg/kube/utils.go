@@ -32,7 +32,7 @@ func YamlByteToUnstructured(yamlByte []byte) (*unstructured.Unstructured, error)
 }
 
 // YamlByteToUnstructured returns the manifests list from the YAML stream data.
-func YamlStreamByteToUnstructuredList(yamlByte []byte) (result []unstructured.Unstructured, err error) {
+func YamlStreamByteToUnstructuredList(yamlByte []byte) (result []*unstructured.Unstructured, err error) {
 	bytes, err := krmyaml.SplitDocuments(string(yamlByte))
 	if err != nil {
 		return
@@ -50,7 +50,7 @@ func YamlStreamByteToUnstructuredList(yamlByte []byte) (result []unstructured.Un
 			return nil, err
 		}
 
-		result = append(result, unstructured.Unstructured{
+		result = append(result, &unstructured.Unstructured{
 			Object: normalizedData.(map[string]interface{}),
 		})
 	}
@@ -118,7 +118,8 @@ func CopyAndRemoveMetadataAndStatus(object *unstructured.Unstructured) *unstruct
 
 // UnstructuredID returns the object ID in the format <kind>/<namespace>/<name>.
 func UnstructuredID(obj *unstructured.Unstructured) string {
-	return ObjMetadataID(UnstructuredToObjMetadata(obj))
+	m := UnstructuredToObjMetadata(obj)
+	return m.ID()
 }
 
 // NormalizeServerSideFields removes the metadata and status fields from the object to
