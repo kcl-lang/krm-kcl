@@ -2,11 +2,13 @@ package kube
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"gopkg.in/yaml.v3"
 	"k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
+	krmyaml "kcl-lang.io/krm-kcl/pkg/yaml"
 )
 
 // JsonByteToRawExtension converts a JSON byte array to a runtime.RawExtension object.
@@ -27,6 +29,32 @@ func YamlByteToUnstructured(yamlByte []byte) (*unstructured.Unstructured, error)
 	}
 	u := &unstructured.Unstructured{Object: data}
 	return u, nil
+}
+
+// YamlByteToUnstructured returns the manifests list from the YAML stream data.
+func YamlStreamByteToUnstructuredList(yamlByte []byte) (result []unstructured.Unstructured, err error) {
+	bytes, err := krmyaml.SplitDocuments(string(yamlByte))
+	if err != nil {
+		return
+	}
+	for _, b := range bytes {
+		var data interface{}
+		err = yaml.Unmarshal([]byte(b), &data)
+		if err != nil {
+			return
+		}
+
+		// Convert map[any]any to map[string]any
+		normalizedData, err := NormalizeMap(data)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, unstructured.Unstructured{
+			Object: normalizedData.(map[string]interface{}),
+		})
+	}
+	return
 }
 
 // JsonByteToUnstructured converts a JSON byte array to an unstructured.Unstructured object.
@@ -105,4 +133,35 @@ func NormalizeServerSideFields(ur *unstructured.Unstructured) *unstructured.Unst
 	unstructured.RemoveNestedField(ur.Object, metadata, "generation")
 	unstructured.RemoveNestedField(ur.Object, metadata, "managedFields")
 	return ur
+}
+
+// NormalizeMap converts map[interface{}]interface{} to map[string]interface{}
+func NormalizeMap(input interface{}) (interface{}, error) {
+	switch in := input.(type) {
+	case map[interface{}]interface{}:
+		normalized := make(map[string]interface{})
+		for key, value := range in {
+			strKey, ok := key.(string)
+			if !ok {
+				return nil, fmt.Errorf("found non-string key in the map")
+			}
+			normalizedValue, err := NormalizeMap(value)
+			if err != nil {
+				return nil, err
+			}
+			normalized[strKey] = normalizedValue
+		}
+		return normalized, nil
+	case []interface{}:
+		for i, v := range in {
+			normalizedValue, err := NormalizeMap(v)
+			if err != nil {
+				return nil, err
+			}
+			in[i] = normalizedValue
+		}
+		return in, nil
+	default:
+		return input, nil
+	}
 }
