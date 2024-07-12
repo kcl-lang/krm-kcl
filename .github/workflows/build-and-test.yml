@@ -20,5 +20,18 @@ jobs:
         with:
           go-version: 1.22
 
+      - uses: engineerd/setup-kind@v0.5.0
+        if: matrix.os == 'ubuntu-latest'
+        with:
+          version: "v0.11.1"
+
+      - name: Kubernetes Testing
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          kubectl cluster-info
+          kubectl get pods -n kube-system
+          echo "current-context:" $(kubectl config current-context)
+          echo "environment-kubeconfig:" ${KUBECONFIG}
+
       - name: Unit test
         run: make test
