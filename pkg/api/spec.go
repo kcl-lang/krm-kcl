@@ -1,6 +1,9 @@
 package api
 
 const (
+	// FieldManager is the name of the manager performing Kubernetes patch operations.
+	FieldManager = "krm-kcl"
+
 	// KCLRunKind represents the kind of resource for the KCLRun resource.
 	KCLRunKind = "KCLRun"
 
