@@ -27,6 +27,14 @@ func YamlByteToUnstructured(yamlByte []byte) (*unstructured.Unstructured, error)
 	if err != nil {
 		return nil, err
 	}
+	jsonByte, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	err = yaml.Unmarshal(jsonByte, &data)
+	if err != nil {
+		return nil, err
+	}
 	u := &unstructured.Unstructured{Object: data}
 	return u, nil
 }
@@ -43,15 +51,22 @@ func YamlStreamByteToUnstructuredList(yamlByte []byte) (result []*unstructured.U
 		if err != nil {
 			return
 		}
-
 		// Convert map[any]any to map[string]any
 		normalizedData, err := NormalizeMap(data)
 		if err != nil {
 			return nil, err
 		}
-
+		jsonByte, err := json.Marshal(normalizedData)
+		if err != nil {
+			return nil, err
+		}
+		var mData map[string]interface{}
+		err = yaml.Unmarshal(jsonByte, &mData)
+		if err != nil {
+			return nil, err
+		}
 		result = append(result, &unstructured.Unstructured{
-			Object: normalizedData.(map[string]interface{}),
+			Object: mData,
 		})
 	}
 	return
