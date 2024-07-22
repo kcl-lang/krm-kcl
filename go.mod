@@ -14,7 +14,7 @@ require (
 	kcl-lang.io/kcl-go v0.9.1
 	kcl-lang.io/kpm v0.9.0
 	sigs.k8s.io/controller-runtime v0.18.4
-	sigs.k8s.io/kustomize/kyaml v0.17.0
+	sigs.k8s.io/kustomize/kyaml v0.17.2
 )
 
 require (
