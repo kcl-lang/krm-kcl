@@ -12,9 +12,9 @@ require (
 	k8s.io/apimachinery v0.30.2
 	k8s.io/cli-runtime v0.30.2
 	k8s.io/client-go v0.30.2
-	kcl-lang.io/cli v0.9.5-0.20240806094811-7ef0634df60c
-	kcl-lang.io/kcl-go v0.10.0-alpha.3
-	kcl-lang.io/kpm v0.10.0-alpha.1
+	kcl-lang.io/cli v0.9.7
+	kcl-lang.io/kcl-go v0.9.3
+	kcl-lang.io/kpm v0.9.7
 	sigs.k8s.io/controller-runtime v0.18.4
 	sigs.k8s.io/kustomize/kyaml v0.17.2
 )
@@ -70,7 +70,6 @@ require (
 	github.com/evanphx/json-patch v5.7.0+incompatible // indirect
 	github.com/fatih/color v1.17.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.5 // indirect
 	github.com/getkin/kin-openapi v0.127.0 // indirect
 	github.com/go-errors/errors v1.5.1 // indirect
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
@@ -208,8 +207,8 @@ require (
 	k8s.io/klog/v2 v2.120.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20240228011516-70dd3763d340 // indirect
 	k8s.io/utils v0.0.0-20240310230437-4693a0247e57 // indirect
-	kcl-lang.io/kcl-openapi v0.6.5 // indirect
-	kcl-lang.io/lib v0.10.0-alpha.3 // indirect
+	kcl-lang.io/kcl-openapi v0.6.6 // indirect
+	kcl-lang.io/lib v0.9.3 // indirect
 	oras.land/oras-go v1.2.6 // indirect
 	oras.land/oras-go/v2 v2.5.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
