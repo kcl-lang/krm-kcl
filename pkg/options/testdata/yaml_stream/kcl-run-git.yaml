@@ -11,4 +11,4 @@ spec:
   params:
     annotations:
       config.kubernetes.io/local-config: "true"
-  source: github.com/kcl-lang/krm-kcl/tests/mutation/set-annotations/
+  source: https://Peefy:token@github.com/kcl-lang/krm-kcl/tests/mutation/set-annotations/
