@@ -188,6 +188,10 @@ func (c *KCLRun) Transform(in []*yaml.RNode, fnCfg *yaml.RNode) ([]*yaml.RNode, 
 			return nil, err
 		}
 	}
+	// git::https://username:password@github.com/user/repo
+	if src.IsVCSDomain(c.Spec.Source) && c.Spec.Credentials.Username != "" && c.Spec.Credentials.Password != "" {
+		c.Spec.Source = fmt.Sprintf("%s::https://%s:%s@%s", src.GitScheme, c.Spec.Credentials.Username, c.Spec.Credentials.Password, c.Spec.Source)
+	}
 	var dependencies []string
 	if c.Spec.Dependencies != "" {
 		dependencies, err = edit.LoadDepListFromConfig(cli, c.Spec.Dependencies)
