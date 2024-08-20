@@ -13,7 +13,7 @@ import (
 // ReadThroughGetter is used to get the source code content from different types of sources (local path, remote URL, or Git source).
 // It gets the pwd, creates temp files, and builds the client to get the code content.
 // If an error occurs during the acquisition process, an error message will be returned.
-func ReadThroughGetter(src string) (string, error) {
+func ReadThroughGetter(src string, opts ...getter.ClientOption) (string, error) {
 	// Get the pwd
 	pwd, err := os.Getwd()
 	if err != nil {
@@ -28,11 +28,12 @@ func ReadThroughGetter(src string) (string, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	// Build the client
 	client := &getter.Client{
-		Ctx:  ctx,
-		Src:  src,
-		Dst:  tmpDir,
-		Pwd:  pwd,
-		Mode: getter.ClientModeAny,
+		Ctx:     ctx,
+		Src:     src,
+		Dst:     tmpDir,
+		Pwd:     pwd,
+		Mode:    getter.ClientModeAny,
+		Options: opts,
 	}
 
 	wg := sync.WaitGroup{}

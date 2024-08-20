@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"kcl-lang.io/kcl-go/pkg/env"
+	"github.com/hashicorp/go-getter"
 	"kcl-lang.io/krm-kcl/pkg/api"
 	"kcl-lang.io/krm-kcl/pkg/source"
 
@@ -23,10 +23,6 @@ const (
 	emptyConfig            = "{}"
 	emptyList              = "[]"
 )
-
-func init() {
-	env.EnableFastEvalMode()
-}
 
 // RunKCL runs a KCL program specified by the given source code or url,
 // with the given resource list as input, and returns the resulting KRM resource list.
@@ -53,9 +49,9 @@ func RunKCL(name, source string, resourceList *yaml.RNode) ([]*yaml.RNode, error
 //
 // Return:
 // A pointer to []*yaml.RNode objects that represent the output YAML objects of the KCL program.
-func RunKCLWithConfig(name, source string, dependencies []string, resourceList *yaml.RNode, config *api.ConfigSpec) ([]*yaml.RNode, error) {
+func RunKCLWithConfig(name, source string, dependencies []string, resourceList *yaml.RNode, config *api.ConfigSpec, getterOptions ...getter.ClientOption) ([]*yaml.RNode, error) {
 	// 1. Construct KCL code from source.
-	entry, err := SourceToTempEntry(source)
+	entry, err := SourceToTempEntry(source, getterOptions...)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
@@ -100,7 +96,7 @@ func ToKCLValueString(value *yaml.RNode, defaultValue string) (string, error) {
 }
 
 // SourceToTempEntry convert source to a temp KCL file.
-func SourceToTempEntry(src string) (string, error) {
+func SourceToTempEntry(src string, opts ...getter.ClientOption) (string, error) {
 	if source.IsOCI(src) {
 		// Read code from a OCI source.
 		return src, nil
@@ -108,7 +104,7 @@ func SourceToTempEntry(src string) (string, error) {
 		return src, nil
 	} else if source.IsRemoteUrl(src) || source.IsGit(src) || source.IsVCSDomain(src) {
 		// Read code from local path or a remote url.
-		return source.ReadThroughGetter(src)
+		return source.ReadThroughGetter(src, opts...)
 	} else {
 		// May be a inline code source.
 		tmpDir, err := os.MkdirTemp("", "sandbox")

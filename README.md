@@ -96,7 +96,7 @@ kind: KCLRun
 metadata:
   name: set-annotation
   annotations:
-    krm.kcl.dev/allow-insecure-source: "true"  # Set plain http for the source managed by KCLRun such as a local registry localhost:7900
+    krm.kcl.dev/allow-insecure-source: "true"  # Set plain http for the source managed by KCLRun such as a local registry localhost:7900 or insecure http source
 spec:
   params:
     annotations:
@@ -138,7 +138,7 @@ spec:
     # omit other fields
 ```
 
-## Dependencies
+## External Dependencies
 
 ```yaml
 apiVersion: krm.kcl.dev/v1alpha1
@@ -152,11 +152,9 @@ spec:
     import k8s.api.core.v1 as k8core
 
     k8core.Pod {
-        spec: k8core.PodSpec{
-            containers: [{
-                name = "main"
-            }]
-        }
+        spec.containers: [{
+            name = "main"
+        }]
     }
 ```
 
@@ -164,15 +162,16 @@ spec:
 
 Here's what you can do in the KCL script:
 
-+ Read resources from `option("resource_list")`. The `option("resource_list")` complies with the [KRM Functions Specification](https://github.com/kubernetes-sigs/kustomize/blob/master/cmd/config/docs/api-conventions/functions-spec.md#krm-functions-specification). You can read the input resources from `option("items")` and the `functionConfig` from `option("functionConfig")`.
-+ Return a KRM list for output resources.
++ Read the input resources from `option("items")` and the `functionConfig` from `option("functionConfig")`.
++ Read resources from `option("resource_list")`. The `option("resource_list")` complies with the [KRM Functions Specification](https://github.com/kubernetes-sigs/kustomize/blob/master/cmd/config/docs/api-conventions/functions-spec.md#krm-functions-specification). 
++ Return a KRM list for output resources through the variable `items`.
 + Return an error using `assert {condition}, {error_message}`.
 + Read the PATH variables. e.g. `option("PATH")`.
 + Read the environment variables. e.g. `option("env")`.
 
 ## Library
 
-You can directly use [KCL standard libraries](https://kcl-lang.io/docs/reference/model/overview) without importing them, such as `regex.match`, `math.log`.
+You can directly use KCL [standard libraries](https://kcl-lang.io/docs/reference/model/overview) by importing them e.g., `import regex`, `import math` and using them e.g., `regex.match`, `math.log`.
 
 ## Tutorial
 
