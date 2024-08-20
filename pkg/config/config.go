@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/hashicorp/go-getter"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 
@@ -161,7 +162,12 @@ func (c *KCLRun) Transform(in []*yaml.RNode, fnCfg *yaml.RNode) ([]*yaml.RNode, 
 			filterNodes = append(filterNodes, n)
 		}
 	}
-	c.DealAnnotations()
+	opts := []getter.ClientOption{}
+	insecure := c.InsecureFlag()
+	if insecure {
+		os.Setenv(settings.DEFAULT_OCI_PLAIN_HTTP_ENV, settings.ON)
+		opts = append(opts, getter.WithInsecure())
+	}
 
 	// Authenticate with credentials to remote source
 	if os.Getenv(SrcUrlEnvVar) != "" {
@@ -196,14 +202,16 @@ func (c *KCLRun) Transform(in []*yaml.RNode, fnCfg *yaml.RNode) ([]*yaml.RNode, 
 		Dependencies:   dependencies,
 		FunctionConfig: fnCfg,
 		Config:         &c.Spec.Config,
+		GetterOptions:  opts,
 	}
 	return st.Transform(filterNodes)
 }
 
-// DealAnnotations handles annotations, e.g., allow-insecure-source.
-func (r *KCLRun) DealAnnotations() {
+// InsecureFlag returns the insecure flag `"krm.kcl.dev/allow-insecure-source"`
+func (r *KCLRun) InsecureFlag() bool {
 	// Deal the allow-insecure-source annotation
 	if v, ok := r.ObjectMeta.Annotations[AnnotationAllowInSecureSource]; ok && isOk(v) {
-		os.Setenv(settings.DEFAULT_OCI_PLAIN_HTTP_ENV, settings.ON)
+		return true
 	}
+	return false
 }

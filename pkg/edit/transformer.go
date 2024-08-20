@@ -3,6 +3,7 @@ package edit
 import (
 	"fmt"
 
+	"github.com/hashicorp/go-getter"
 	"kcl-lang.io/krm-kcl/pkg/api"
 	"sigs.k8s.io/kustomize/kyaml/errors"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
@@ -31,6 +32,8 @@ type SimpleTransformer struct {
 	FunctionConfig *yaml.RNode
 	// Config is the compile config.
 	Config *api.ConfigSpec
+	// Getter options
+	GetterOptions []getter.ClientOption
 }
 
 // Format transformer using the name and source.
@@ -48,7 +51,7 @@ func (st *SimpleTransformer) Transform(nodes []*yaml.RNode) ([]*yaml.RNode, erro
 	}
 
 	// 2. Run code
-	out, err := RunKCLWithConfig(st.Name, st.Source, st.Dependencies, in, st.Config)
+	out, err := RunKCLWithConfig(st.Name, st.Source, st.Dependencies, in, st.Config, st.GetterOptions...)
 
 	if err != nil {
 		return nil, errors.Wrap(err)
