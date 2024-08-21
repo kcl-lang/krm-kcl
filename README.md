@@ -190,3 +190,4 @@ You can directly use KCL [standard libraries](https://kcl-lang.io/docs/reference
 + [KPT KCL Plugin](https://github.com/kcl-lang/kpt-kcl)
 + [Crossplane KCL Function](https://github.com/crossplane-contrib/function-kcl)
 + [KCL Operator](https://github.com/kcl-lang/kcl-operator)
++ [Flux KCL Controller](https://github.com/kcl-lang/flux-kcl-controller)
