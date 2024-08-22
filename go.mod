@@ -12,9 +12,8 @@ require (
 	k8s.io/apimachinery v0.31.0
 	k8s.io/cli-runtime v0.31.0
 	k8s.io/client-go v0.31.0
-	kcl-lang.io/cli v0.10.0-beta.1
-	kcl-lang.io/kcl-go v0.10.0-beta.1
-	kcl-lang.io/kpm v0.10.0-alpha.3
+	kcl-lang.io/cli v0.10.0-beta.2
+	kcl-lang.io/kpm v0.10.0-beta.2
 	sigs.k8s.io/controller-runtime v0.19.0
 	sigs.k8s.io/kustomize/kyaml v0.17.2
 )
@@ -48,7 +47,7 @@ require (
 	github.com/containerd/errdefs v0.1.0 // indirect
 	github.com/containerd/log v0.1.0 // indirect
 	github.com/containerd/platforms v0.2.1 // indirect
-	github.com/containers/image/v5 v5.32.0 // indirect
+	github.com/containers/image/v5 v5.32.1 // indirect
 	github.com/containers/libtrust v0.0.0-20230121012942-c1716e8a8d01 // indirect
 	github.com/containers/ocicrypt v1.2.0 // indirect
 	github.com/containers/storage v1.55.0 // indirect
@@ -63,7 +62,7 @@ require (
 	github.com/docker/go-metrics v0.0.1 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/dominikbraun/graph v0.23.0 // indirect
-	github.com/elliotchance/orderedmap/v2 v2.2.0 // indirect
+	github.com/elliotchance/orderedmap/v2 v2.4.0 // indirect
 	github.com/emicklei/go-restful/v3 v3.11.0 // indirect
 	github.com/emicklei/proto v1.13.2 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
@@ -185,7 +184,7 @@ require (
 	golang.org/x/exp v0.0.0-20240719175910-8a7402abbf56 // indirect
 	golang.org/x/mod v0.20.0 // indirect
 	golang.org/x/net v0.28.0 // indirect
-	golang.org/x/oauth2 v0.21.0 // indirect
+	golang.org/x/oauth2 v0.22.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.23.0 // indirect
 	golang.org/x/term v0.23.0 // indirect
@@ -210,8 +209,9 @@ require (
 	k8s.io/klog/v2 v2.130.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20240228011516-70dd3763d340 // indirect
 	k8s.io/utils v0.0.0-20240711033017-18e509b52bc8 // indirect
-	kcl-lang.io/kcl-openapi v0.7.0 // indirect
-	kcl-lang.io/lib v0.10.0-beta.1 // indirect
+	kcl-lang.io/kcl-go v0.10.0-beta.2 // indirect
+	kcl-lang.io/kcl-openapi v0.8.0 // indirect
+	kcl-lang.io/lib v0.10.0-beta.2 // indirect
 	oras.land/oras-go v1.2.6 // indirect
 	oras.land/oras-go/v2 v2.5.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
