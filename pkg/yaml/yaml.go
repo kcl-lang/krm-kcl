@@ -28,13 +28,8 @@ func SplitDocuments(s string) ([]string, error) {
 				return nil, fmt.Errorf("invalid document separator: %s", strings.TrimSpace(separator))
 			}
 			// Remove all whitespace
-			result := strings.Map(func(r rune) rune {
-				if unicode.IsSpace(r) {
-					return -1
-				}
-				return r
-			}, s[prev:loc[0]])
-			if len(result) > 0 {
+			result := s[prev:loc[0]]
+			if len(result) > 0 && !isAllWhitespace(result) {
 				docs = append(docs, result)
 			}
 			prev = loc[1]
@@ -42,4 +37,13 @@ func SplitDocuments(s string) ([]string, error) {
 		docs = append(docs, s[prev:])
 	}
 	return docs, nil
+}
+
+func isAllWhitespace(str string) bool {
+	for _, r := range str {
+		if !unicode.IsSpace(r) {
+			return false
+		}
+	}
+	return true
 }
