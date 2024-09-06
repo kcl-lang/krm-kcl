@@ -8,7 +8,6 @@ import (
 
 	"kcl-lang.io/cli/pkg/options"
 	"kcl-lang.io/kpm/pkg/client"
-	pkg "kcl-lang.io/kpm/pkg/package"
 	"kcl-lang.io/krm-kcl/pkg/api"
 	"sigs.k8s.io/kustomize/kyaml/errors"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
@@ -35,7 +34,7 @@ func LoadDepListFromConfig(cli *client.KpmClient, dependencies string) ([]string
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
-	pkg, err := pkg.LoadKclPkg(tmpDir)
+	pkg, err := cli.LoadPkgFromPath(tmpDir)
 	if err != nil {
 		return nil, err
 	}

@@ -151,8 +151,9 @@ metadata:
   name: my-kcl-fn
   namespace: foo
 spec:
-  dependencies:
+  dependencies: |
     helloworld = {oci = "oci://ghcr.io/kcl-lang/helloworld", "tag" = "0.1.0"}
+    k8s = "1.26"
   source: |
     import helloworld
 
@@ -176,7 +177,7 @@ spec:
 				assert.NoError(t, err)
 				resultYaml, err := yaml.Parse(tc.expectResult)
 				assert.NoError(t, err)
-				assert.Equal(t, result[0], resultYaml)
+				assert.Equal(t, result[0].MustString(), resultYaml.MustString())
 			} else {
 				assert.Error(t, err)
 				assert.Contains(t, err.Error(), tc.expectErrMsg)
