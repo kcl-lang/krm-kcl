@@ -24,8 +24,8 @@ func LoadDepListFromConfig(cli *client.KpmClient, dependencies string) ([]string
 	cli.SetLogWriter(nil)
 	modData := fmt.Sprintf("[package]\n\n[dependencies]\n%s", dependencies)
 	// May be a inline code source.
-	tmpDir, err := os.MkdirTemp("", "sandbox")
-	defer os.Remove(tmpDir)
+	tmpDir, err := os.MkdirTemp("", "kcl-sandbox-deps")
+	defer os.RemoveAll(tmpDir)
 	if err != nil {
 		return nil, fmt.Errorf("error creating temp directory: %v", err)
 	}
