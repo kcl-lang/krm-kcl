@@ -51,7 +51,10 @@ func RunKCL(name, source string, resourceList *yaml.RNode) ([]*yaml.RNode, error
 // A pointer to []*yaml.RNode objects that represent the output YAML objects of the KCL program.
 func RunKCLWithConfig(name, source string, dependencies []string, resourceList *yaml.RNode, config *api.ConfigSpec, getterOptions ...getter.ClientOption) ([]*yaml.RNode, error) {
 	// 1. Construct KCL code from source.
-	entry, err := SourceToTempEntry(source, getterOptions...)
+	entry, isTmp, err := SourceToTempEntry(source, getterOptions...)
+	if isTmp {
+		defer os.Remove(entry)
+	}
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
@@ -96,27 +99,28 @@ func ToKCLValueString(value *yaml.RNode, defaultValue string) (string, error) {
 }
 
 // SourceToTempEntry convert source to a temp KCL file.
-func SourceToTempEntry(src string, opts ...getter.ClientOption) (string, error) {
+func SourceToTempEntry(src string, opts ...getter.ClientOption) (string, bool, error) {
 	if source.IsOCI(src) {
 		// Read code from a OCI source.
-		return src, nil
+		return src, false, nil
 	} else if source.IsLocal(src) {
-		return src, nil
+		return src, false, nil
 	} else if source.IsRemoteUrl(src) || source.IsGit(src) || source.IsVCSDomain(src) {
 		// Read code from local path or a remote url.
-		return source.ReadThroughGetter(src, opts...)
+		tmp, err := source.ReadThroughGetter(src, opts...)
+		return tmp, true, err
 	} else {
 		// May be a inline code source.
 		tmpDir, err := os.MkdirTemp("", "sandbox")
 		if err != nil {
-			return "", fmt.Errorf("error creating temp directory: %v", err)
+			return "", true, fmt.Errorf("error creating temp directory: %v", err)
 		}
 		// Write kcl code in the temp file.
 		file := filepath.Join(tmpDir, "prog.k")
 		err = os.WriteFile(file, []byte(src), 0666)
 		if err != nil {
-			return "", errors.Wrap(err)
+			return "", true, errors.Wrap(err)
 		}
-		return file, nil
+		return file, true, nil
 	}
 }
