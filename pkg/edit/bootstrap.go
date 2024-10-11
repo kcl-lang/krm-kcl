@@ -24,6 +24,25 @@ const (
 	emptyList              = "[]"
 )
 
+// Origin of the KCL Source code to be processed
+type KCLEntryOrigin struct {
+	// KCL Source (file, directory, url, ...)
+	source string
+	// Temp directory where the kcl code (if any) is allocated. Optional field only retrieved for cleaning purposes.
+	tmpDir string
+	// Whether the source is a directory or not.
+	// isDir bool
+}
+
+// Remove any KCLEntryOrigin's temporary folder
+func KCLEntryOriginTmpDirCleanup(entry *KCLEntryOrigin) {
+	if entry.tmpDir != "" {
+		if _, err := os.Stat(entry.tmpDir); err == nil {
+			err = os.RemoveAll(entry.tmpDir)
+		}
+	}
+}
+
 // RunKCL runs a KCL program specified by the given source code or url,
 // with the given resource list as input, and returns the resulting KRM resource list.
 //
@@ -51,10 +70,8 @@ func RunKCL(name, source string, resourceList *yaml.RNode) ([]*yaml.RNode, error
 // A pointer to []*yaml.RNode objects that represent the output YAML objects of the KCL program.
 func RunKCLWithConfig(name, source string, dependencies []string, resourceList *yaml.RNode, config *api.ConfigSpec, getterOptions ...getter.ClientOption) ([]*yaml.RNode, error) {
 	// 1. Construct KCL code from source.
-	entry, isTmp, err := SourceToTempEntry(source, getterOptions...)
-	if isTmp {
-		defer os.Remove(entry)
-	}
+	entry, err := SourceToTempEntry(source, getterOptions...)
+	defer KCLEntryOriginTmpDirCleanup(entry)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
@@ -65,7 +82,7 @@ func RunKCLWithConfig(name, source string, dependencies []string, resourceList *
 	}
 	// 3. Run the KCL code.
 	result := bytes.NewBuffer([]byte{})
-	opts.Entries = []string{entry}
+	opts.Entries = []string{entry.source}
 	opts.Writer = result
 	if len(dependencies) > 0 {
 		opts.ExternalPackages = dependencies
@@ -99,28 +116,28 @@ func ToKCLValueString(value *yaml.RNode, defaultValue string) (string, error) {
 }
 
 // SourceToTempEntry convert source to a temp KCL file.
-func SourceToTempEntry(src string, opts ...getter.ClientOption) (string, bool, error) {
+func SourceToTempEntry(src string, opts ...getter.ClientOption) (*KCLEntryOrigin, error) {
 	if source.IsOCI(src) {
 		// Read code from a OCI source.
-		return src, false, nil
+		return &KCLEntryOrigin{src, ""}, nil
 	} else if source.IsLocal(src) {
-		return src, false, nil
+		return &KCLEntryOrigin{src, ""}, nil
 	} else if source.IsRemoteUrl(src) || source.IsGit(src) || source.IsVCSDomain(src) {
 		// Read code from local path or a remote url.
-		tmp, err := source.ReadThroughGetter(src, opts...)
-		return tmp, true, err
+		src, tmpDir, err := source.ReadThroughGetter(src, opts...)
+		return &KCLEntryOrigin{src, tmpDir}, err
 	} else {
 		// May be a inline code source.
-		tmpDir, err := os.MkdirTemp("", "sandbox")
+		tmpDir, err := os.MkdirTemp("", "kcl-sandbox")
 		if err != nil {
-			return "", true, fmt.Errorf("error creating temp directory: %v", err)
+			return &KCLEntryOrigin{"", ""},  fmt.Errorf("error creating temp directory: %v", err)
 		}
 		// Write kcl code in the temp file.
 		file := filepath.Join(tmpDir, "prog.k")
 		err = os.WriteFile(file, []byte(src), 0666)
 		if err != nil {
-			return "", true, errors.Wrap(err)
+			return &KCLEntryOrigin{file, tmpDir}, errors.Wrap(err)
 		}
-		return file, true, nil
+		return &KCLEntryOrigin{file, tmpDir}, nil
 	}
 }
