@@ -163,6 +163,22 @@ spec:
 `,
 			expectResult: `a: Hello World!`,
 		},
+		{
+			name: "KCLRunWithDebugPrint",
+			config: `apiVersion: krm.kcl.dev/v1alpha1
+kind: KCLRun
+metadata:
+  name: my-kcl-fn
+  namespace: foo
+spec:
+  source: |
+    print("hello world")
+    {
+        data = 1
+    }
+`,
+			expectResult: `data: 1`,
+		},
 	}
 	for _, tc := range testcases {
 		tc := tc
