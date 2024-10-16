@@ -38,7 +38,7 @@ type KCLEntryOrigin struct {
 func KCLEntryOriginTmpDirCleanup(entry *KCLEntryOrigin) {
 	if entry.tmpDir != "" {
 		if _, err := os.Stat(entry.tmpDir); err == nil {
-			err = os.RemoveAll(entry.tmpDir)
+			_ = os.RemoveAll(entry.tmpDir)
 		}
 	}
 }
@@ -130,7 +130,7 @@ func SourceToTempEntry(src string, opts ...getter.ClientOption) (*KCLEntryOrigin
 		// May be a inline code source.
 		tmpDir, err := os.MkdirTemp("", "kcl-sandbox")
 		if err != nil {
-			return &KCLEntryOrigin{"", ""},  fmt.Errorf("error creating temp directory: %v", err)
+			return &KCLEntryOrigin{"", ""}, fmt.Errorf("error creating temp directory: %v", err)
 		}
 		// Write kcl code in the temp file.
 		file := filepath.Join(tmpDir, "prog.k")
