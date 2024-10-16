@@ -13,7 +13,7 @@ require (
 	kcl-lang.io/cli v0.10.4-0.20241016021654-a8eb2b56bdd8
 	kcl-lang.io/kpm v0.10.0
 	sigs.k8s.io/controller-runtime v0.19.0
-	sigs.k8s.io/kustomize/kyaml v0.17.2
+	sigs.k8s.io/kustomize/kyaml v0.18.1
 )
 
 require (
@@ -175,7 +175,6 @@ require (
 	go.opentelemetry.io/otel v1.28.0 // indirect
 	go.opentelemetry.io/otel/metric v1.28.0 // indirect
 	go.opentelemetry.io/otel/trace v1.28.0 // indirect
-	go.starlark.net v0.0.0-20230525235612-a134d8f9ddca // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/crypto v0.28.0 // indirect
 	golang.org/x/exp v0.0.0-20240719175910-8a7402abbf56 // indirect
