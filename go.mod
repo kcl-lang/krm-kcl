@@ -10,7 +10,7 @@ require (
 	k8s.io/apimachinery v0.31.2
 	k8s.io/cli-runtime v0.31.1
 	k8s.io/client-go v0.31.2
-	kcl-lang.io/cli v0.10.9
+	kcl-lang.io/cli v0.10.10
 	kcl-lang.io/kpm v0.10.0
 	sigs.k8s.io/controller-runtime v0.19.1
 	sigs.k8s.io/kustomize/kyaml v0.17.2
