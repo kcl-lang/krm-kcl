@@ -10,8 +10,8 @@ require (
 	k8s.io/apimachinery v0.31.3
 	k8s.io/cli-runtime v0.31.3
 	k8s.io/client-go v0.31.3
-	kcl-lang.io/cli v0.10.9
-	kcl-lang.io/kpm v0.11.0-alpha.1
+	kcl-lang.io/cli v0.11.0-alpha.1
+	kcl-lang.io/kpm v0.11.0-alpha.2
 	sigs.k8s.io/controller-runtime v0.19.3
 	sigs.k8s.io/kustomize/kyaml v0.17.2
 )
@@ -62,14 +62,12 @@ require (
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/dominikbraun/graph v0.23.0 // indirect
 	github.com/ebitengine/purego v0.7.1 // indirect
-	github.com/elliotchance/orderedmap/v2 v2.4.0 // indirect
+	github.com/elliotchance/orderedmap/v2 v2.5.0 // indirect
 	github.com/emicklei/go-restful/v3 v3.11.0 // indirect
 	github.com/emicklei/proto v1.13.2 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
-	github.com/fatih/color v1.18.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.5 // indirect
 	github.com/getkin/kin-openapi v0.128.0 // indirect
 	github.com/go-errors/errors v1.5.1 // indirect
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
@@ -87,7 +85,7 @@ require (
 	github.com/go-openapi/strfmt v0.23.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/go-openapi/validate v0.24.0 // indirect
-	github.com/goccy/go-yaml v1.13.4 // indirect
+	github.com/goccy/go-yaml v1.15.8 // indirect
 	github.com/gofrs/flock v0.12.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-collections/collections v0.0.0-20130729185459-604e922904d3 // indirect
@@ -125,8 +123,6 @@ require (
 	github.com/kubescape/go-git-url v0.0.30 // indirect
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
