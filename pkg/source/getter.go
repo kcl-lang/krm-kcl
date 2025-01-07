@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"sync"
 
 	"github.com/hashicorp/go-getter"
@@ -24,6 +25,13 @@ func ReadThroughGetter(src string, opts ...getter.ClientOption) (string, string,
 	if err != nil {
 		return "", tmpDir, fmt.Errorf("error creating temp file: %v", err)
 	}
+
+	// go-getter should download the source code to a directory which not exists.
+	// if the path exists, it will return an error.
+	if IsGit(src) || IsVCSDomain(src) {
+		tmpDir = filepath.Join(tmpDir, "git")
+	}
+
 	// Getter context
 	ctx, cancel := context.WithCancel(context.Background())
 	// Build the client
