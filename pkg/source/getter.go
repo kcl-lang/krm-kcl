@@ -26,6 +26,8 @@ func ReadThroughGetter(src string, opts ...getter.ClientOption) (string, string,
 		return "", tmpDir, fmt.Errorf("error creating temp file: %v", err)
 	}
 
+	// go-getter should download the source code to a directory which not exists.
+	// if the path exists, it will return an error.
 	if IsGit(src) || IsVCSDomain(src) {
 		tmpDir = filepath.Join(tmpDir, "git")
 	}
