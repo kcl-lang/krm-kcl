@@ -8,7 +8,7 @@ require (
 	github.com/stretchr/testify v1.10.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.33.3
-	k8s.io/cli-runtime v0.33.2
+	k8s.io/cli-runtime v0.33.3
 	k8s.io/client-go v0.33.3
 	kcl-lang.io/cli v0.11.2
 	kcl-lang.io/kpm v0.11.3
