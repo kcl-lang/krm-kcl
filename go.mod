@@ -13,7 +13,7 @@ require (
 	kcl-lang.io/cli v0.11.2
 	kcl-lang.io/kpm v0.11.3
 	sigs.k8s.io/controller-runtime v0.21.0
-	sigs.k8s.io/kustomize/kyaml v0.20.0
+	sigs.k8s.io/kustomize/kyaml v0.20.1
 )
 
 require (
