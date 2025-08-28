@@ -5,7 +5,7 @@ go 1.24.0
 require (
 	github.com/hashicorp/go-getter v1.7.8
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.33.3
 	k8s.io/cli-runtime v0.33.3
