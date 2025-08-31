@@ -79,7 +79,7 @@ spec:
   params:
     annotations:
       config.kubernetes.io/local-config: "true"
-  source: oci://ghcr.io/kcl-lang/set-annotation
+  source: oci://ghcr.io/kcl-lang/set-annotations:0.1.1
   credentials: # If private OCI registry
     url: https://<oci-host-url> # or KCL_SRC_URL environment variable
     username: <username> # or KCL_SRC_USERNAME environment variable
@@ -101,7 +101,7 @@ spec:
   params:
     annotations:
       config.kubernetes.io/local-config: "true"
-  source: oci://localhost:7900/my-repo/set-annotation
+  source: oci://ghcr.io/kcl-lang/set-annotations:0.1.1
 ```
 
 ## Resource Match Constraints
@@ -113,7 +113,7 @@ spec:
   params:
     annotations:
       config.kubernetes.io/local-config: "true"
-  source: oci://ghcr.io/kcl-lang/set-annotation
+  source: oci://ghcr.io/kcl-lang/set-annotation:0.1.1
   matchConstraints:  # Set resource filter match constraints for the matched types.
     resourceRules:
     - apiGroups: ["apps"]
@@ -130,7 +130,7 @@ spec:
   params:
     annotations:
       config.kubernetes.io/local-config: "true"
-  source: oci://ghcr.io/kcl-lang/set-annotation
+  source: oci://ghcr.io/kcl-lang/set-annotation:0.1.1
   config: # See [pkg/api/ConfigSpec]
     vendor: true
     sortKeys: true
@@ -146,7 +146,7 @@ kind: KCLRun
 spec:
   # Set the dependencies are the external dependencies for the KCL code.
   # The format of the `dependencies` field is same as the [dependencies]` in the `kcl.mod` file
-  dependencies:
+  dependencies: |
     k8s = "1.31"
   source: |
     import k8s.api.core.v1 as k8core

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/hashicorp/go-getter"
 	"kcl-lang.io/krm-kcl/pkg/api"
@@ -68,9 +69,9 @@ func RunKCL(name, source string, resourceList *yaml.RNode) ([]*yaml.RNode, error
 //
 // Return:
 // A pointer to []*yaml.RNode objects that represent the output YAML objects of the KCL program.
-func RunKCLWithConfig(name, source string, dependencies []string, resourceList *yaml.RNode, config *api.ConfigSpec, getterOptions ...getter.ClientOption) ([]*yaml.RNode, error) {
+func RunKCLWithConfig(name, src string, dependencies []string, resourceList *yaml.RNode, config *api.ConfigSpec, getterOptions ...getter.ClientOption) ([]*yaml.RNode, error) {
 	// 1. Construct KCL code from source.
-	entry, err := SourceToTempEntry(source, getterOptions...)
+	entry, err := SourceToTempEntry(src, getterOptions...)
 	defer KCLEntryOriginTmpDirCleanup(entry)
 	if err != nil {
 		return nil, errors.Wrap(err)
@@ -82,10 +83,29 @@ func RunKCLWithConfig(name, source string, dependencies []string, resourceList *
 	}
 	// 3. Run the KCL code.
 	result := bytes.NewBuffer([]byte{})
-	opts.Entries = []string{entry.source}
+
+	// Configure the source
+	if source.IsOCI(entry.source) {
+		parts := strings.SplitN(source.TrimOCIPrefix(entry.source), ":", 2)
+		opts.Oci = source.OCIPrefix(parts[0])
+		if len(parts) > 1 {
+			opts.Tag = parts[1]
+		}
+	} else {
+		// Everything else is treated as an entry.
+		opts.Entries = []string{entry.source}
+	}
 	opts.Writer = result
 	if len(dependencies) > 0 {
 		opts.ExternalPackages = dependencies
+	}
+	err = opts.Complete([]string{})
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+	err = opts.Validate()
+	if err != nil {
+		return nil, errors.Wrap(err)
 	}
 	err = opts.Run()
 	if err != nil {

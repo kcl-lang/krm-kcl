@@ -85,6 +85,20 @@ func TestRunOCI(t *testing.T) {
 			false,
 		},
 		{
+			"resource_list",
+			fields{
+				InputPath: "./testdata/resource_list/kcl-run-oci-with-version.yaml",
+			},
+			false,
+		},
+		{
+			"resource_list",
+			fields{
+				InputPath: "./testdata/resource_list/kcl-run-oci-with-bad-version.yaml",
+			},
+			true,
+		},
+		{
 			"yaml_stream",
 			fields{
 				InputPath: "./testdata/yaml_stream/kcl-run-oci.yaml",
