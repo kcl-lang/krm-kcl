@@ -13,7 +13,7 @@ require (
 	kcl-lang.io/cli v0.11.4
 	kcl-lang.io/kpm v0.11.4
 	sigs.k8s.io/controller-runtime v0.22.4
-	sigs.k8s.io/kustomize/kyaml v0.20.1
+	sigs.k8s.io/kustomize/kyaml v0.21.0
 )
 
 require (
@@ -152,7 +152,7 @@ require (
 	github.com/protocolbuffers/txtpbfmt v0.0.0-20240416193709-1e18ef0a7fdc // indirect
 	github.com/qri-io/jsonpointer v0.1.1 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
-	github.com/sergi/go-diff v1.3.2-0.20230802210424-5b0b94c5c0d3 // indirect
+	github.com/sergi/go-diff v1.4.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/skeema/knownhosts v1.3.1 // indirect
 	github.com/spf13/cobra v1.10.1 // indirect
