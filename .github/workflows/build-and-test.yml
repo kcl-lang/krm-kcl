@@ -18,7 +18,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: 1.23
+          go-version-file: go.mod
 
       - uses: engineerd/setup-kind@v0.6.2
         if: matrix.os == 'ubuntu-latest'
