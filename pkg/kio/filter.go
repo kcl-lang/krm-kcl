@@ -23,14 +23,31 @@ func (f Filter) Filter(in []*yaml.RNode) ([]*yaml.RNode, error) {
 	if err != nil {
 		return nil, err
 	}
-	for idx, c := range configs {
-		var fnCfg *yaml.RNode
-		if hasFnCfg {
-			fnCfg = f.rw.FunctionConfig
-		} else {
-			fnCfg = in[idxs[idx]]
+
+	// Snapshot every per-KCLRun function-config pointer before we start
+	// mutating `in`. The SimpleTransformer in c.Transform drops the
+	// processed KCLRun nodes from the returned slice, so the indexes
+	// recorded in `idxs` become stale after the first iteration and
+	// `in[idxs[idx]]` would panic with "index out of range" for any
+	// stream containing more than one KCLRun (#9). Pinning the fnCfg
+	// references here avoids relying on positional indexing into a
+	// transformer-mutated slice.
+	fnCfgs := make([]*yaml.RNode, len(configs))
+	if hasFnCfg {
+		for i := range fnCfgs {
+			fnCfgs[i] = f.rw.FunctionConfig
 		}
-		in, err = c.Transform(in, fnCfg)
+	} else {
+		original := in
+		for i, idx := range idxs {
+			if idx < len(original) {
+				fnCfgs[i] = original[idx]
+			}
+		}
+	}
+
+	for idx, c := range configs {
+		in, err = c.Transform(in, fnCfgs[idx])
 		if err != nil {
 			return nil, err
 		}
