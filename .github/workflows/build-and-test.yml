@@ -25,13 +25,13 @@ jobs:
         with:
           version: "v0.31.0"
 
-      - name: Kubernetes Testing
+      - name: Wait for kind cluster
         if: matrix.os == 'ubuntu-latest'
         run: |
-          kubectl cluster-info
-          kubectl get pods -n kube-system
-          echo "current-context:" $(kubectl config current-context)
-          echo "environment-kubeconfig:" ${KUBECONFIG}
+          # helm/kind-action brings up a kind cluster but races against the
+          # next step; wait for it to be Ready so the kube engine test does
+          # not flake on the very first call.
+          kubectl wait --for=condition=Ready nodes --all --timeout=120s
 
       - name: Unit test
         run: make test
