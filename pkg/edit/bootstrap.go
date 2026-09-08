@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/hashicorp/go-getter"
 	"kcl-lang.io/krm-kcl/pkg/api"
@@ -86,11 +85,9 @@ func RunKCLWithConfig(name, src string, dependencies []string, resourceList *yam
 
 	// Configure the source
 	if source.IsOCI(entry.source) {
-		parts := strings.SplitN(source.TrimOCIPrefix(entry.source), ":", 2)
-		opts.Oci = source.OCIPrefix(parts[0])
-		if len(parts) > 1 {
-			opts.Tag = parts[1]
-		}
+		// Parse the OCI reference so that a registry port (e.g. ":7900") is
+		// not mistaken for the tag separator (see kcl-lang/krm-kcl issue #450).
+		opts.Oci, opts.Tag = source.ParseOCIReference(source.TrimOCIPrefix(entry.source))
 	} else {
 		// Everything else is treated as an entry.
 		opts.Entries = []string{entry.source}
