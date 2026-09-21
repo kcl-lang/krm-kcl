@@ -14,7 +14,7 @@ require (
 	k8s.io/client-go v0.37.0
 	kcl-lang.io/cli v0.12.10
 	kcl-lang.io/kpm v0.12.9
-	sigs.k8s.io/controller-runtime v0.25.0
+	sigs.k8s.io/controller-runtime v0.25.1
 	sigs.k8s.io/kustomize/kyaml v0.21.1
 )
 
